@@ -1,0 +1,235 @@
+---
+/**
+ * "Walk the floor plan": plays in place. When the section comes into view the plan
+ * draws itself, then it moves through the rooms on its own: each room is traced in
+ * the accent colour while its two figures count up. Visitors can pick a room or a
+ * floor at any time; hovering or focusing the section pauses the tour.
+ * Reduced motion: no drawing or auto-advance; rooms change only when picked.
+ */
+import plans from '../data/floorplans.json';
+import { formatNumber, listingUrl, shortAddress, getNeighborhood, type Listing } from '../lib/data';
+
+interface Props { listing: Listing }
+const { listing } = Astro.props;
+
+type Stat = { value: number; unit: string; label: string };
+type Stop = { floor: string; name: string; d: string; lx: number; ly: number; mapLabel?: string; stats: Stat[] };
+type Floor = { id: string; name: string; viewBox: string; walls: string; labels: { text: string; x: number; y: number }[] };
+type Plan = { heading: string; intro: string; floors: Floor[]; tour: Stop[] };
+
+const plan = (plans as unknown as Record<string, Plan | string>)[listing.id] as Plan | undefined;
+const first = plan?.tour[0];
+const config = plan ? plan.tour.map((s) => ({ floor: s.floor, name: s.name, stats: s.stats })) : [];
+const id = `fp-${listing.id}`;
+---
+{plan && first && (
+  <section class="fp wrap" data-fp aria-labelledby={`${id}-h`}>
+    <div class="fp-grid">
+      <div class="fp-copy">
+        <h2 id={`${id}-h`} class="t-display" data-reveal>
+          <span class="rl"><span>{plan.heading}</span></span>
+        </h2>
+        <p class="mt-5 max-w-sm text-[0.95rem] leading-relaxed text-ink-muted">
+          {shortAddress(listing)}, {getNeighborhood(listing.neighborhood).name}. {plan.intro}
+        </p>
+        <a href={`${listingUrl(listing)}#tour`} class="btn btn-primary mt-6">Book a tour</a>
+
+        <div class="fp-stats" aria-hidden="true">
+          {first.stats.map((st, i) => (
+            <div class="fp-stat">
+              <p class="fp-num"><span class="num" data-fp-value={i}>{formatNumber(st.value)}</span><span class="fp-unit" data-fp-unit={i}>{st.unit}</span></p>
+              <p class="fp-label" data-fp-label={i}>{st.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="fp-plan">
+        <div class="fp-tabs" role="group" aria-label="Floors">
+          {plan.floors.map((f, i) => (
+            <button type="button" class="fp-tab" data-fp-tab={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>{f.name}</button>
+          ))}
+        </div>
+        <div class="fp-stage" role="img" aria-label={`Floor plan of ${shortAddress(listing)}`}>
+          {plan.floors.map((f, fi) => (
+            <svg class="fp-floor" viewBox={f.viewBox} data-fp-floor={f.id} data-active={fi === 0 ? 'true' : undefined} aria-hidden="true">
+              <path class="fp-walls" d={f.walls} pathLength="1" />
+              {plan.tour.map((s, si) => s.floor === f.id && (
+                <g class="fp-zone" data-fp-zone={si} data-active={si === 0 ? 'true' : undefined}>
+                  <path class="fp-fill" d={s.d} />
+                  <path class="fp-trace" d={s.d} pathLength="1" />
+                  <text class="fp-zlabel" x={s.lx} y={s.ly} text-anchor="middle">{s.mapLabel ?? s.name}</text>
+                </g>
+              ))}
+              {f.labels.map((l) => <text class="fp-label-quiet" x={l.x} y={l.y} text-anchor="middle">{l.text}</text>)}
+            </svg>
+          ))}
+        </div>
+
+        <!-- Room list: shows where the tour is, and lets the visitor jump to any room. -->
+        <ol class="fp-rooms">
+          {plan.tour.map((s, i) => (
+            <li>
+              <button type="button" class="fp-room" data-fp-room={i} aria-pressed={i === 0 ? 'true' : 'false'}>
+                <span class="fp-room-name">{s.name}</span>
+                <span class="fp-progress" aria-hidden="true"><span></span></span>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+
+    <!-- Every room and figure, for screen readers. -->
+    <dl class="sr-only">
+      {plan.tour.map((s) => (
+        <>
+          <dt>{s.name}, {plan.floors.find((f) => f.id === s.floor)?.name}</dt>
+          {s.stats.map((st) => <dd>{formatNumber(st.value)} {st.unit} {st.label}</dd>)}
+        </>
+      ))}
+    </dl>
+    <script type="application/json" data-fp-config set:html={JSON.stringify(config)} />
+  </section>
+)}
+
+<style>
+  .fp { --dwell: 3600ms; }
+  .fp-grid { display: grid; gap: 2.5rem; }
+  @media (min-width: 1024px) { .fp-grid { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 4rem; align-items: start; } }
+
+  .fp-tabs { display: flex; justify-content: flex-end; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .fp-tab { min-height: 2.5rem; padding: 0 1rem; border-radius: 9999px; font-size: 0.85rem; font-weight: 600; color: var(--c-ink-muted); border: 1px solid var(--c-line-strong); transition: color 200ms ease, background-color 200ms ease, border-color 200ms ease; }
+  .fp-tab:hover { color: var(--c-ink); border-color: var(--c-ink); }
+  .fp-tab[aria-pressed='true'] { background: var(--c-ink); color: var(--c-deep); border-color: var(--c-ink); }
+
+  .fp-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; border-top: 1px solid var(--c-line); padding-top: 1.5rem; }
+  .fp-num { display: flex; align-items: baseline; gap: 0.5rem; font-family: var(--f-display); font-weight: 500; letter-spacing: -0.04em; line-height: 1; }
+  .fp-num .num { font-size: clamp(3rem, 2rem + 4vw, 5.6rem); }
+  .fp-unit { font-family: var(--f-body); font-size: 1rem; letter-spacing: 0; color: var(--c-ink-muted); white-space: nowrap; }
+  .fp-label { margin-top: 0.5rem; font-size: 0.85rem; color: var(--c-ink-muted); }
+
+  .fp-stage { position: relative; aspect-ratio: 1000 / 680; }
+  .fp-floor { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; transition: opacity 600ms ease, visibility 0s linear 600ms; }
+  .fp-floor[data-active='true'] { opacity: 1; visibility: visible; transition: opacity 600ms ease, visibility 0s; }
+
+  .fp-walls { fill: none; stroke: color-mix(in srgb, var(--c-ink) 40%, transparent); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .fp-fill { fill: var(--c-accent); opacity: 0; transition: opacity 600ms ease; }
+  .fp-zone[data-active='true'] .fp-fill { opacity: 0.09; }
+  .fp-trace { fill: none; stroke: var(--c-accent); stroke-width: 2.6; stroke-linejoin: round; opacity: 0; }
+  .fp-zone[data-active='true'] .fp-trace { opacity: 1; }
+  .fp-zlabel, .fp-label-quiet { font-family: var(--f-body); font-size: 15px; font-weight: 600; letter-spacing: 0.06em; fill: color-mix(in srgb, var(--c-ink) 42%, transparent); transition: fill 300ms ease; }
+  .fp-label-quiet { font-weight: 500; fill: color-mix(in srgb, var(--c-ink) 28%, transparent); }
+  .fp-zone[data-active='true'] .fp-zlabel { fill: var(--c-ink); }
+
+  .fp-rooms { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.25rem; margin-top: 1.5rem; border-top: 1px solid var(--c-line); }
+  @media (min-width: 768px) { .fp-rooms { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .fp-room { position: relative; display: block; width: 100%; padding: 0.9rem 0 1rem; text-align: left; color: var(--c-ink-muted); transition: color 200ms ease; }
+  .fp-room:hover, .fp-room[aria-pressed='true'] { color: var(--c-ink); }
+  .fp-room-name { font-size: 0.85rem; font-weight: 600; }
+  .fp-progress { position: absolute; left: 0; right: 0; top: -1px; height: 1px; overflow: hidden; }
+  .fp-progress span { display: block; height: 100%; background: var(--c-accent); transform: scaleX(0); transform-origin: left; }
+  .fp-room[aria-pressed='true'] .fp-progress span { transform: scaleX(1); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fp-walls { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .fp[data-drawn='true'] .fp-walls { animation: fp-draw 2s cubic-bezier(0.45, 0.05, 0.3, 1) forwards; }
+    .fp-zone[data-active='true'] .fp-trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: fp-draw 1.2s cubic-bezier(0.45, 0.05, 0.3, 1) forwards; }
+    /* The active room's progress line fills over the time it stays on screen. */
+    .fp[data-playing='true'] .fp-room[aria-pressed='true'] .fp-progress span { transform: scaleX(0); animation: fp-fill var(--dwell) linear forwards; }
+    .fp[data-paused='true'] .fp-room[aria-pressed='true'] .fp-progress span { animation-play-state: paused; }
+  }
+  @keyframes fp-draw { to { stroke-dashoffset: 0; } }
+  @keyframes fp-fill { to { transform: scaleX(1); } }
+</style>
+
+<script>
+  const initPlan = (root: HTMLElement) => {
+    const stops: { floor: string; name: string; stats: { value: number; unit: string; label: string }[] }[] =
+      JSON.parse(root.querySelector('[data-fp-config]')!.textContent || '[]');
+    if (!stops.length) return;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const DWELL = 3600;
+    const fmt = new Intl.NumberFormat('en-US');
+    const zones = [...root.querySelectorAll<SVGGElement>('[data-fp-zone]')];
+    const floors = [...root.querySelectorAll<SVGSVGElement>('[data-fp-floor]')];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-fp-tab]')];
+    const rooms = [...root.querySelectorAll<HTMLButtonElement>('[data-fp-room]')];
+    const values = [0, 1].map((i) => root.querySelector<HTMLElement>(`[data-fp-value="${i}"]`));
+    const units = [0, 1].map((i) => root.querySelector<HTMLElement>(`[data-fp-unit="${i}"]`));
+    const labels = [0, 1].map((i) => root.querySelector<HTMLElement>(`[data-fp-label="${i}"]`));
+
+    const shown = [0, 0];
+    let raf = 0;
+    const countTo = (targets: number[]) => {
+      cancelAnimationFrame(raf);
+      const from = [...shown];
+      const t0 = performance.now();
+      const dur = reduced ? 0 : 1000;
+      const step = (now: number) => {
+        const k = dur ? Math.min(1, (now - t0) / dur) : 1;
+        const e = 1 - Math.pow(1 - k, 3);
+        targets.forEach((t, i) => {
+          shown[i] = from[i] + (t - from[i]) * e;
+          if (values[i]) values[i]!.textContent = fmt.format(Math.round(shown[i]));
+        });
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    let current = -1;
+    const show = (i: number) => {
+      current = i;
+      const s = stops[i];
+      s.stats.forEach((st, k) => {
+        if (units[k]) units[k]!.textContent = st.unit;
+        if (labels[k]) labels[k]!.textContent = st.label;
+      });
+      countTo(s.stats.map((st) => st.value));
+      floors.forEach((f) => (f.dataset.fpFloor === s.floor ? (f.dataset.active = 'true') : delete f.dataset.active));
+      tabs.forEach((t) => t.setAttribute('aria-pressed', String(t.dataset.fpTab === s.floor)));
+      rooms.forEach((r, n) => r.setAttribute('aria-pressed', String(n === i)));
+      zones.forEach((z) => {
+        delete z.dataset.active;
+        if (Number(z.dataset.fpZone) === i) requestAnimationFrame(() => requestAnimationFrame(() => { if (current === i) z.dataset.active = 'true'; }));
+      });
+      // Restart the active room's progress line.
+      const bar = rooms[i]?.querySelector<HTMLElement>('.fp-progress span');
+      if (bar) { bar.style.animation = 'none'; requestAnimationFrame(() => { bar.style.animation = ''; }); }
+    };
+
+    // Auto-advance while visible and not being interacted with.
+    let timer = 0;
+    let visible = false;
+    let paused = false;
+    const schedule = () => {
+      clearTimeout(timer);
+      if (reduced || !visible || paused) return;
+      timer = window.setTimeout(() => { show((current + 1) % stops.length); schedule(); }, DWELL);
+    };
+    const setPaused = (p: boolean) => { paused = p; root.dataset.paused = String(p); schedule(); };
+    root.addEventListener('pointerenter', () => setPaused(true));
+    root.addEventListener('pointerleave', () => setPaused(false));
+    root.addEventListener('focusin', () => setPaused(true));
+    root.addEventListener('focusout', (e) => { if (!root.contains(e.relatedTarget as Node)) setPaused(false); });
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) {
+        root.dataset.drawn = 'true';
+        if (!reduced) root.dataset.playing = 'true';
+        if (current < 0) show(0);
+      }
+      schedule();
+    }, { threshold: 0.35 }).observe(root.querySelector('.fp-stage')!);
+
+    rooms.forEach((r, i) => r.addEventListener('click', () => { show(i); schedule(); }));
+    tabs.forEach((t) => t.addEventListener('click', () => {
+      const idx = stops.findIndex((s) => s.floor === t.dataset.fpTab);
+      if (idx >= 0) { show(idx); schedule(); }
+    }));
+  };
+  const idle = (cb: () => void) => ('requestIdleCallback' in window ? (window as any).requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 300));
+  idle(() => document.querySelectorAll<HTMLElement>('[data-fp]').forEach(initPlan));
+</script>

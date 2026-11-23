@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AskQuestion from '../components/AskQuestion.astro';
+import { brand } from '../lib/brand';
+import { content, getAgent, agentUrl, mapsLink } from '../lib/data';
+const tel = brand.contact.phone.replace(/\D/g, '');
+---
+<Layout title="Contact" description={`Reach the right ${brand.brokerageName} agent directly, whether you're buying, selling or leasing.`}>
+  <div class="wrap pt-12 pb-28 md:pt-20 md:pb-36">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+      <h1 class="t-display lg:col-span-7">Tell us what you’re planning</h1>
+      <p class="text-ink-muted lg:col-span-4 lg:col-start-9">
+        Your message goes straight to the agent who handles it, not to a shared inbox.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-14 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-7">
+        <ul class="space-y-3">
+          {content.contactPaths.map((p) => {
+            const a = getAgent(p.agentId);
+            return (
+              <li class="path rounded-ui border border-line bg-surface" data-path={p.id}>
+                <div class="p-5 md:p-7">
+                  <h2 class="text-xl leading-tight">{p.title}</h2>
+                  <p class="mt-2 max-w-[34rem] text-ink-muted">{p.body}</p>
+                  <p class="mt-3 text-[0.95rem]">Goes to <a class="link" href={agentUrl(a)}>{a.name}</a>, {a.title.toLowerCase()}.</p>
+                  <div class="mt-5">
+                    <AskQuestion agent={a} id={`ask-${p.id}`} group="contact" topic={p.id} ctaLabel={`Message ${a.firstName}`} prefill={`Hi ${a.firstName}, ${p.messagePrefill.charAt(0).toLowerCase()}${p.messagePrefill.slice(1)}`} buttonClass="btn btn-outline" />
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <aside class="lg:col-span-4 lg:col-start-9" aria-label="Office details">
+        <h2 class="text-xl">The office</h2>
+        <address class="mt-4 not-italic">
+          {brand.contact.street}<br />{brand.contact.city}
+        </address>
+        <p class="mt-2"><a class="link" href={mapsLink(brand.contact.mapsQuery)} target="_blank" rel="noopener">Get directions</a></p>
+        <dl class="mt-8 space-y-4">
+          <div><dt class="text-sm text-ink-muted">Phone</dt><dd><a class="link num" href={`tel:${tel}`}>{brand.contact.phone}</a></dd></div>
+          <div><dt class="text-sm text-ink-muted">Email</dt><dd><a class="link" href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a></dd></div>
+          <div><dt class="text-sm text-ink-muted">Hours</dt><dd>{brand.contact.hours}</dd></div>
+          <div><dt class="text-sm text-ink-muted">Typical reply</dt><dd>Within {brand.leads.responseTime}</dd></div>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // /contact/?path=buying opens the matching form straight away.
+  const path = new URLSearchParams(location.search).get('path');
+  if (path) {
+    const el = document.getElementById(`ask-${path}`);
+    if (el) {
+      el.closest('[data-path]')?.scrollIntoView({ block: 'start' });
+      el.dispatchEvent(new CustomEvent('ask:open'));
+    }
+  }
+</script>

@@ -1,0 +1,222 @@
+---
+import Logo from './Logo.astro';
+import { brand } from '../lib/brand';
+
+interface Props { overlay?: boolean; bookHref: string }
+const { overlay = false, bookHref } = Astro.props;
+
+const nav = [
+  { href: '/listings/', label: 'Listings' },
+  { href: '/neighborhoods/', label: 'Neighborhoods' },
+  { href: '/agents/', label: 'Agents' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+const opensWidget = bookHref.startsWith('#');
+---
+
+<header class="site-header" data-overlay={overlay ? 'true' : 'false'} data-scrolled="false">
+  <div class="wrap bar">
+    <a href="/" class="brand-home rounded-ui">
+      <Logo tone={overlay ? 'light' : 'ink'} class="header-logo" /><span class="sr-only">, home page</span>
+    </a>
+
+    <nav aria-label="Primary" class="nav-center hidden lg:block">
+      <ul class="flex items-center gap-8">
+        {nav.map((item) => (
+          <li><a href={item.href} class="nav-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="nav-right flex items-center justify-end gap-2">
+      <a href={bookHref} class="btn btn-light book-cta hidden sm:inline-flex" data-book-trigger={opensWidget ? bookHref : undefined}>
+        Book a Tour
+        <span class="btn-icon" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 9L9 3M4 3h5v5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg></span>
+      </a>
+      <button type="button" class="menu-btn" aria-haspopup="dialog" aria-controls="mobile-menu" data-menu-open>
+        <span>Menu</span>
+        <svg width="20" height="12" viewBox="0 0 20 12" aria-hidden="true"><path d="M0 1h20M0 11h20" stroke="currentColor" stroke-width="1.5" /></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog id="mobile-menu" class="mobile-menu" aria-label="Site menu">
+  <div class="flex min-h-full flex-col">
+    <div class="wrap flex items-center justify-between py-4">
+      <Logo />
+      <button type="button" class="menu-btn" data-menu-close>
+        <span>Close</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2l12 12M14 2L2 14" stroke="currentColor" stroke-width="1.5" /></svg>
+      </button>
+    </div>
+    <nav aria-label="Mobile" class="wrap flex-1 pt-8">
+      <ul class="flex flex-col">
+        {nav.map((item) => (
+          <li class="rule">
+            <a href={item.href} class="mobile-link" aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="wrap pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-10">
+      <a href={bookHref} class="btn btn-primary btn-block" data-book-trigger={opensWidget ? bookHref : undefined} data-menu-close>Book a Tour</a>
+      <p class="mt-6 text-sm text-ink-muted">
+        Call the office at <a class="link num" href={`tel:${brand.contact.phone.replace(/\D/g, '')}`}>{brand.contact.phone}</a>.
+        {brand.contact.hours}.
+      </p>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    color: var(--c-ink);
+    background: color-mix(in srgb, var(--c-base) 94%, transparent);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: background-color 260ms ease, border-color 260ms ease, color 260ms ease;
+  }
+  .bar {
+    height: 5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    transition: height 260ms var(--ease-out-soft);
+  }
+  .brand-home { justify-self: start; }
+  @media (min-width: 1024px) {
+    .bar { grid-template-columns: 1fr auto 1fr; height: 5.5rem; }
+  }
+  .site-header[data-scrolled='true'] { border-bottom-color: var(--c-line); }
+  .site-header[data-scrolled='true'] .bar { height: 3.75rem; }
+
+  /* Over the home hero: transparent with light text until scrolled. */
+  .site-header[data-overlay='true'] {
+    position: fixed;
+    inset: 0 0 auto 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color: var(--c-surface);
+  }
+  .site-header[data-overlay='true'][data-scrolled='true'] {
+    background: color-mix(in srgb, var(--c-base) 94%, transparent);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
+    color: var(--c-ink);
+  }
+  .site-header[data-overlay='true'] :global(.logo) { color: inherit; }
+
+  .header-logo { transition: transform 260ms var(--ease-out-soft); transform-origin: left center; }
+  .site-header[data-scrolled='true'] .header-logo { transform: scale(0.88); }
+
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    padding: 0.6rem 0;
+    font-size: 0.92rem;
+    font-weight: 550;
+    letter-spacing: 0.01em;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.3rem;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms var(--ease-out-soft);
+  }
+  .nav-link:hover::after { transform: scaleX(1); }
+  .nav-link[aria-current='page']::after { transform: scaleX(1); background: var(--c-ink); height: 2px; }
+  .site-header[data-overlay='true'][data-scrolled='false'] .nav-link[aria-current='page']::after { background: currentColor; }
+
+  .book-cta { min-height: 2.75rem; padding: 0.4rem 1.25rem 0.4rem 1.2rem; font-size: 0.92rem; box-shadow: 0 6px 20px -12px rgb(14 22 33 / 0.35); }
+  .site-header[data-scrolled='true'] .book-cta, .site-header[data-overlay='false'] .book-cta { background: var(--c-ink); color: var(--c-surface); }
+  .site-header[data-scrolled='true'] .book-cta .btn-icon, .site-header[data-overlay='false'] .book-cta .btn-icon { background: var(--c-accent); }
+  .site-header[data-scrolled='true'] .book-cta .btn-icon svg, .site-header[data-overlay='false'] .book-cta .btn-icon svg { color: var(--c-ink); }
+
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    padding: 0 0.25rem 0 0.75rem;
+    font-size: 0.98rem;
+    font-weight: 540;
+    color: inherit;
+  }
+
+  @media (min-width: 1024px) { .menu-btn[data-menu-open] { display: none; } }
+
+  .mobile-menu {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: var(--c-base);
+    color: var(--c-ink);
+  }
+  .mobile-menu::backdrop { background: var(--c-base); }
+  .mobile-menu[open] { animation: menu-in 260ms var(--ease-out-soft); }
+  @keyframes menu-in { from { opacity: 0; } to { opacity: 1; } }
+  .mobile-link {
+    display: block;
+    padding: 1.05rem 0;
+    font-family: var(--f-display);
+    font-size: 2.1rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+  .mobile-link[aria-current='page'] { color: var(--c-accent-text); }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (header) {
+    const overlay = header.dataset.overlay === 'true';
+    let ticking = false;
+    const update = () => {
+      // Over the hero, stay transparent until most of it has scrolled away.
+      const threshold = overlay ? Math.max(80, window.innerHeight * 0.55) : 12;
+      header.dataset.scrolled = String(window.scrollY > threshold);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
+
+  const menu = document.getElementById('mobile-menu') as HTMLDialogElement | null;
+  document.querySelector('[data-menu-open]')?.addEventListener('click', () => menu?.showModal());
+  menu?.querySelectorAll('[data-menu-close]').forEach((el) => el.addEventListener('click', () => menu.close()));
+  // Close if the viewport grows past the mobile breakpoint while open.
+  window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => { if (e.matches) menu?.close(); });
+
+  // "Book a Tour" in the header opens the page's own booking widget when there is one.
+  document.querySelectorAll<HTMLAnchorElement>('[data-book-trigger]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector(a.dataset.bookTrigger!);
+      if (!target) return;
+      e.preventDefault();
+      target.dispatchEvent(new CustomEvent('booking:open', { bubbles: true }));
+    });
+  });
+</script>

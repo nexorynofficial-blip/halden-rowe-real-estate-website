@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import { agents, agentUrl, listingsFor, getNeighborhood } from '../../lib/data';
+import { brand } from '../../lib/brand';
+---
+<Layout title="Agents" description={`Meet the ${brand.brokerageName} agents and book a call directly with the one who knows your area.`}>
+  <div class="wrap pt-12 md:pt-20">
+    <div class="grid gap-6 lg:grid-cols-12 lg:items-end">
+      <h1 class="t-display lg:col-span-7">The people who will show you around</h1>
+      <p class="text-ink-muted lg:col-span-4 lg:col-start-9">
+        Each agent works a few neighborhoods closely. Pick the one who knows the area you're interested in and book a call directly.
+      </p>
+    </div>
+
+    <ul class="mt-16 pb-28 md:mt-20 md:pb-36">
+      {agents.map((a, i) => {
+        const active = listingsFor(a.id).filter((l) => l.status !== 'pending').length;
+        return (
+          <li class="rule grid gap-6 py-10 md:grid-cols-12 md:gap-8 md:py-14">
+            <a href={agentUrl(a)} class="block overflow-hidden rounded-ui md:col-span-3" tabindex="-1" aria-hidden="true">
+              <Photo src={a.photo} alt="" sizes="(min-width: 768px) 22vw, 100vw" widths={[360, 540, 720]} priority={i === 0} class="aspect-[4/5] h-full w-full object-cover md:aspect-[4/5]" />
+            </a>
+            <div class="md:col-span-4">
+              <h2 class="t-title"><a href={agentUrl(a)} class="hover:underline underline-offset-[0.15em] decoration-1">{a.name}</a></h2>
+              <p class="mt-2 text-ink-muted">{a.title}</p>
+              <p class="mt-6 text-[0.95rem]">
+                <span class="text-ink-muted">Works in </span>{a.areas.map((s) => getNeighborhood(s).name).join(', ')}
+              </p>
+              <p class="mt-1 text-[0.95rem]"><span class="text-ink-muted">Speaks </span>{a.languages.join(', ')}</p>
+            </div>
+            <div class="md:col-span-4 md:col-start-9">
+              <p>{a.shortBio}</p>
+              <dl class="num mt-6 flex gap-8 text-[0.95rem]">
+                <div><dt class="text-ink-muted">Homes sold</dt><dd class="font-display text-xl">{a.homesSold}</dd></div>
+                <div><dt class="text-ink-muted">Listed now</dt><dd class="font-display text-xl">{active}</dd></div>
+                <div><dt class="text-ink-muted">Years</dt><dd class="font-display text-xl">{a.yearsActive}</dd></div>
+              </dl>
+              <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <a href={`${agentUrl(a)}#book`} class="btn btn-primary">Book a call with {a.firstName}</a>
+                <a href={agentUrl(a)} class="link font-medium">Profile and listings</a>
+              </div>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</Layout>

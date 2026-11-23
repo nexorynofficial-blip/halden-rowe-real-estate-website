@@ -1,0 +1,46 @@
+---
+// Private sales page (noindex, excluded from the sitemap): the prospect's current site next to this build.
+// Populate it with: npm run compare -- https://prospect.com
+import Layout from '../layouts/Layout.astro';
+import { existsSync, readFileSync } from 'node:fs';
+import { brand } from '../lib/brand';
+
+const has = (f: string) => existsSync(new URL(`../../public/compare/${f}`, import.meta.url));
+const ready = has('before-desktop.png') && has('after-desktop.png');
+const results = has('results.json') ? JSON.parse(readFileSync(new URL('../../public/compare/results.json', import.meta.url), 'utf8')) : null;
+const host = results ? new URL(results.prospect).hostname.replace(/^www\./, '') : 'their current site';
+---
+<Layout title="Before and after" noindex>
+  <div class="wrap pt-12 pb-28 md:pt-20">
+    <h1 class="t-display max-w-[20ch]">{host}, today and rebuilt</h1>
+    {!ready ? (
+      <div class="mt-10 max-w-2xl rounded-ui border border-line bg-surface p-8">
+        <p>No comparison captured yet. With the site running locally, run:</p>
+        <pre tabindex="0" aria-label="Command to run" class="mt-4 overflow-x-auto rounded-ui bg-ink p-4 text-sm text-surface"><code>npm run compare -- https://prospect-site.com</code></pre>
+        <p class="mt-4 text-ink-muted">This saves above-the-fold captures of both homepages at desktop and mobile sizes, plus page weight and load timings, then shows them here after the next build.</p>
+      </div>
+    ) : (
+      <>
+        {['desktop', 'mobile'].map((vp) => (
+          <section class="mt-14" aria-label={`${vp} comparison`}>
+            <h2 class="text-xl capitalize">{vp}</h2>
+            <div class:list={['mt-6 grid gap-6', vp === 'desktop' ? 'lg:grid-cols-2' : 'grid-cols-2 max-w-3xl']}>
+              <figure>
+                <img src={`/compare/before-${vp}.png`} alt={`${host} homepage as it is today, ${vp}`} class="w-full rounded-ui border border-line" loading="lazy" />
+                <figcaption class="mt-3 text-[0.95rem] text-ink-muted">
+                  Today{results && <>: <span class="num">{results.before[vp].transferKB} KB, {results.before[vp].requests} requests, loaded in {(results.before[vp].loadMs / 1000).toFixed(1)}s</span></>}
+                </figcaption>
+              </figure>
+              <figure>
+                <img src={`/compare/after-${vp}.png`} alt={`${brand.brokerageName} rebuild, ${vp}`} class="w-full rounded-ui border border-line" loading="lazy" />
+                <figcaption class="mt-3 text-[0.95rem] text-ink-muted">
+                  Rebuilt{results && <>: <span class="num">{results.after[vp].transferKB} KB, {results.after[vp].requests} requests, loaded in {(results.after[vp].loadMs / 1000).toFixed(1)}s</span></>}
+                </figcaption>
+              </figure>
+            </div>
+          </section>
+        ))}
+      </>
+    )}
+  </div>
+</Layout>

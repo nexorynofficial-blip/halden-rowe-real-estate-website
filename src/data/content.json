@@ -1,0 +1,177 @@
+{
+  "stats": [
+    {
+      "value": "$1.2B",
+      "label": "in homes sold since 2009"
+    },
+    {
+      "value": "17 days",
+      "label": "median time on market in 2025, against a county median of 34"
+    },
+    {
+      "value": "4.9 / 5",
+      "label": "average rating from 312 verified client reviews"
+    }
+  ],
+  "home": {
+    "featuredIds": [
+      "hr-1018",
+      "hr-1031",
+      "hr-1047",
+      "hr-1009",
+      "hr-1036",
+      "hr-1015"
+    ],
+    "listingsHeading": "Explore our best listings",
+    "listingsIntro": "{{listingCount}} homes, each one walked, photographed and priced by the agent who will show it to you.",
+    "agentSpotlightId": "mara-ellison",
+    "agentSpotlightHeading": "Talk to the person who will actually sell your house.",
+    "neighborhoodsHeading": "Nine neighborhoods, each with its own market",
+    "neighborhoodsIntro": "Prices on the South Coast move street by street. These are the medians we track for the areas we work in, updated every quarter.",
+    "neighborhoodsAsOf": "Q3 2026",
+    "about": {
+      "heading": "Your trusted partner in Santa Barbara real estate",
+      "label": "About us",
+      "columns": [
+        "We started in {{founded}} with two agents and a rented office in Montecito. We still turn down more listings than we take, so every home gets an agent who knows it inside out.",
+        "Whether you're looking for a beach cottage, a canyon retreat or an estate on an acre of oaks, the agent who lists it is the one who shows it, prices it and negotiates it."
+      ],
+      "statement": "Exclusive listings, prices backed by real sales, and one agent from the first tour to the closing table.",
+      "images": [
+        "1600607687939-ce8a6c25118c.jpg",
+        "1613490493576-7fde63acd811.jpg",
+        "1600566753190-17f0baa2a6c3.jpg"
+      ],
+      "imageAlts": [
+        "Living room with a low white sofa and a timber-clad wall",
+        "White modern house above a pool in Hope Ranch",
+        "Cedar and black steel house on the Mesa"
+      ]
+    },
+    "aboutEditorial": {
+      "statement": [
+        "Timeless homes.",
+        "Honest prices.",
+        "One agent,",
+        "start to finish."
+      ],
+      "image": "1600607687939-ce8a6c25118c.jpg",
+      "imageAlt": "Living room with a low white sofa and a timber-clad wall",
+      "paragraphs": [
+        "Every home we represent is shown by the agent who listed it, priced from sales we have walked through ourselves, and photographed in the light that suits it.",
+        "Whether you are after a beach cottage, a canyon retreat or an estate under the oaks, you deal with one person from the first tour to the closing table."
+      ]
+    },
+    "statsScatter": [
+      {
+        "value": "$1.2B",
+        "label": "in homes sold since 2009"
+      },
+      {
+        "value": "17",
+        "unit": "days",
+        "label": "median time on market, against a county median of 34"
+      },
+      {
+        "value": "4.9",
+        "unit": "/ 5",
+        "label": "average rating from 312 verified reviews"
+      },
+      {
+        "value": "11",
+        "unit": "agents",
+        "label": "one office on Coast Village Road"
+      }
+    ],
+    "listingsLabel": "Our listings",
+    "visionHeading": "Talk to the person who will actually sell your house",
+    "beliefsHeading": "How we work",
+    "beliefsImage": "1600210491892-03d54c0aaf87.jpg",
+    "worldHeading": "Nine neighborhoods, each with its own market"
+  },
+  "testimonials": [
+    {
+      "quote": "Mara told us our asking price was too high and that we would lose a month finding out. She was right about both. We relisted at her number and had three offers in nine days.",
+      "name": "Catherine and Paul Whitford",
+      "detail": "Sold a four-bedroom house in Montecito, 2025",
+      "agentId": "mara-ellison"
+    },
+    {
+      "quote": "Julian found an easement problem on the house we loved before our inspector did, then got the sellers to fix it before closing. I have never had a lawyer that thorough, let alone an agent.",
+      "name": "Rohan Mehta",
+      "detail": "Bought on the Riviera, 2026",
+      "agentId": "julian-okafor"
+    },
+    {
+      "quote": "We were moving from London and had never seen Santa Barbara. Elena walked us through six houses on video calls, and the one we chose was exactly as she described it.",
+      "name": "Sophie Laurent",
+      "detail": "Leased in Mission Canyon, 2025",
+      "agentId": "elena-varga"
+    },
+    {
+      "quote": "Daniel crawled under the house with a flashlight before he would let us make an offer. We got a fair price and a foundation we trust.",
+      "name": "Marisol and Ben Ortega",
+      "detail": "Bought in Ojai, 2024",
+      "agentId": "daniel-reyes"
+    }
+  ],
+  "about": {
+    "heading": "A small brokerage, on purpose.",
+    "paragraphs": [
+      "We started {{brokerageName}} in {{founded}} with two agents and a rented office in Montecito. We are still on the same street, now with eleven agents, and we still turn down more listings than we take.",
+      "That is a deliberate choice. Every home we represent is shown by the agent who listed it, priced from comparable sales we have walked through ourselves, and photographed in the light that suits it. We would rather sell fewer houses well than many houses quickly."
+    ],
+    "principles": [
+      {
+        "title": "One agent, start to finish",
+        "body": "The person who lists your home shows it, negotiates it and is at the closing. Nobody is handed off to a junior colleague."
+      },
+      {
+        "title": "Prices you can defend",
+        "body": "Every list price comes with the six to ten comparable sales behind it, so you can see exactly where the number came from."
+      },
+      {
+        "title": "Answers the same day",
+        "body": "Questions about a listing reach the listing agent directly. Our median reply time last year was 38 minutes."
+      },
+      {
+        "title": "Private when you need it",
+        "body": "Many sellers never want a sign on the lawn. We show those homes quietly, to buyers we have already met."
+      },
+      {
+        "title": "Local before anything else",
+        "body": "Every agent lives in the area they sell. We know which streets flood and which canyons hold the morning fog."
+      }
+    ]
+  },
+  "contactPaths": [
+    {
+      "id": "buying",
+      "title": "I'm looking to buy",
+      "body": "Tell us the areas and the kind of house. We'll send homes that match, including ones that haven't reached the market yet.",
+      "agentId": "julian-okafor",
+      "messagePrefill": "We're looking to buy in "
+    },
+    {
+      "id": "selling",
+      "title": "I'm thinking of selling",
+      "body": "We'll visit, walk the house with you and come back within a week with a price and the sales behind it.",
+      "agentId": "mara-ellison",
+      "messagePrefill": "We're thinking of selling our home at "
+    },
+    {
+      "id": "leasing",
+      "title": "I want to rent or lease",
+      "body": "Furnished seasonal homes, downtown residences and long-term leases across the South Coast.",
+      "agentId": "elena-varga",
+      "messagePrefill": "I'm looking to rent from "
+    }
+  ],
+  "privateListings": {
+    "heading": "Hear about homes before they’re listed.",
+    "body": "About a third of the homes we sell never appear on this site. Owners ask us to show them quietly first. Tell us where you're looking and we'll send them to you as they come in.",
+    "cta": "Send me private listings",
+    "fine": "One or two emails a month. Every one has an unsubscribe link.",
+    "doneFine": "Each email names the agent handling the home, so you can reply straight to them."
+  }
+}

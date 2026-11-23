@@ -1,0 +1,103 @@
+---
+/**
+ * Static, brand-tinted location map. No map library is shipped.
+ * - With PUBLIC_MAPBOX_TOKEN set: one Mapbox Static Images request, pin in the accent colour.
+ * - Without: OpenStreetMap tiles, toned to the palette with CSS filters.
+ */
+import { brand } from '../lib/brand';
+import { mapsLink, directionsLink } from '../lib/data';
+
+interface Props { lat: number; lng: number; label: string; query: string; zoom?: number }
+const { lat, lng, label, query, zoom = 15 } = Astro.props;
+const token = import.meta.env.PUBLIC_MAPBOX_TOKEN as string | undefined;
+
+const n = 2 ** zoom;
+const xf = ((lng + 180) / 360) * n;
+const latRad = (lat * Math.PI) / 180;
+const yf = ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
+const x0 = Math.floor(xf);
+const y0 = Math.floor(yf);
+// Offset of the point inside its tile, in px (tiles are 256px).
+const px = (xf - x0) * 256;
+const py = (yf - y0) * 256;
+// Only request tiles that can intersect the largest frame we render (about 960 x 480).
+const HALF_W = 480;
+const HALF_H = 260;
+const tiles: { x: number; y: number; dx: number; dy: number }[] = [];
+for (let dy = -3; dy <= 3; dy++)
+  for (let dx = -3; dx <= 3; dx++) {
+    const left = dx * 256 - px;
+    const top = dy * 256 - py;
+    if (left < HALF_W && left + 256 > -HALF_W && top < HALF_H && top + 256 > -HALF_H) tiles.push({ x: x0 + dx, y: y0 + dy, dx, dy });
+  }
+const pin = brand.accentColor.replace('#', '');
+const mapboxSrc = token
+  ? `https://api.mapbox.com/styles/v1/mapbox/light-v11/static/pin-l+${pin}(${lng},${lat})/${lng},${lat},${zoom - 0.5},0/1200x700@2x?access_token=${token}&attribution=false&logo=false`
+  : null;
+---
+<figure class="map">
+  <div class="map-frame" role="img" aria-label={`Map showing the location of ${label}`}>
+    {mapboxSrc ? (
+      <img src={mapboxSrc} alt="" loading="lazy" decoding="async" width="1200" height="700" class="mapbox" />
+    ) : (
+      <>
+        <div class="tiles" style={`transform: translate(calc(-${px}px - 0px), calc(-${py}px));`}>
+          {tiles.map((t) => (
+            <img
+              src={`https://tile.openstreetmap.org/${zoom}/${t.x}/${t.y}.png`}
+              alt=""
+              width="256"
+              height="256"
+              loading="lazy"
+              decoding="async"
+              style={`left: ${t.dx * 256}px; top: ${t.dy * 256}px;`}
+            />
+          ))}
+        </div>
+        <div class="tone" aria-hidden="true"></div>
+        <span class="pin" aria-hidden="true"><span></span></span>
+      </>
+    )}
+  </div>
+  <figcaption class="mt-3 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[0.95rem]">
+    <span class="text-ink-muted">{token ? 'Map data © Mapbox © OpenStreetMap' : 'Map data © OpenStreetMap contributors'}</span>
+    <span class="flex gap-5">
+      <a class="link" href={mapsLink(query)} target="_blank" rel="noopener">Open in Google Maps</a>
+      <a class="link" href={directionsLink(query)} target="_blank" rel="noopener">Directions</a>
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .map-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-ui);
+    background: var(--c-base-deep);
+  }
+  @media (min-width: 768px) { .map-frame { aspect-ratio: 16 / 8; } }
+  .mapbox { width: 100%; height: 100%; object-fit: cover; }
+  .tiles { position: absolute; left: 50%; top: 50%; width: 0; height: 0; }
+  .tiles img {
+    position: absolute;
+    width: 256px;
+    height: 256px;
+    max-width: none;
+    filter: grayscale(1) sepia(0.28) contrast(0.9) brightness(1.04);
+  }
+  .tone { position: absolute; inset: 0; background: var(--c-base); mix-blend-mode: multiply; opacity: 0.55; pointer-events: none; }
+  .pin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.75rem 0 0 -0.75rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--c-accent) 28%, transparent);
+    display: grid;
+    place-items: center;
+  }
+  .pin span { width: 0.75rem; height: 0.75rem; border-radius: 9999px; background: var(--c-ink); box-shadow: 0 0 0 2px var(--c-surface); }
+</style>

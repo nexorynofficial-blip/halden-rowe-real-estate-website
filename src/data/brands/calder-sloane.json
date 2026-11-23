@@ -1,0 +1,75 @@
+{
+  "id": "calder-sloane",
+  "brokerageName": "Calder Sloane",
+  "legalName": "Calder Sloane Realty Group",
+  "logo": {
+    "monogram": "CS",
+    "wordmark": "Calder Sloane",
+    "descriptor": "Realty",
+    "src": null
+  },
+  "tagline": "Coastal property, handled by a team that answers its own phone.",
+  "description": "Calder Sloane is a coastal real estate team representing buyers and sellers from Hope Ranch to Carpinteria.",
+  "market": "Santa Barbara",
+  "founded": 2014,
+  "license": "CA DRE #02200417",
+
+  "baseColor": "#E6E4DD",
+  "primaryColor": "#1E2226",
+  "accentColor": "#3F6E68",
+  "secondaryColor": "#2C3A3B",
+  "tertiaryColor": "#8A7D63",
+  "surfaceColor": "#FBFBF8",
+
+  "fontHeading": "Fraunces",
+  "fontBody": "Public Sans",
+  "fontFiles": {
+    "heading": "/fonts/fraunces-var.woff2",
+    "headingWeight": "300 600",
+    "body": "/fonts/public-sans-var.woff2",
+    "bodyWeight": "100 900"
+  },
+
+  "heroImage": "1613490493576-7fde63acd811.jpg",
+  "heroListingId": "hr-1031",
+  "hero": {
+    "headline": "The coast is small. We know every house on it.",
+    "body": "Fourteen years of selling homes along one stretch of shoreline means we can tell you what a house is worth before the appraiser does.",
+    "primaryCta": "See this home",
+    "secondaryCta": "Browse all listings"
+  },
+
+  "contact": {
+    "phone": "(805) 555-0170",
+    "email": "team@caldersloane.com",
+    "street": "3 West Carrillo Street",
+    "city": "Santa Barbara, CA 93101",
+    "hours": "Monday to Saturday, 9 am to 6 pm",
+    "mapsQuery": "3 West Carrillo Street, Santa Barbara, CA 93101"
+  },
+
+  "booking": {
+    "provider": "demo",
+    "calOrigin": "https://cal.com",
+    "tourLengthMinutes": 30,
+    "callLengthMinutes": 15,
+    "daysAhead": 10
+  },
+
+  "leads": {
+    "webhookUrl": "",
+    "responseTime": "1 business hour",
+    "responseMinutes": 60
+  },
+
+  "analytics": {
+    "plausibleDomain": "",
+    "ga4Id": ""
+  },
+
+  "site": {
+    "url": "https://calder-sloane-demo.vercel.app",
+    "locale": "en_US",
+    "timezone": "America/Los_Angeles"
+  }
+}

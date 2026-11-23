@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import ListingCard from '../../components/ListingCard.astro';
+import BookingWidget from '../../components/BookingWidget.astro';
+import AskQuestion from '../../components/AskQuestion.astro';
+import Testimonial from '../../components/Testimonial.astro';
+import { brand } from '../../lib/brand';
+import { agents, type Agent, listingsFor, getNeighborhood, content } from '../../lib/data';
+
+export function getStaticPaths() {
+  return agents.map((a) => ({ params: { id: a.id }, props: { agent: a } }));
+}
+const { agent: a } = Astro.props as { agent: Agent };
+const own = listingsFor(a.id);
+const active = own.filter((l) => l.status !== 'pending');
+const quote = content.testimonials.find((t) => t.agentId === a.id);
+const tel = a.phone.replace(/\D/g, '');
+const areas = a.areas.map((s) => getNeighborhood(s).name);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: a.name,
+  jobTitle: a.title,
+  telephone: a.phone,
+  email: a.email,
+  worksFor: { '@type': 'Organization', name: brand.brokerageName },
+  areaServed: areas,
+  knowsLanguage: a.languages,
+};
+---
+<Layout title={`${a.name}, ${a.title}`} description={a.shortBio} ogImage={a.photo} bookHref="#book" jsonLd={jsonLd}>
+  <div class="wrap pt-8 md:pt-14">
+    <nav aria-label="Breadcrumb" class="text-sm text-ink-muted">
+      <a href="/agents/" class="link">All agents</a>
+    </nav>
+
+    <div class="mt-8 grid gap-12 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-6">
+        <h1 class="t-display">{a.name}</h1>
+        <p class="mt-3 text-lg text-ink-muted">{a.title}, {brand.brokerageName}</p>
+
+        <div class="prose-body mt-10 max-w-[36rem] text-[1.08rem] leading-[1.7]">
+          {a.bio.map((p) => <p>{p}</p>)}
+        </div>
+
+        <dl class="mt-10 grid max-w-[36rem] grid-cols-2 gap-x-8 gap-y-5 border-t border-line pt-6 sm:grid-cols-4">
+          <div><dt class="text-sm text-ink-muted">Years selling</dt><dd class="num mt-1 font-display text-2xl">{a.yearsActive}</dd></div>
+          <div><dt class="text-sm text-ink-muted">Homes sold</dt><dd class="num mt-1 font-display text-2xl">{a.homesSold}</dd></div>
+          <div><dt class="text-sm text-ink-muted">Sales volume</dt><dd class="num mt-1 font-display text-2xl">{a.salesVolume}</dd></div>
+          <div><dt class="text-sm text-ink-muted">Listed now</dt><dd class="num mt-1 font-display text-2xl">{active.length}</dd></div>
+        </dl>
+
+        <dl class="mt-8 max-w-[36rem] space-y-2 text-[0.98rem]">
+          <div class="flex gap-3"><dt class="w-28 shrink-0 text-ink-muted">Works in</dt><dd>{areas.join(', ')}</dd></div>
+          <div class="flex gap-3"><dt class="w-28 shrink-0 text-ink-muted">Speaks</dt><dd>{a.languages.join(', ')}</dd></div>
+          <div class="flex gap-3"><dt class="w-28 shrink-0 text-ink-muted">License</dt><dd class="num">{a.license}</dd></div>
+        </dl>
+      </div>
+
+      <div class="lg:col-span-5 lg:col-start-8">
+        <div class="overflow-hidden rounded-ui">
+          <Photo src={a.photo} alt={a.photoAlt} sizes="(min-width: 1024px) 38vw, 100vw" widths={[480, 720, 900]} priority class="aspect-[4/5] w-full object-cover" />
+        </div>
+
+        <div class="mt-8 space-y-3">
+          <BookingWidget mode="call" agent={a} id="book" group="agent" />
+          <AskQuestion agent={a} id="ask" group="agent" ctaLabel={`Ask ${a.firstName} a question`} />
+        </div>
+        <p class="mt-5 text-[0.95rem] text-ink-muted">
+          Direct line <a class="link num" href={`tel:${tel}`}>{a.phone}</a>. Email <a class="link" href={`mailto:${a.email}`}>{a.email}</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {own.length > 0 && (
+    <section class="wrap mt-28 md:mt-40" aria-labelledby="own-h">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="own-h" class="t-title">{a.firstName}’s listings</h2>
+        <p class="text-ink-muted">{active.length} available{own.length > active.length ? `, ${own.length - active.length} in escrow` : ''}</p>
+      </div>
+      <div class="lgrid mt-12">
+        {own.map((l, i) => (
+          <ListingCard listing={l} size={i === 0 ? 'lg' : 'md'} />
+        ))}
+      </div>
+    </section>
+  )}
+
+  {quote && (
+    <section class="wrap py-28 md:py-40" aria-label={`A client of ${a.firstName}'s`}>
+      <div class="lg:ml-[8.33%]">
+        <Testimonial t={quote} size="medium" />
+      </div>
+    </section>
+  )}
+</Layout>

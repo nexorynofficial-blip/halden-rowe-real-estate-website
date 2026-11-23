@@ -1,0 +1,404 @@
+[
+  {
+    "id": "hr-1024",
+    "slug": "1190-pepper-lane-montecito",
+    "title": "A glass and timber house under the oaks",
+    "address": { "street": "1190 Pepper Lane", "city": "Montecito", "state": "CA", "zip": "93108" },
+    "price": 8950000,
+    "status": "for-sale",
+    "bedrooms": 5,
+    "bathrooms": 5.5,
+    "sqft": 6120,
+    "lotAcres": 1.14,
+    "yearBuilt": 2019,
+    "propertyType": "Single-family home",
+    "neighborhood": "montecito",
+    "lat": 34.4363,
+    "lng": -119.6186,
+    "featured": true,
+    "listedDate": "2026-10-21",
+    "agentId": "mara-ellison",
+    "summary": "Built in 2019 around a 200-year-old coast live oak, with walls of glass that slide away on three sides.",
+    "description": [
+      "The house was designed around a single coast live oak, roughly two centuries old, that stands at the center of the lot. Every principal room looks onto it, and the architect stepped the roofline down so the canopy reads from the street before the house does.",
+      "The main level is one long room of white oak and limestone, with pocketing glass on three sides that opens the kitchen, dining and living areas to the terrace. Upstairs, four bedroom suites face the mountains. A fifth suite sits on the ground floor beside a study that could easily become a guest apartment.",
+      "The lower garden has a 60-foot lap pool, a spa set into the old stone wall, and a lawn level enough for a proper game of croquet. Lower Village shops and Butterfly Beach are a six-minute drive."
+    ],
+    "features": [
+      "Pocketing glass walls on three sides of the main level",
+      "60-foot saltwater lap pool and stone-set spa",
+      "Kitchen with Bulthaup cabinetry and a separate scullery",
+      "Ground-floor guest suite with private terrace",
+      "Solar array with Tesla Powerwall backup",
+      "Three-car garage with EV charging",
+      "Gated entry with two-car motor court"
+    ],
+    "images": [
+      { "src": "1600585154340-be6161a56a0c.jpg", "alt": "The house at dusk, lit from inside, with the oak canopy above the roofline" },
+      { "src": "1600607688969-a5bfcd646154.jpg", "alt": "The rear lawn and glass facade in afternoon light" },
+      { "src": "1600607687939-ce8a6c25118c.jpg", "alt": "Living room with a low white sofa and timber-clad feature wall" },
+      { "src": "1600585152220-90363fe7e115.jpg", "alt": "Kitchen with a white stone island, oak floors and pendant lights" },
+      { "src": "1600607687644-c7171b42498f.jpg", "alt": "Primary bedroom with full-height glass doors to the terrace" },
+      { "src": "1600566752355-35792bedcfea.jpg", "alt": "Primary bathroom with a freestanding tub and dark stone walls" },
+      { "src": "1600585154526-990dced4db0d.jpg", "alt": "Entry path along the timber-screened side of the house" }
+    ]
+  },
+  {
+    "id": "hr-1031",
+    "slug": "4470-via-esperanza-hope-ranch",
+    "title": "White modern house above a quiet Hope Ranch lagoon",
+    "address": { "street": "4470 Via Esperanza", "city": "Santa Barbara", "state": "CA", "zip": "93110" },
+    "price": 6400000,
+    "status": "for-sale",
+    "bedrooms": 4,
+    "bathrooms": 4.5,
+    "sqft": 5380,
+    "lotAcres": 0.92,
+    "yearBuilt": 2016,
+    "propertyType": "Single-family home",
+    "neighborhood": "hope-ranch",
+    "lat": 34.4296,
+    "lng": -119.7672,
+    "featured": true,
+    "listedDate": "2026-10-02",
+    "agentId": "julian-okafor",
+    "summary": "A crisp white house with a cantilevered upper floor, an infinity-edge pool and Hope Ranch beach access.",
+    "description": [
+      "This is one of a handful of contemporary houses in Hope Ranch, and one of very few with a clear line of sight to the lagoon. The upper floor cantilevers eleven feet over the pool terrace, which keeps the afternoon sun off the living room glass without a single awning.",
+      "Inside, the plan is calm and simple: a double-height living room, a kitchen with an island long enough for eight stools, and a stair of floating oak treads up to four bedroom suites. The primary suite has its own terrace facing west.",
+      "Membership in the Hope Ranch Park Homes Association brings private beach access, riding trails and the right to join the Valley Club waitlist."
+    ],
+    "features": [
+      "Infinity-edge pool with travertine deck",
+      "Cantilevered upper floor with west-facing primary terrace",
+      "Double-height living room with clerestory windows",
+      "Floating oak staircase",
+      "Private Hope Ranch beach and trail access",
+      "Whole-house water filtration and greywater irrigation"
+    ],
+    "images": [
+      { "src": "1613490493576-7fde63acd811.jpg", "alt": "White two-story house with a striped pool and timber soffit" },
+      { "src": "1613545325278-f24b0cae1224.jpg", "alt": "Bright living room with a stone fireplace wall and white seating" },
+      { "src": "1600566753086-00f18fb6b3ea.jpg", "alt": "Open living area with an open-tread stair and tall windows" },
+      { "src": "1616594039964-ae9021a400a0.jpg", "alt": "Bedroom with an upholstered bed and brass ceiling light" },
+      { "src": "1484154218962-a197022b5858.jpg", "alt": "Kitchen with white cabinetry and black pendant lights" },
+      { "src": "1613977257363-707ba9348227.jpg", "alt": "Pool terrace with outdoor seating at the rear of the house" }
+    ]
+  },
+  {
+    "id": "hr-1018",
+    "slug": "680-picacho-lane-montecito",
+    "title": "A 1928 courtyard estate, restored with restraint",
+    "address": { "street": "680 Picacho Lane", "city": "Montecito", "state": "CA", "zip": "93108" },
+    "price": 11750000,
+    "status": "for-sale",
+    "bedrooms": 6,
+    "bathrooms": 7,
+    "sqft": 7450,
+    "lotAcres": 2.31,
+    "yearBuilt": 1928,
+    "propertyType": "Estate",
+    "neighborhood": "montecito",
+    "lat": 34.4459,
+    "lng": -119.6347,
+    "featured": true,
+    "listedDate": "2026-09-14",
+    "agentId": "mara-ellison",
+    "summary": "A Spanish Colonial Revival estate arranged around a tiled courtyard and pool, restored in 2021.",
+    "description": [
+      "Designed in 1928 by a student of George Washington Smith, the house wraps three sides of a courtyard paved in its original Malibu tile. The 2021 restoration kept the hand-adzed beams, the plaster finishes and the iron hardware, and replaced everything you cannot see: plumbing, wiring, structural steel and a new roof of reclaimed clay tile.",
+      "The arched loggia opens onto the pool, which glows at night against the whitewashed walls. Six bedrooms are spread between the main house and a two-bedroom guest casita with its own kitchen.",
+      "The 2.3-acre grounds include a walled olive grove, a vegetable garden on drip irrigation, and a hilltop terrace with a view of the Channel Islands on clear afternoons."
+    ],
+    "features": [
+      "Original Malibu tile courtyard and fountain",
+      "2021 seismic and systems restoration",
+      "Two-bedroom guest casita with kitchen",
+      "Walled olive grove and kitchen garden",
+      "Wine cellar for 1,400 bottles",
+      "Ocean and island views from the hilltop terrace"
+    ],
+    "images": [
+      { "src": "1416331108676-a22ccb276e35.jpg", "alt": "Courtyard pool at night surrounded by whitewashed arches" },
+      { "src": "1600210491892-03d54c0aaf87.jpg", "alt": "Living room with exposed beams and arched windows" },
+      { "src": "1617806118233-18e1de247200.jpg", "alt": "Dining room with green velvet chairs and a round mirror" },
+      { "src": "1617104678098-de229db51175.jpg", "alt": "Bedroom with dark walls, linen bedding and tall windows" },
+      { "src": "1576013551627-0cc20b96c2a7.jpg", "alt": "Garden pool terrace framed by cypress trees" }
+    ]
+  },
+  {
+    "id": "hr-1009",
+    "slug": "1625-mission-ridge-road-riviera",
+    "title": "Riviera colonial with a pool lawn and city lights",
+    "address": { "street": "1625 Mission Ridge Road", "city": "Santa Barbara", "state": "CA", "zip": "93103" },
+    "price": 4850000,
+    "status": "for-sale",
+    "bedrooms": 4,
+    "bathrooms": 3.5,
+    "sqft": 3940,
+    "lotAcres": 0.48,
+    "yearBuilt": 1937,
+    "propertyType": "Single-family home",
+    "neighborhood": "riviera",
+    "lat": 34.4389,
+    "lng": -119.6898,
+    "featured": false,
+    "listedDate": "2026-10-28",
+    "agentId": "julian-okafor",
+    "summary": "A double-galleried colonial on the upper Riviera, with a pool lawn that catches the last light.",
+    "description": [
+      "Upper Riviera houses rarely come with this much flat ground. The pool lawn runs the full width of the lot and looks straight over the city to the harbor, which is why the original owners built the house with deep galleries on both floors.",
+      "The rooms are generously proportioned and full of daylight: a living room with built-in bookshelves, a family room off the kitchen, and four bedrooms upstairs, each opening onto the upper gallery.",
+      "You can walk to the Old Mission in twelve minutes, and the Riviera's switchback lanes make for one of the best evening walks in town."
+    ],
+    "features": [
+      "Upper and lower galleries facing the ocean",
+      "Heated pool on a level lawn",
+      "Library with built-in shelving",
+      "Updated kitchen with a six-burner range",
+      "Detached two-car garage with studio above"
+    ],
+    "images": [
+      { "src": "1564013799919-ab600027ffc6.jpg", "alt": "White colonial house with double galleries behind a pool and palms" },
+      { "src": "1545083036-b175dd155a1d.jpg", "alt": "Living room with built-in white shelving and gray sofas" },
+      { "src": "1556912173-3bb406ef7e77.jpg", "alt": "White kitchen with marble counters and a large range" },
+      { "src": "1505693416388-ac5ce068fe85.jpg", "alt": "Bedroom with tufted headboard and pale linens" }
+    ]
+  },
+  {
+    "id": "hr-1015",
+    "slug": "2275-lillie-avenue-summerland",
+    "title": "A shingled porch house two streets from the beach",
+    "address": { "street": "2275 Lillie Avenue", "city": "Summerland", "state": "CA", "zip": "93067" },
+    "price": 3195000,
+    "status": "for-sale",
+    "bedrooms": 3,
+    "bathrooms": 2.5,
+    "sqft": 2610,
+    "lotAcres": 0.31,
+    "yearBuilt": 1948,
+    "propertyType": "Single-family home",
+    "neighborhood": "summerland",
+    "lat": 34.4214,
+    "lng": -119.5966,
+    "featured": false,
+    "listedDate": "2026-10-09",
+    "agentId": "daniel-reyes",
+    "summary": "A wraparound porch, a big lawn and a five-minute walk to Lookout Park and the sand.",
+    "description": [
+      "Summerland is a village of porches, and this is one of the best of them: deep, wraparound and furnished like a second living room. The house behind it was rebuilt in 2017 on its original footprint, with new systems and the proportions of a 1940s beach cottage.",
+      "There are three bedrooms upstairs under the dormers and a ground floor that runs front to back, so you can see the garden from the front door. The kitchen opens onto a lawn big enough for a game of catch.",
+      "The Summerland Beach Cafe, the antiques shops on Lillie Avenue and the steps down to the beach are all a short walk."
+    ],
+    "features": [
+      "Wraparound covered porch",
+      "Rebuilt in 2017 with all new systems",
+      "Three dormered bedrooms upstairs",
+      "Large level lawn with mature hedging",
+      "Five-minute walk to the beach"
+    ],
+    "images": [
+      { "src": "1570129477492-45c003edd2be.jpg", "alt": "Gray shingled house with a white wraparound porch and wide lawn" },
+      { "src": "1560184897-ae75f418493e.jpg", "alt": "Covered porch with a swing bench and potted plants" },
+      { "src": "1600121848594-d8644e57abab.jpg", "alt": "Living room in soft grays with a large window" },
+      { "src": "1586023492125-27b2c045efd7.jpg", "alt": "Reading corner with a yellow armchair and floor lamp" }
+    ]
+  },
+  {
+    "id": "hr-1012",
+    "slug": "405-foothill-road-ojai",
+    "title": "Craftsman on the East End, with a view of the Topa Topas",
+    "address": { "street": "405 Foothill Road", "city": "Ojai", "state": "CA", "zip": "93023" },
+    "price": 2475000,
+    "status": "pending",
+    "bedrooms": 3,
+    "bathrooms": 2,
+    "sqft": 2280,
+    "lotAcres": 0.82,
+    "yearBuilt": 1924,
+    "propertyType": "Single-family home",
+    "neighborhood": "ojai",
+    "lat": 34.4513,
+    "lng": -119.258,
+    "featured": false,
+    "listedDate": "2026-08-30",
+    "agentId": "daniel-reyes",
+    "summary": "A 1924 craftsman with deep eaves, original built-ins and the Pink Moment from the back porch.",
+    "description": [
+      "This East End craftsman still has its original fir floors, built-in sideboards and clinker-brick chimney. The current owners added a modern kitchen in 2020 without disturbing the rest of the house.",
+      "The back porch faces the Topa Topa bluffs, which turn pink at sunset in what locals call the Pink Moment. The lot has a dozen mature orange trees, a vegetable garden and a converted barn used as a studio.",
+      "The house is in escrow. Ask Daniel about similar homes coming to market in the valley this winter."
+    ],
+    "features": [
+      "Original fir floors and built-in cabinetry",
+      "Clinker-brick fireplace",
+      "Converted barn studio",
+      "Twelve mature orange trees",
+      "Views of the Topa Topa bluffs"
+    ],
+    "images": [
+      { "src": "1583608205776-bfd35f0d9f83.jpg", "alt": "Gray craftsman house with stone base and a broad front lawn" },
+      { "src": "1618221195710-dd6b41faaea6.jpg", "alt": "Warm living room with wood floors and tall windows onto trees" },
+      { "src": "1600210492486-724fe5c67fb0.jpg", "alt": "Sunny living room with a gallery wall and leather chair" },
+      { "src": "1615874959474-d609969a20ed.jpg", "alt": "Bedroom with sage walls and orange accent pillows" }
+    ]
+  },
+  {
+    "id": "hr-1036",
+    "slug": "1810-cliff-drive-mesa",
+    "title": "Timber and blackened steel on the Mesa",
+    "address": { "street": "1810 Cliff Drive", "city": "Santa Barbara", "state": "CA", "zip": "93109" },
+    "price": 3695000,
+    "status": "for-sale",
+    "bedrooms": 4,
+    "bathrooms": 3.5,
+    "sqft": 3320,
+    "lotAcres": 0.21,
+    "yearBuilt": 2022,
+    "propertyType": "Single-family home",
+    "neighborhood": "mesa",
+    "lat": 34.4029,
+    "lng": -119.7231,
+    "featured": false,
+    "listedDate": "2026-10-15",
+    "agentId": "julian-okafor",
+    "summary": "A 2022 architect's house in cedar and steel, with a glass stair hall and a plunge pool.",
+    "description": [
+      "An architect designed this house for their own family and it shows: cedar cladding that will silver over the next decade, blackened steel window frames, and a stair hall of structural glass that pulls light down into the middle of the plan.",
+      "The kitchen and living room open to a plunge pool and deck. Four bedrooms are split across two floors, with the primary suite on its own level above the garage.",
+      "Shoreline Park and Mesa Lane steps are a short walk, and the Mesa's cafés are around the corner."
+    ],
+    "features": [
+      "Western red cedar cladding",
+      "Structural glass stair hall",
+      "Plunge pool and ipe deck",
+      "Gas fireplace set in a timber-clad wall",
+      "All-electric with induction cooking"
+    ],
+    "images": [
+      { "src": "1600566753190-17f0baa2a6c3.jpg", "alt": "Cedar and black steel house with a timber screen at street level" },
+      { "src": "1600573472550-8090b5e0745e.jpg", "alt": "Glass stair hall looking out to the plunge pool" },
+      { "src": "1600566753104-685f4f24cb4d.jpg", "alt": "Living room with a timber-paneled wall and linear fireplace" },
+      { "src": "1600566752229-250ed79470f8.jpg", "alt": "Minimal white kitchen with marble backsplash" },
+      { "src": "1600607687126-8a3414349a51.jpg", "alt": "Quiet bedroom with gray bedding and a small plant" }
+    ]
+  },
+  {
+    "id": "hr-1050",
+    "slug": "21-west-victoria-street-4b-downtown",
+    "title": "A corner residence above Victoria Street",
+    "address": { "street": "21 West Victoria Street", "unit": "Unit 4B", "city": "Santa Barbara", "state": "CA", "zip": "93101" },
+    "price": 7800,
+    "priceUnit": "month",
+    "status": "for-rent",
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "sqft": 1340,
+    "lotAcres": null,
+    "yearBuilt": 2018,
+    "propertyType": "Condominium",
+    "neighborhood": "downtown",
+    "lat": 34.4243,
+    "lng": -119.7046,
+    "featured": false,
+    "listedDate": "2026-11-01",
+    "agentId": "elena-varga",
+    "summary": "A two-bedroom corner residence with two balconies, steps from State Street and the Arlington.",
+    "description": [
+      "A top-floor corner unit with windows on two sides and a balcony off each bedroom. The building is quiet, with a lobby attendant on weekdays and secure parking for two cars.",
+      "The living room is furnished but can be left empty if you have your own pieces. A twelve-month lease is preferred; six months will be considered for the right tenant.",
+      "The Arlington Theatre, the Public Market and the Wednesday farmers market on State Street are all within three blocks."
+    ],
+    "features": [
+      "Top-floor corner unit with two balconies",
+      "Two secured parking spaces",
+      "In-unit washer and dryer",
+      "Furnished or unfurnished",
+      "Pets considered"
+    ],
+    "images": [
+      { "src": "1522708323590-d24dbb6b0267.jpg", "alt": "Bright apartment living room with a red armchair and dining table" },
+      { "src": "1502672260266-1c1ef2d93688.jpg", "alt": "Living area with plants, a mid-century chair and a gray sofa" },
+      { "src": "1493809842364-78817add7ffb.jpg", "alt": "Living room with herringbone floors and a blue velvet sofa" },
+      { "src": "1531835551805-16d864c8d311.jpg", "alt": "Bedroom with a patterned rug and gallery prints" }
+    ]
+  },
+  {
+    "id": "hr-1042",
+    "slug": "4890-sandyland-road-carpinteria",
+    "title": "Beach house on the Sandyland sand spit",
+    "address": { "street": "4890 Sandyland Road", "city": "Carpinteria", "state": "CA", "zip": "93013" },
+    "price": 5100000,
+    "status": "pending",
+    "bedrooms": 4,
+    "bathrooms": 4,
+    "sqft": 3560,
+    "lotAcres": 0.18,
+    "yearBuilt": 2020,
+    "propertyType": "Single-family home",
+    "neighborhood": "carpinteria",
+    "lat": 34.3925,
+    "lng": -119.5368,
+    "featured": false,
+    "listedDate": "2026-09-03",
+    "agentId": "mara-ellison",
+    "summary": "A new beach house on the sand spit, with a pool facing the dunes and an outdoor kitchen.",
+    "description": [
+      "Sandyland Road is the narrow strip between the salt marsh and the beach, and houses here rarely sell. This one was built in 2020 to the current coastal standards, raised on piers with flood-resistant ground-floor finishes.",
+      "The living spaces open fully to the pool and an outdoor kitchen, with the dunes just beyond. Four bedrooms each have their own bath.",
+      "The house is in escrow. Mara keeps a short list of buyers waiting for the next house on the spit, and you are welcome to join it."
+    ],
+    "features": [
+      "Built in 2020 to current coastal flood standards",
+      "Pool and outdoor kitchen facing the dunes",
+      "Four en-suite bedrooms",
+      "Walk to Carpinteria State Beach"
+    ],
+    "images": [
+      { "src": "1580587771525-78b9dba3b914.jpg", "alt": "Modern white and timber beach house with a pool in front" },
+      { "src": "1600566753151-384129cf4e3e.jpg", "alt": "Living room with glass doors open to the pool" },
+      { "src": "1604014237800-1c9102c219da.jpg", "alt": "Indoor-outdoor living room with a long dining table" },
+      { "src": "1582268611958-ebfd161ef9cf.jpg", "alt": "Pool house with sliding glass doors and lounge chairs" }
+    ]
+  },
+  {
+    "id": "hr-1047",
+    "slug": "1222-las-canoas-road-mission-canyon",
+    "title": "Furnished canyon house for a season or a year",
+    "address": { "street": "1222 Las Canoas Road", "city": "Santa Barbara", "state": "CA", "zip": "93105" },
+    "price": 14500,
+    "priceUnit": "month",
+    "status": "for-rent",
+    "bedrooms": 4,
+    "bathrooms": 4,
+    "sqft": 3780,
+    "lotAcres": 1.6,
+    "yearBuilt": 2015,
+    "propertyType": "Single-family home",
+    "neighborhood": "mission-canyon",
+    "lat": 34.4566,
+    "lng": -119.7134,
+    "featured": true,
+    "listedDate": "2026-10-25",
+    "agentId": "elena-varga",
+    "summary": "A furnished modern house in Mission Canyon, available for six months or longer.",
+    "description": [
+      "Set on 1.6 acres at the top of Mission Canyon, the house feels remote but is eight minutes from downtown. The owners are spending a year abroad and have left it fully furnished, down to the linens and the espresso machine.",
+      "The main floor is one open room with a dining table for ten, a living area around the fireplace, and doors that open onto the canyon. Four bedrooms are spread across two wings.",
+      "The Botanic Garden and the Tunnel and Jesusita trailheads are a short walk. Gardening and pool service are included in the rent."
+    ],
+    "features": [
+      "Fully furnished, including linens and kitchenware",
+      "Six-month minimum lease",
+      "Gardening and pool service included",
+      "Walk to the Botanic Garden and canyon trailheads",
+      "Fiber internet"
+    ],
+    "images": [
+      { "src": "1600566753376-12c8ab7fb75b.jpg", "alt": "Modern house at dusk with a timber screen and lit stairwell" },
+      { "src": "1600585153490-76fb20a32601.jpg", "alt": "Black-clad upper floor with vertical lit windows at dusk" },
+      { "src": "1600607687920-4e2a09cf159d.jpg", "alt": "Dining area with a black table beside a floating stair" },
+      { "src": "1600210491369-e753d80a41f3.jpg", "alt": "White living room with framed prints and a leather lounge chair" }
+    ]
+  }
+]

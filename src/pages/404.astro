@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { brand } from '../lib/brand';
+const tel = brand.contact.phone.replace(/\D/g, '');
+---
+<Layout title="Page not found" noindex>
+  <div class="wrap pt-16 pb-36 md:pt-28">
+    <h1 class="t-display max-w-[18ch]">This page isn’t here. The home you were looking for may have sold.</h1>
+    <p class="mt-6 max-w-[36rem] text-ink-muted">
+      Listings come down when they close. Browse what's on the market now, or call the office on
+      <a class="link num" href={`tel:${tel}`}>{brand.contact.phone}</a> and we'll tell you what happened to it.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="/listings/" class="btn btn-primary">See current listings</a>
+      <a href="/" class="btn btn-outline">Go to the home page</a>
+    </div>
+  </div>
+</Layout>

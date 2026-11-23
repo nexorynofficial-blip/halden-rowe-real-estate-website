@@ -1,0 +1,89 @@
+---
+import Logo from './Logo.astro';
+import { brand } from '../lib/brand';
+import { neighborhoods, agents, mapsLink, agentUrl } from '../lib/data';
+const year = new Date().getFullYear();
+const tel = brand.contact.phone.replace(/\D/g, '');
+---
+
+<footer class="site-foot on-dark bg-ink text-surface">
+  <div class="wrap pt-20 pb-10 md:pt-24">
+    <div class="grid gap-14 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <Logo tone="light" />
+        <p class="mt-8 max-w-sm font-display text-xl leading-snug text-surface">{brand.tagline}</p>
+      </div>
+
+      <div class="md:col-span-2">
+        <h2 class="foot-h">Neighborhoods</h2>
+        <ul class="mt-4 space-y-2">
+          {neighborhoods.slice(0, 6).map((n) => (
+            <li><a class="foot-link" href={`/neighborhoods/#${n.slug}`}>{n.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="md:col-span-2">
+        <h2 class="foot-h">Agents</h2>
+        <ul class="mt-4 space-y-2">
+          {agents.map((a) => (
+            <li><a class="foot-link" href={agentUrl(a)}>{a.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="md:col-span-3">
+        <h2 class="foot-h">Office</h2>
+        <address class="mt-4 not-italic text-on-dark-muted">
+          <a class="foot-link" href={mapsLink(brand.contact.mapsQuery)}>{brand.contact.street}<br />{brand.contact.city}</a>
+        </address>
+        <p class="mt-4"><a class="link num" href={`tel:${tel}`}>{brand.contact.phone}</a></p>
+        <p class="mt-1"><a class="link" href={`mailto:${brand.contact.email}`}>{brand.contact.email}</a></p>
+        <p class="mt-4 text-sm text-on-dark-muted">{brand.contact.hours}</p>
+      </div>
+    </div>
+
+    <div class="mt-20 flex flex-col gap-3 border-t border-[color-mix(in_srgb,var(--c-surface)_18%,transparent)] pt-6 text-sm text-on-dark-muted md:flex-row md:justify-between">
+      <p>&copy; {year} {brand.legalName}. {brand.license}. Equal Housing Opportunity.</p>
+      <p>Listing information is deemed reliable but not guaranteed. Photography for demonstration only.</p>
+    </div>
+  </div>
+  <div class="wordmark" aria-hidden="true" data-word={brand.logo.wordmark}></div>
+</footer>
+
+<style>
+  .site-foot { margin: 0.5rem; border-radius: 22px; overflow: hidden; }
+  @media (min-width: 768px) { .site-foot { margin: 0.75rem; border-radius: var(--radius-panel); } }
+  .foot-h {
+    font-family: var(--f-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--c-accent-on-dark);
+  }
+  .wordmark::before { content: attr(data-word); }
+  .wordmark {
+    font-family: var(--f-display);
+    font-size: clamp(4.5rem, 17.5vw, 17rem);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    text-align: center;
+    color: color-mix(in srgb, var(--c-surface) 7%, transparent);
+    margin-bottom: -0.12em;
+    user-select: none;
+    overflow: hidden;
+  }
+  .foot-link {
+    display: inline-block;
+    padding: 0.2rem 0;
+    color: var(--c-surface);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 160ms ease;
+  }
+  .foot-link:hover { text-decoration-color: var(--c-accent-on-dark); }
+  address .foot-link { color: var(--c-on-dark-muted); }
+  @media (max-width: 767px) { .foot-link { padding: 0.55rem 0; } ul.space-y-2 > :not(:last-child) { margin-bottom: 0; } }
+</style>

@@ -1,0 +1,211 @@
+---
+import { brand } from '../lib/brand';
+import type { Agent, Listing } from '../lib/data';
+import { shortAddress } from '../lib/data';
+
+interface Props {
+  agent: Agent;
+  listing?: Listing;
+  id: string;
+  ctaLabel?: string;
+  /** Opening line for the message box. Defaults to a listing reference. */
+  prefill?: string;
+  /** Render the form already open, without the toggle button. */
+  inline?: boolean;
+  group?: string;
+  topic?: string;
+  buttonClass?: string;
+}
+const { agent, listing, id, ctaLabel = 'Ask a Question', inline = false, group = 'actions', topic, buttonClass = 'btn btn-outline btn-block' } = Astro.props;
+const prefill =
+  Astro.props.prefill ??
+  (listing ? `Hi ${agent.firstName}, I have a question about ${shortAddress(listing)} (listing ${listing.id.toUpperCase()}): ` : `Hi ${agent.firstName}, `);
+
+const config = {
+  agent: { id: agent.id, firstName: agent.firstName, phone: agent.phone, hours: agent.hours },
+  listingId: listing?.id ?? null,
+  topic: topic ?? (listing ? 'listing' : 'agent'),
+  tz: brand.site.timezone,
+  responseMinutes: brand.leads.responseMinutes,
+};
+const panelId = `${id}-panel`;
+const tel = agent.phone.replace(/\D/g, '');
+---
+<section class="ask" id={id} data-ask data-config={JSON.stringify(config)} aria-label={ctaLabel}>
+  {!inline && (
+    <button type="button" class={buttonClass} data-toggle aria-expanded="false" aria-controls={panelId}>{ctaLabel}</button>
+  )}
+  <div class="expander" id={panelId} data-open={inline ? 'true' : 'false'} data-group={group} inert={!inline}>
+    <div class="expander-inner">
+      <div class:list={['panel', { 'panel-inline': inline }]}>
+        <form data-form>
+          <div class="space-y-5">
+            <div>
+              <label class="field-label" for={`${id}-name`}>Your name</label>
+              <input class="field" type="text" id={`${id}-name`} name="name" autocomplete="name" data-rule="name" />
+            </div>
+            <fieldset>
+              <legend class="field-label">How should {agent.firstName} reply?</legend>
+              <div class="flex flex-wrap gap-2">
+                <label class="choice"><input type="radio" name="replyBy" value="email" checked /><span>Email</span></label>
+                <label class="choice"><input type="radio" name="replyBy" value="call" /><span>Phone call</span></label>
+                <label class="choice"><input type="radio" name="replyBy" value="text" /><span>Text</span></label>
+              </div>
+            </fieldset>
+            <div data-when="email">
+              <label class="field-label" for={`${id}-email`}>Email</label>
+              <input class="field" id={`${id}-email`} name="email" type="email" autocomplete="email" inputmode="email" data-rule="email" />
+            </div>
+            <div data-when="call text" hidden>
+              <label class="field-label" for={`${id}-phone`}>Phone number</label>
+              <input class="field num" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" inputmode="tel" data-rule="phone" />
+            </div>
+            <div>
+              <label class="field-label" for={`${id}-message`}>Your question</label>
+              <textarea class="field" id={`${id}-message`} name="message" rows="5" data-rule="message">{prefill}</textarea>
+            </div>
+          </div>
+          <p class="alert mt-5" data-alert role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary btn-block mt-6" data-submit>Send to {agent.firstName}</button>
+          <p class="mt-3 text-sm text-ink-muted">{agent.firstName} usually replies {agent.responseTime}.</p>
+        </form>
+
+        <div data-done hidden tabindex="-1" class="outline-none">
+          <h3 class="font-display text-xl leading-tight">{agent.firstName} has your question.</h3>
+          <p class="mt-3" data-done-body></p>
+          <p class="mt-5 text-[0.95rem] text-ink-muted">
+            Need an answer sooner? Call <a class="link num" href={`tel:${tel}`}>{agent.phone}</a>.
+            <button type="button" class="link" data-another>Ask something else</button>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .expander { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 380ms var(--ease-out-soft); }
+  .expander[data-open='true'] { grid-template-rows: 1fr; }
+  .expander-inner { min-height: 0; overflow: hidden; }
+  .panel { margin-top: 0.75rem; padding: 1.25rem; border: 1px solid var(--c-line); border-radius: var(--radius-ui); background: var(--c-surface); }
+  @media (min-width: 768px) { .panel { padding: 1.5rem; } }
+  .panel-inline { margin-top: 0; }
+  .alert { padding: 0.8rem 1rem; border-left: 3px solid #9A3B2B; background: var(--c-base); border-radius: 0 var(--radius-ui) var(--radius-ui) 0; font-size: 0.97rem; }
+</style>
+
+<script>
+  import { profile, track, submitLead, FieldError, reference, setPanel } from '../scripts/core';
+  import { replyBy } from '../scripts/time';
+  import { attachValidation, validateForm, setServerError, formatPhone } from '../scripts/forms';
+
+  function init(root: HTMLElement) {
+    const cfg = JSON.parse(root.dataset.config!);
+    const panel = root.querySelector<HTMLElement>('.expander')!;
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]');
+    const form = root.querySelector<HTMLFormElement>('[data-form]')!;
+    const done = root.querySelector<HTMLElement>('[data-done]')!;
+    const alertEl = root.querySelector<HTMLElement>('[data-alert]')!;
+    const submit = root.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+
+    attachValidation(form);
+
+    const syncReply = () => {
+      const v = (form.querySelector<HTMLInputElement>('input[name="replyBy"]:checked')!).value;
+      form.querySelectorAll<HTMLElement>('[data-when]').forEach((el) => {
+        el.hidden = !el.dataset.when!.split(' ').includes(v);
+      });
+    };
+    form.addEventListener('change', (e) => { if ((e.target as HTMLInputElement).name === 'replyBy') syncReply(); });
+
+    const prefillFromProfile = () => {
+      const p = profile.get();
+      if (p.name && !field('name').value) field('name').value = p.name;
+      if (p.email && !field('email').value) field('email').value = p.email;
+      if (p.phone && !field('phone').value) field('phone').value = p.phone;
+      if (p.replyBy) {
+        const r = form.querySelector<HTMLInputElement>(`input[name="replyBy"][value="${p.replyBy}"]`);
+        if (r) r.checked = true;
+      }
+      syncReply();
+    };
+    prefillFromProfile();
+    field('phone').addEventListener('blur', () => { field('phone').value = formatPhone(field('phone').value); });
+
+    const open = () => {
+      setPanel(panel, toggle, true);
+      track('inquiry_opened', { listing: cfg.listingId, agent: cfg.agent.id });
+      // Put the caret at the end of the pre-filled message so the visitor just keeps typing.
+      const msg = field('message') as unknown as HTMLTextAreaElement;
+      setTimeout(() => { field('name').value ? (msg.focus({ preventScroll: true }), msg.setSelectionRange(msg.value.length, msg.value.length)) : field('name').focus({ preventScroll: true }); }, 200);
+    };
+    const close = () => setPanel(panel, toggle, false);
+    toggle?.addEventListener('click', () => (panel.dataset.open === 'true' ? close() : open()));
+    panel.addEventListener('panel:close', close);
+    root.addEventListener('ask:open', open);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertEl.hidden = true;
+      if (!validateForm(form)) return;
+      const data = new FormData(form);
+      const reply = String(data.get('replyBy'));
+      const payload = {
+        type: 'inquiry',
+        topic: cfg.topic,
+        listingId: cfg.listingId,
+        agentId: cfg.agent.id,
+        contact: {
+          name: String(data.get('name')).trim(),
+          replyBy: reply,
+          email: reply === 'email' ? String(data.get('email')).trim() : undefined,
+          phone: reply !== 'email' ? formatPhone(String(data.get('phone'))) : undefined,
+        },
+        message: String(data.get('message')).trim(),
+        ref: reference('Q'),
+      };
+      submit.disabled = true;
+      const label = submit.textContent;
+      submit.textContent = 'Sending…';
+      try {
+        await submitLead(payload);
+        profile.save({ name: payload.contact.name, email: payload.contact.email, phone: payload.contact.phone, replyBy: reply });
+        track('inquiry_submitted', { listing: cfg.listingId, agent: cfg.agent.id, replyBy: reply });
+        const when = replyBy(cfg.responseMinutes, cfg.agent.hours, cfg.tz);
+        const how = reply === 'email' ? `by email at ${payload.contact.email}` : reply === 'call' ? `with a call to ${payload.contact.phone}` : `by text at ${payload.contact.phone}`;
+        root.querySelector('[data-done-body]')!.textContent =
+          `${cfg.agent.firstName} will reply ${how} ${when}. Your reference is ${payload.ref}.`;
+        form.hidden = true;
+        done.hidden = false;
+        done.focus({ preventScroll: true });
+      } catch (err) {
+        alertEl.hidden = false;
+        if (err instanceof FieldError) {
+          // The address field may be hidden if the visitor switched reply method; show it again.
+          if (err.field === 'email') {
+            const r = form.querySelector<HTMLInputElement>('input[name="replyBy"][value="email"]')!;
+            r.checked = true; syncReply();
+          }
+          const f = field(err.field);
+          setServerError(f, err.message);
+          f.focus();
+          alertEl.textContent = 'Your question was not sent. Fix the highlighted field and send it again. Your message is still here.';
+        } else {
+          alertEl.textContent = `Your question was not sent because the connection dropped. Your message is still here. Try again, or call ${cfg.agent.firstName} on ${cfg.agent.phone}.`;
+        }
+      } finally {
+        submit.disabled = false;
+        submit.textContent = label;
+      }
+    });
+
+    root.querySelector('[data-another]')?.addEventListener('click', () => {
+      (field('message') as unknown as HTMLTextAreaElement).value = '';
+      done.hidden = true;
+      form.hidden = false;
+      field('message').focus();
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-ask]').forEach(init);
+</script>

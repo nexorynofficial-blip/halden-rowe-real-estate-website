@@ -1,0 +1,46 @@
+---
+import { neighborhoods, listingsIn, formatCompactPrice } from '../lib/data';
+interface Props { asOf: string; linkBase?: string }
+const { asOf, linkBase = '/neighborhoods/' } = Astro.props;
+const rows = neighborhoods.map((n) => {
+  const active = listingsIn(n.slug).filter((l) => l.status !== 'pending');
+  return { ...n, active: active.length };
+});
+---
+<table class="w-full text-left">
+  <caption class="sr-only">Median sale price, median days on market, and our active listings by neighborhood, {asOf}</caption>
+  <thead>
+    <tr class="text-sm text-ink-muted">
+      <th scope="col" class="pb-3 font-medium">Neighborhood</th>
+      <th scope="col" class="pb-3 text-right font-medium">Median sale</th>
+      <th scope="col" class="hidden pb-3 text-right font-medium sm:table-cell">Days on market</th>
+      <th scope="col" class="pb-3 text-right font-medium"><span class="sm:hidden">Ours</span><span class="hidden sm:inline">Our listings</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows.map((n) => (
+      <tr class="rule group">
+        <th scope="row" class="py-4 pr-4 font-normal">
+          <a href={`${linkBase}#${n.slug}`} class="hood-link font-display text-lg leading-tight">{n.name}</a>
+        </th>
+        <td class="num py-4 text-right">{formatCompactPrice(n.medianPrice)}</td>
+        <td class="num hidden py-4 text-right sm:table-cell">{n.medianDays} days</td>
+        <td class="num py-4 text-right">{n.active > 0 ? n.active : <span class="text-ink-muted">None</span>}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .hood-link {
+    display: inline-block;
+    padding: 0.35rem 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 160ms ease;
+  }
+  .hood-link:hover { text-decoration-color: var(--c-accent); }
+  tbody tr:last-child { border-bottom: 1px solid var(--c-line); }
+</style>

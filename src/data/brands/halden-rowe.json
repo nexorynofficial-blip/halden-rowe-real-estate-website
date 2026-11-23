@@ -1,0 +1,68 @@
+{
+  "id": "halden-rowe",
+  "brokerageName": "Halden Rowe",
+  "legalName": "Halden Rowe Estates, Inc.",
+  "logo": {
+    "monogram": "HR",
+    "wordmark": "Halden Rowe",
+    "descriptor": "Estates",
+    "src": null
+  },
+  "tagline": "Santa Barbara homes, represented by people who know the streets.",
+  "description": "Halden Rowe is an independent Santa Barbara brokerage representing homes in Montecito, Hope Ranch, the Riviera, Summerland, Carpinteria and Ojai.",
+  "market": "Santa Barbara",
+  "founded": 2009,
+  "license": "CA DRE #02145788",
+  "baseColor": "#F9F6EE",
+  "primaryColor": "#142334",
+  "accentColor": "#C9AD98",
+  "secondaryColor": "#1E3249",
+  "tertiaryColor": "#A88D78",
+  "surfaceColor": "#FFFFFF",
+  "fontHeading": "Bricolage Grotesque",
+  "fontBody": "Instrument Sans",
+  "fontFiles": {
+    "heading": "/fonts/bricolage-grotesque-var.woff2",
+    "headingWeight": "400 650",
+    "body": "/fonts/instrument-sans-var.woff2",
+    "bodyWeight": "400 700"
+  },
+  "heroImage": "1600585154340-be6161a56a0c.jpg",
+  "heroListingId": "hr-1024",
+  "hero": {
+    "headline": "Homes with a sense of place, sold with care.",
+    "body": "We represent a small number of exceptional properties between the Santa Ynez foothills and the sea, and we know every one of them by heart.",
+    "primaryCta": "See this home",
+    "secondaryCta": "Browse all listings"
+  },
+  "contact": {
+    "phone": "(805) 555-0100",
+    "email": "hello@haldenrowe.com",
+    "street": "1150 Coast Village Road, Suite 2",
+    "city": "Montecito, CA 93108",
+    "hours": "Open daily, 9 am to 6 pm",
+    "mapsQuery": "1150 Coast Village Road, Montecito, CA 93108"
+  },
+  "booking": {
+    "provider": "demo",
+    "calOrigin": "https://cal.com",
+    "tourLengthMinutes": 45,
+    "callLengthMinutes": 20,
+    "daysAhead": 21
+  },
+  "leads": {
+    "webhookUrl": "",
+    "responseTime": "2 business hours",
+    "responseMinutes": 120
+  },
+  "analytics": {
+    "plausibleDomain": "",
+    "ga4Id": ""
+  },
+  "site": {
+    "url": "https://halden-rowe-demo.vercel.app",
+    "locale": "en_US",
+    "timezone": "America/Los_Angeles"
+  },
+  "mutedColor": "#EAE3E0"
+}

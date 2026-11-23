@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/home/Hero.astro';
+import FloorPlan from '../components/FloorPlan.astro';
+import Sheet from '../components/Sheet.astro';
+import AboutIntro from '../components/home/AboutIntro.astro';
+import FeaturedReel from '../components/home/FeaturedReel.astro';
+import TeamRow from '../components/home/TeamRow.astro';
+import NeighborhoodExplorer from '../components/home/NeighborhoodExplorer.astro';
+import Testimonial from '../components/Testimonial.astro';
+import PrivateListings from '../components/PrivateListings.astro';
+import { brand, fill } from '../lib/brand';
+import { pictureSources } from '../lib/responsive';
+import { listings, agents, neighborhoods, content, heroListing, sortListings, getListing, shortAddress } from '../lib/data';
+
+const hero = await pictureSources(brand.heroImage);
+
+// Six homes for the reel, the hero home excluded.
+const picked = content.home.featuredIds.map((id) => getListing(id)).filter((l): l is NonNullable<typeof l> => !!l && l.id !== heroListing.id);
+const featured = (picked.length >= 6 ? picked : sortListings(listings.filter((l) => l.id !== heroListing.id && l.status !== 'pending'))).slice(0, 6);
+const quote = content.testimonials[0];
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateAgent',
+  name: brand.brokerageName,
+  description: brand.description,
+  telephone: brand.contact.phone,
+  email: brand.contact.email,
+  url: Astro.site?.toString(),
+  address: { '@type': 'PostalAddress', streetAddress: brand.contact.street, addressLocality: brand.contact.city },
+};
+---
+<Layout overlayHeader jsonLd={orgLd} preload={{ srcset: hero.avif, sizes: '100vw', type: 'image/avif' }}>
+  <Hero listing={heroListing} sources={hero} />
+
+  <Sheet tone="white" tab="About us" meta={`Since ${brand.founded}`} first>
+    <AboutIntro />
+  </Sheet>
+
+  <Sheet tone="ink" tab="Floor plan" meta={shortAddress(heroListing)}>
+    <FloorPlan listing={heroListing} />
+  </Sheet>
+
+  <Sheet tone="platinum" tab="Listings" meta={`${listings.length} homes`}>
+    <FeaturedReel
+      items={featured}
+      total={listings.length}
+      heading={content.home.listingsHeading}
+      intro={fill(content.home.listingsIntro, { listingCount: listings.length === 10 ? 'Ten' : listings.length })}
+    />
+  </Sheet>
+
+  <Sheet tone="base" tab="Agents" meta={`${agents.length} agents`}>
+    <TeamRow leadId={content.home.agentSpotlightId} heading={content.home.agentSpotlightHeading} />
+  </Sheet>
+
+  <Sheet tone="white" tab="Neighborhoods" meta={`${neighborhoods.length} areas`}>
+    <NeighborhoodExplorer heading={content.home.neighborhoodsHeading} intro={content.home.neighborhoodsIntro} asOf={content.home.neighborhoodsAsOf} />
+  </Sheet>
+
+  <Sheet tone="platinum" tab="Clients" meta={content.stats[2]?.value}>
+    <section class="wrap" aria-label="Client testimonial">
+      <div class="lg:px-16">
+        <Testimonial t={quote} />
+      </div>
+    </section>
+  </Sheet>
+
+  <Sheet tone="ink" tab="Private listings" meta="1 to 2 emails a month" last>
+    <PrivateListings />
+  </Sheet>
+</Layout>

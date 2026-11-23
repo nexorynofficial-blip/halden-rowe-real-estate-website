@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "montecito",
+    "name": "Montecito",
+    "medianPrice": 6850000,
+    "medianDays": 41,
+    "summary": "Oak-shaded lanes, walled estates and two villages with the best coffee on the South Coast.",
+    "body": "Montecito runs from the foothills to Butterfly Beach. Lower Village and Upper Village each have their own character, and the lanes between them are lined with century-old oaks and stone walls. Most sales here are private estates on an acre or more."
+  },
+  {
+    "slug": "hope-ranch",
+    "name": "Hope Ranch",
+    "medianPrice": 5900000,
+    "medianDays": 38,
+    "summary": "A gated enclave with its own beach, bridle trails and a lagoon at the center.",
+    "body": "Hope Ranch is a private community west of the city with roughly 750 homes, a members-only beach and miles of riding trails. Lots are large, often an acre or more, and the architecture is a mix of mid-century ranches and new contemporary houses."
+  },
+  {
+    "slug": "riviera",
+    "name": "The Riviera",
+    "medianPrice": 3400000,
+    "medianDays": 24,
+    "summary": "Switchback lanes on the hillside above the Old Mission, with views over the city to the harbor.",
+    "body": "The Riviera climbs the hill behind the Old Mission. Houses here date mostly from the 1920s and 1930s, and nearly all of them have a view. It is quiet, walkable and a few minutes from downtown."
+  },
+  {
+    "slug": "mesa",
+    "name": "The Mesa",
+    "medianPrice": 2650000,
+    "medianDays": 19,
+    "summary": "A flat coastal bluff of family streets, surf breaks and sunset walks along Shoreline Park.",
+    "body": "The Mesa sits on a bluff between the harbor and Hendry's Beach. It is the most neighborly part of town, with small cafés, good schools and the long clifftop path of Shoreline Park."
+  },
+  {
+    "slug": "downtown",
+    "name": "Downtown",
+    "medianPrice": 1450000,
+    "medianDays": 22,
+    "summary": "Condominiums and townhouses within walking distance of State Street, the Arlington and the Funk Zone.",
+    "body": "Downtown Santa Barbara has a small but growing supply of condominiums and townhouses, most of them built in the last decade. Residents walk to restaurants, theaters and the Saturday farmers market."
+  },
+  {
+    "slug": "mission-canyon",
+    "name": "Mission Canyon",
+    "medianPrice": 2950000,
+    "medianDays": 33,
+    "summary": "Wooded canyon lots above the Botanic Garden, with trailheads at the end of the street.",
+    "body": "Mission Canyon follows the creek up from the Old Mission into the foothills. Lots are wooded and private, and the hiking trails start at the top of the canyon."
+  },
+  {
+    "slug": "summerland",
+    "name": "Summerland",
+    "medianPrice": 3150000,
+    "medianDays": 27,
+    "summary": "A hillside beach village of porches, antiques shops and ocean views.",
+    "body": "Summerland is a tiny village between Montecito and Carpinteria. Its streets climb the hill above the freeway, so nearly every house has a view of the water, and the beach is reached by a short set of steps from Lookout Park."
+  },
+  {
+    "slug": "carpinteria",
+    "name": "Carpinteria",
+    "medianPrice": 1980000,
+    "medianDays": 29,
+    "summary": "A relaxed beach town with the calmest swimming beach on the coast.",
+    "body": "Carpinteria calls itself the world's safest beach, and the reef offshore keeps the water calm. The town is relaxed and walkable, with a strong local school district and a growing restaurant scene."
+  },
+  {
+    "slug": "ojai",
+    "name": "Ojai",
+    "medianPrice": 1850000,
+    "medianDays": 46,
+    "summary": "A valley town of citrus groves, craftsman houses and the Pink Moment at dusk.",
+    "body": "Ojai is forty minutes inland, in a valley ringed by mountains. The East End holds most of the older craftsman and ranch properties, many on an acre or more of citrus and oak."
+  }
+]

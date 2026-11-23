@@ -1,0 +1,121 @@
+---
+/**
+ * Listing gallery. Desktop: one large image with two beside it.
+ * Mobile: a swipeable strip. "All photos" expands the full set inline, captioned.
+ */
+import Photo from './Photo.astro';
+import type { ListingImage } from '../lib/data';
+
+interface Props { images: ListingImage[]; label: string }
+const { images, label } = Astro.props;
+---
+<div class="gallery" data-gallery>
+  <!-- One set of images: a swipeable strip on mobile, a 1 + 2 mosaic on desktop. -->
+  <div class="gal" data-count={Math.min(images.length, 3)} role="region" aria-label={`Photos of ${label}`} tabindex="0">
+    {images.map((im, i) => (
+      <div class:list={['gal-item', { lead: i === 0 }]}>
+        <Photo
+          src={im.src}
+          alt={im.alt}
+          sizes={i === 0 ? '(min-width: 1280px) 58vw, (min-width: 768px) 62vw, 88vw' : '(min-width: 768px) 34vw, 88vw'}
+          widths={i === 0 ? [480, 720, 960, 1280, 1600, 2000] : [480, 720, 960]}
+          priority={i === 0}
+          class="h-full w-full object-cover"
+        />
+      </div>
+    ))}
+  </div>
+  <p class="mt-2 flex justify-between text-sm text-ink-muted md:hidden">
+    <span>Swipe for more</span><span class="num">{images.length} photos</span>
+  </p>
+
+  {images.length > 3 && (
+    <div class="mt-4 hidden justify-end md:flex">
+      <button type="button" class="btn btn-outline" data-all-toggle aria-expanded="false" aria-controls="all-photos">
+        <span data-label-closed>See all {images.length} photos</span><span data-label-open hidden>Hide photos</span>
+      </button>
+    </div>
+  )}
+  <div class="md:hidden mt-3">
+    <button type="button" class="btn btn-outline btn-block" data-all-toggle aria-expanded="false" aria-controls="all-photos">
+      <span data-label-closed>See all photos with captions</span><span data-label-open hidden>Hide photos</span>
+    </button>
+  </div>
+
+  <div id="all-photos" class="all" hidden>
+    <h2 class="sr-only">All photos</h2>
+    <ul class="all-grid">
+      {images.map((im, i) => (
+        <li class:list={['all-item', { wide: i % 3 === 0 }]}>
+          <figure>
+            <Photo src={im.src} alt={im.alt} sizes={i % 3 === 0 ? '(min-width: 768px) 90vw, 100vw' : '(min-width: 768px) 45vw, 100vw'} widths={[480, 720, 960, 1280, 1600]} class="h-full w-full object-cover" />
+            <figcaption class="mt-2 text-[0.95rem] text-ink-muted">{im.alt}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .gal {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin-inline: -1.25rem;
+    padding-inline: 1.25rem;
+    scroll-padding-inline: 1.25rem;
+    scrollbar-width: none;
+  }
+  .gal::-webkit-scrollbar { display: none; }
+  .gal-item { flex: 0 0 88%; aspect-ratio: 4 / 3; scroll-snap-align: start; overflow: hidden; border-radius: 22px; background: var(--c-base-deep); }
+  .gal-item :global(picture) { display: block; height: 100%; }
+
+  @media (min-width: 768px) {
+    .gal {
+      display: grid;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+      grid-template-columns: 1.7fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.75rem;
+      height: clamp(26rem, 50vw, 44rem);
+    }
+    .gal-item { aspect-ratio: auto; }
+    .gal-item:nth-child(n + 4) { display: none; }
+    .gal-item.lead { grid-row: span 2; }
+    .gal[data-count='1'] { grid-template-columns: 1fr; }
+    .gal[data-count='2'] .gal-item:not(.lead) { grid-row: span 2; }
+  }
+
+  .all { margin-top: 2.5rem; }
+  .all-grid { display: grid; gap: 2rem 1rem; }
+  @media (min-width: 768px) {
+    .all-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem 1rem; }
+    .all-item.wide { grid-column: span 2; }
+  }
+  .all-item :global(img) { border-radius: var(--radius-ui); aspect-ratio: 3 / 2; }
+  .all-item.wide :global(img) { aspect-ratio: 16 / 9; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((g) => {
+    const all = g.querySelector<HTMLElement>('#all-photos')!;
+    const toggles = g.querySelectorAll<HTMLButtonElement>('[data-all-toggle]');
+    toggles.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        const open = all.hidden;
+        all.hidden = !open;
+        toggles.forEach((b) => {
+          b.setAttribute('aria-expanded', String(open));
+          b.querySelector<HTMLElement>('[data-label-closed]')!.hidden = open;
+          b.querySelector<HTMLElement>('[data-label-open]')!.hidden = !open;
+        });
+        if (open) all.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        else btn.scrollIntoView({ block: 'center' });
+      }),
+    );
+  });
+</script>

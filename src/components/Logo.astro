@@ -1,0 +1,59 @@
+---
+import { brand } from '../lib/brand';
+interface Props { class?: string; tone?: 'ink' | 'light' }
+const { class: cls = '', tone = 'ink' } = Astro.props;
+const { logo } = brand;
+---
+{logo.src ? (
+  <img src={logo.src} alt={brand.brokerageName} class:list={['h-9 w-auto', cls]} />
+) : (
+  <span class:list={['logo inline-flex items-center gap-3', cls]} data-tone={tone}>
+    <span class="logo-mark" aria-hidden="true">{logo.monogram}</span>
+    <span class="flex flex-col leading-none">
+      <span class="logo-word">{logo.wordmark}</span>
+      <span class="logo-desc">{logo.descriptor}</span>
+    </span>
+  </span>
+)}
+
+<style>
+  .logo { color: var(--c-ink); }
+  .logo[data-tone='light'] { color: var(--c-surface); }
+  .logo-mark {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid currentColor;
+    border-radius: 9999px;
+    font-family: var(--f-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: inherit;
+    position: relative;
+  }
+  /* A second, accent ring offset inside the first: the seal. */
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 9999px;
+    border: 1px solid var(--c-accent);
+    opacity: 0.9;
+  }
+  .logo[data-tone='light'] .logo-mark::after { border-color: var(--c-accent-on-dark); }
+  .logo-word {
+    font-family: var(--f-display);
+    font-size: 1.45rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .logo-desc {
+    margin-top: 0.2rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+  }
+</style>

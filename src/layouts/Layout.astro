@@ -1,0 +1,128 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { brand } from '../lib/brand';
+import { buildTheme, cssVarBlock } from '../lib/theme';
+import { img } from '../lib/images';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Loader from '../components/Loader.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string; // filename in src/assets
+  /** Home page: header sits transparently over the hero. */
+  overlayHeader?: boolean;
+  /** Where the header's "Book a Tour" goes. A #hash opens an on-page widget. */
+  bookHref?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Preload this image (used for the LCP hero). */
+  preload?: { srcset: string; sizes: string; type: string } | null;
+}
+
+const {
+  title,
+  description = brand.description,
+  ogImage = brand.heroImage,
+  overlayHeader = false,
+  bookHref = '/listings/',
+  noindex = false,
+  jsonLd,
+  preload = null,
+} = Astro.props;
+
+const { vars, report } = buildTheme(brand);
+const g = globalThis as any;
+if (!g.__themeReported) {
+  g.__themeReported = true;
+  const failing = report.filter((r) => r.ratio < r.min);
+  console.log(`\n[theme] ${brand.brokerageName}: contrast check`);
+  for (const r of report) console.log(`  ${r.ratio >= r.min ? 'pass' : 'FAIL'}  ${r.ratio.toFixed(2)}:1  ${r.pair}`);
+  if (failing.length) console.warn(`[theme] ${failing.length} pairing(s) below WCAG AA`);
+}
+
+const pageTitle = title ? `${title} | ${brand.brokerageName}` : `${brand.brokerageName} | ${brand.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: img(ogImage), width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 78 });
+const ogUrl = new URL(og.src, Astro.site);
+
+const runtime = {
+  brand: brand.id,
+  plausible: brand.analytics.plausibleDomain,
+  ga4: brand.analytics.ga4Id,
+  webhook: brand.leads.webhookUrl,
+  timezone: brand.site.timezone,
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <meta name="theme-color" content={brand.baseColor} />
+    <meta name="color-scheme" content="dark light" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={brand.brokerageName} />
+    <meta property="og:title" content={title ?? brand.brokerageName} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={brand.site.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href={`data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='6' fill='${brand.secondaryColor}'/><text x='32' y='42' font-family='Georgia,serif' font-size='28' text-anchor='middle' fill='${brand.baseColor}'>${brand.logo.monogram}</text></svg>`)}`} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preload" href={brand.fontFiles.heading} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={brand.fontFiles.body} as="font" type="font/woff2" crossorigin />
+    {preload && <link rel="preload" as="image" imagesrcset={preload.srcset} imagesizes={preload.sizes} type={preload.type} fetchpriority="high" />}
+
+    <style set:html={`@font-face{font-family:"${brand.fontHeading}";src:url(${brand.fontFiles.heading}) format("woff2");font-weight:${brand.fontFiles.headingWeight};font-style:normal;font-display:swap}${(brand.fontFiles as { headingItalic?: string }).headingItalic ? `@font-face{font-family:"${brand.fontHeading}";src:url(${(brand.fontFiles as { headingItalic?: string }).headingItalic}) format("woff2");font-weight:${brand.fontFiles.headingWeight};font-style:italic;font-display:swap}` : ''}@font-face{font-family:"${brand.fontBody}";src:url(${brand.fontFiles.body}) format("woff2");font-weight:${brand.fontFiles.bodyWeight};font-style:normal;font-display:swap}${cssVarBlock(vars)}`} />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, String.fromCharCode(92) + 'u003c')} />}
+    <script is:inline define:vars={{ runtime }}>window.__SITE__ = runtime;</script>
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script is:inline>
+      // Intro loader: once per session (?intro replays it). Decided before first paint.
+      (function () {
+        var d = document.documentElement, seen = false;
+        try { seen = sessionStorage.getItem('intro-seen') === '1'; } catch (e) {}
+        if (seen && !/[?&]intro(=|&|$)/.test(location.search)) return;
+        d.classList.add('is-loading');
+        try { sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
+        // Failsafe: if the loader script never runs, hide the loader and let the page animate.
+        setTimeout(function () { var l = document.querySelector('[data-loader]'); if (l) { l.remove(); document.querySelectorAll('[data-intro-wait]').forEach(function (e) { e.setAttribute('data-intro-go', ''); }); } }, 6000);
+      })();
+    </script>
+    {brand.analytics.plausibleDomain && (
+      <script is:inline defer data-domain={brand.analytics.plausibleDomain} src="https://plausible.io/js/script.js" />
+    )}
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <Loader />
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-ui focus:bg-ink focus:px-4 focus:py-3 focus:text-surface">Skip to content</a>
+    <Header overlay={overlayHeader} bookHref={bookHref} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    <slot name="after" />
+    <script>
+      // Shared scroll reveals: add .is-in once an element is a fifth of the way into view.
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.01 });
+      document.querySelectorAll('[data-reveal], [data-reveal-fade], [data-reveal-img]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

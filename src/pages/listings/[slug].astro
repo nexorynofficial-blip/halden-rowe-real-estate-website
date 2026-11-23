@@ -1,0 +1,295 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Gallery from '../../components/Gallery.astro';
+import StatusTag from '../../components/StatusTag.astro';
+import BookingWidget from '../../components/BookingWidget.astro';
+import AskQuestion from '../../components/AskQuestion.astro';
+import LocationMap from '../../components/LocationMap.astro';
+import ListingCard from '../../components/ListingCard.astro';
+import Photo from '../../components/Photo.astro';
+import FloorPlan from '../../components/FloorPlan.astro';
+import plans from '../../data/floorplans.json';
+import {
+  listings, type Listing, getAgent, getNeighborhood, formatPrice, formatBaths, formatNumber, formatCompactPrice,
+  fullAddress, shortAddress, agentUrl, sortListings, statusLabel,
+} from '../../lib/data';
+
+export function getStaticPaths() {
+  return listings.map((l) => ({ params: { slug: l.slug }, props: { listing: l } }));
+}
+
+const { listing: l } = Astro.props as { listing: Listing };
+const agent = getAgent(l.agentId);
+const hood = getNeighborhood(l.neighborhood);
+const tel = agent.phone.replace(/\D/g, '');
+const isPending = l.status === 'pending';
+const isLease = l.status === 'for-rent';
+
+const facts: [string, string][] = [
+  ['Status', statusLabel[l.status]],
+  ['Property type', l.propertyType],
+  ['Year built', String(l.yearBuilt)],
+  ['Interior', `${formatNumber(l.sqft)} sq ft`],
+  ...(l.lotAcres ? [['Lot', `${l.lotAcres} acres`] as [string, string]] : []),
+  ['Listed', new Date(l.listedDate + 'T12:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })],
+  ['Listing number', l.id.toUpperCase()],
+];
+if (!isLease) facts.splice(4, 0, ['Price per sq ft', `$${formatNumber(Math.round(l.price / l.sqft))}`]);
+
+// Similar homes: same neighborhood first, then nearest in price.
+const similar = sortListings(listings.filter((x) => x.id !== l.id && x.status !== 'pending' && (x.priceUnit ?? 'total') === (l.priceUnit ?? 'total')))
+  .sort((a, b) => Number(b.neighborhood === l.neighborhood) - Number(a.neighborhood === l.neighborhood) || Math.abs(a.price - l.price) - Math.abs(b.price - l.price))
+  .slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'RealEstateListing',
+  name: `${shortAddress(l)}, ${l.address.city}`,
+  description: l.summary,
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+  datePosted: l.listedDate,
+  offers: {
+    '@type': 'Offer',
+    price: l.price,
+    priceCurrency: 'USD',
+    availability: isPending ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+    ...(isLease ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: l.price, priceCurrency: 'USD', unitCode: 'MON' } } : {}),
+  },
+  about: {
+    '@type': l.propertyType === 'Condominium' ? 'Apartment' : 'SingleFamilyResidence',
+    address: { '@type': 'PostalAddress', streetAddress: shortAddress(l), addressLocality: l.address.city, addressRegion: l.address.state, postalCode: l.address.zip, addressCountry: 'US' },
+    geo: { '@type': 'GeoCoordinates', latitude: l.lat, longitude: l.lng },
+    numberOfRooms: l.bedrooms,
+    floorSize: { '@type': 'QuantitativeValue', value: l.sqft, unitCode: 'FTK' },
+  },
+};
+---
+<Layout
+  title={`${shortAddress(l)}, ${l.address.city}`}
+  description={`${formatPrice(l)}. ${l.bedrooms} beds, ${formatBaths(l.bathrooms)} baths, ${formatNumber(l.sqft)} sq ft in ${hood.name}. ${l.summary}`}
+  ogImage={l.images[0].src}
+  bookHref={isPending ? '/listings/' : '#tour'}
+  jsonLd={jsonLd}
+>
+  <article>
+    <div class="wrap pt-6 md:pt-8">
+      <nav aria-label="Breadcrumb" class="text-sm text-ink-muted">
+        <ol class="flex flex-wrap gap-2">
+          <li><a href="/listings/" class="link">Listings</a></li>
+          <li aria-hidden="true">/</li>
+          <li><a href={`/listings/?hood=${hood.slug}`} class="link">{hood.name}</a></li>
+        </ol>
+      </nav>
+
+      <header class="mt-6 grid gap-6 md:mt-8 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-8">
+          <h1 class="t-display">{shortAddress(l)}</h1>
+          <p class="mt-3 text-lg text-ink-muted">{l.address.city}, {l.address.state} {l.address.zip}</p>
+        </div>
+        <div class="lg:col-span-4 lg:text-right">
+          <StatusTag status={l.status} />
+          <p class="num mt-2 font-display text-3xl leading-none tracking-tight">{formatPrice(l)}</p>
+        </div>
+      </header>
+
+      <div class="mt-8 md:mt-10">
+        <Gallery images={l.images} label={shortAddress(l)} />
+      </div>
+    </div>
+
+    <div class="wrap detail mt-12 md:mt-16">
+      <!-- Key facts -->
+      <section class="d-head" aria-label="Key facts">
+        <p class="display t-title max-w-[26ch]">{l.title}</p>
+        <dl class="specs mt-8">
+          <div><dt>Bedrooms</dt><dd class="num">{l.bedrooms}</dd></div>
+          <div><dt>Bathrooms</dt><dd class="num">{formatBaths(l.bathrooms)}</dd></div>
+          <div><dt>Square feet</dt><dd class="num">{formatNumber(l.sqft)}</dd></div>
+          {l.lotAcres ? <div><dt>Acres</dt><dd class="num">{l.lotAcres}</dd></div> : <div><dt>Built</dt><dd class="num">{l.yearBuilt}</dd></div>}
+        </dl>
+      </section>
+
+      <!-- Agent + actions -->
+      <aside class="d-aside" aria-label={`Contact ${agent.name}`}>
+        <div class="aside-inner">
+          <div class="flex items-center gap-4">
+            <a href={agentUrl(agent)} class="shrink-0 overflow-hidden rounded-ui">
+              <Photo src={agent.photo} alt={agent.name} sizes="72px" widths={[160]} class="h-[4.5rem] w-[4.5rem] object-cover" />
+            </a>
+            <div>
+              <p class="text-sm text-ink-muted">Listed by</p>
+              <p class="font-display text-lg leading-tight"><a href={agentUrl(agent)} class="hover:underline underline-offset-4">{agent.name}</a></p>
+              <p class="text-sm text-ink-muted">{agent.title}</p>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-3">
+            {isPending ? (
+              <div class="rounded-ui bg-walnut p-4 text-surface">
+                <p class="font-semibold">This home is in escrow.</p>
+                <p class="mt-1 text-[0.95rem] text-on-dark-muted">Tours have stopped. Ask {agent.firstName} about similar homes in {hood.name} before they're listed.</p>
+              </div>
+            ) : (
+              <BookingWidget mode="tour" agent={agent} listing={l} id="tour" group="listing" />
+            )}
+            <AskQuestion agent={agent} listing={l} id="ask" group="listing" ctaLabel={isPending ? `Ask ${agent.firstName} about similar homes` : 'Ask a Question'} prefill={isPending ? `Hi ${agent.firstName}, I missed ${shortAddress(l)}. I'm looking for something similar in ${hood.name}: ` : undefined} />
+          </div>
+
+          <p class="mt-5 text-[0.95rem] text-ink-muted">
+            Or call <a class="link num" href={`tel:${tel}`}>{agent.phone}</a>. {agent.firstName} replies {agent.responseTime}.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Long-form -->
+      <div class="d-body">
+        <section aria-labelledby="about-h" class="pt-4">
+          <h2 id="about-h" class="t-title">About the house</h2>
+          <div class="prose-body mt-6 max-w-[38rem] text-[1.08rem] leading-[1.7]">
+            {l.description.map((p) => <p>{p}</p>)}
+          </div>
+        </section>
+
+        <section aria-labelledby="features-h" class="mt-16">
+          <h2 id="features-h" class="text-xl">What stands out</h2>
+          <ul class="mt-6 grid gap-x-10 sm:grid-cols-2">
+            {l.features.map((f) => <li class="rule py-3">{f}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="facts-h" class="mt-16">
+          <h2 id="facts-h" class="text-xl">Details</h2>
+          <dl class="mt-6 grid gap-x-10 sm:grid-cols-2">
+            {facts.map(([k, v]) => (
+              <div class="rule flex justify-between gap-6 py-3">
+                <dt class="text-ink-muted">{k}</dt>
+                <dd class="num text-right font-medium">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section aria-labelledby="where-h" class="mt-16">
+          <h2 id="where-h" class="text-xl">Where it is</h2>
+          <p class="mt-3 max-w-[38rem] text-ink-muted">{hood.summary}</p>
+          <div class="mt-6">
+            <LocationMap lat={l.lat} lng={l.lng} label={shortAddress(l)} query={fullAddress(l)} />
+          </div>
+          <dl class="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3">
+            <div><dt class="text-sm text-ink-muted">{hood.name} median sale</dt><dd class="num mt-1 font-display text-xl">{formatCompactPrice(hood.medianPrice)}</dd></div>
+            <div><dt class="text-sm text-ink-muted">Median days on market</dt><dd class="num mt-1 font-display text-xl">{hood.medianDays}</dd></div>
+            <div class="col-span-2 sm:col-span-1"><dt class="text-sm text-ink-muted">Area guide</dt><dd class="mt-1"><a class="link" href={`/neighborhoods/#${hood.slug}`}>Living in {hood.name}</a></dd></div>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </article>
+
+  {(plans as Record<string, unknown>)[l.id] && (
+    <div class="plan-panel scope-dark mt-24 md:mt-32">
+      <FloorPlan listing={l} />
+    </div>
+  )}
+
+  {similar.length > 0 && (
+    <section class="wrap mt-28 pb-28 md:mt-36 md:pb-36" aria-labelledby="similar-h">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="similar-h" class="t-title">{similar.some((s) => s.neighborhood === l.neighborhood) ? `More in ${hood.name} and nearby` : 'Similar homes nearby'}</h2>
+        <a href="/listings/" class="link font-medium">All listings</a>
+      </div>
+      <div class="mt-10 grid gap-10 md:grid-cols-3 md:gap-6">
+        {similar.map((s) => <ListingCard listing={s} size="md" data-shape="wide" sizes="(min-width: 768px) 30vw, 100vw" />)}
+      </div>
+    </section>
+  )}
+
+  <!-- Mobile action bar: appears once the booking controls scroll out of view -->
+  {!isPending && (
+    <div class="mbar md:hidden" data-mbar aria-hidden="true">
+      <div class="flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <p class="num truncate font-semibold">{formatPrice(l)}</p>
+          <p class="truncate text-sm text-ink-muted">{shortAddress(l)}</p>
+        </div>
+        <button type="button" class="btn btn-primary shrink-0" data-mbar-book tabindex="-1">Book a Tour</button>
+      </div>
+    </div>
+  )}
+</Layout>
+
+<style>
+  .detail { display: grid; gap: 3rem; grid-template-areas: 'head' 'aside' 'body'; }
+  .d-head { grid-area: head; }
+  .d-aside { grid-area: aside; }
+  .d-body { grid-area: body; }
+  @media (min-width: 1024px) {
+    .detail {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 1fr) minmax(0, 4fr);
+      grid-template-areas: 'head . aside' 'body . aside';
+      grid-template-rows: auto 1fr;
+      column-gap: 2rem;
+      row-gap: 3.5rem;
+    }
+    .aside-inner { position: sticky; top: 6.5rem; }
+    /* When a panel is open its content can exceed the viewport; let it scroll with the page. */
+    .d-aside:has([data-open='true']) .aside-inner { position: static; }
+  }
+
+  .aside-inner { background: var(--c-surface); border-radius: var(--radius-panel); box-shadow: var(--shadow-panel); padding: 1.5rem; }
+  @media (min-width: 768px) { .aside-inner { padding: 1.75rem; } }
+  .plan-panel { margin-inline: 0.5rem; border-radius: 22px; overflow-x: clip; padding-bottom: 4rem; }
+  @media (min-width: 768px) { .plan-panel { margin-inline: 0.75rem; border-radius: var(--radius-panel); padding-bottom: 6rem; } }
+  .plan-panel > :global(section) { padding-top: 4rem; }
+  .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; border-top: 1px solid var(--c-line); padding-top: 1.25rem; }
+  @media (min-width: 640px) { .specs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .specs dt { font-size: 0.9rem; color: var(--c-ink-muted); }
+  .specs dd { margin-top: 0.15rem; font-family: var(--f-display); font-size: 2.075rem; line-height: 1.1; letter-spacing: -0.01em; }
+
+  .mbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 0.75rem 1.25rem max(0.75rem, env(safe-area-inset-bottom));
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-line);
+    box-shadow: 0 -12px 30px -20px rgb(14 22 33 / 0.4);
+    transform: translateY(110%);
+    transition: transform 320ms var(--ease-out-soft);
+  }
+  .mbar[data-show='true'] { transform: none; }
+</style>
+
+<script>
+  import { track } from '../../scripts/core';
+
+  const id = location.pathname.split('/').filter(Boolean).pop();
+  track('listing_view', { listing: id });
+
+  const bar = document.querySelector<HTMLElement>('[data-mbar]');
+  const tour = document.getElementById('tour');
+  if (bar && tour) {
+    const btn = bar.querySelector<HTMLButtonElement>('[data-mbar-book]')!;
+    // Show only once the in-page booking controls have scrolled above the viewport.
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const show = tour.getBoundingClientRect().bottom < 0;
+      if (bar.dataset.show === String(show)) return;
+      bar.dataset.show = String(show);
+      bar.setAttribute('aria-hidden', String(!show));
+      btn.tabIndex = show ? 0 : -1;
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    update();
+    btn.addEventListener('click', () => tour.dispatchEvent(new CustomEvent('booking:open')));
+    // A booked tour turns the bar's button into a link to the confirmation.
+    const sync = () => {
+      const booked = !tour.querySelector('[data-booked]')?.hasAttribute('hidden');
+      btn.textContent = booked ? 'View your booking' : 'Book a Tour';
+    };
+    sync();
+    new MutationObserver(sync).observe(tour, { attributes: true, subtree: true, attributeFilter: ['hidden'] });
+  }
+</script>

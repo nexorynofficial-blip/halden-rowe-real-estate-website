@@ -1,0 +1,104 @@
+---
+/** Lead capture for off-market homes: email + area, inline confirmation. */
+import { neighborhoods, content } from '../lib/data';
+const copy = content.privateListings;
+---
+<section class="wrap" aria-labelledby="pl-h" data-pl>
+  <div class="pl grid gap-12 lg:grid-cols-12 lg:gap-8">
+    <div class="lg:col-span-6">
+      <h2 id="pl-h" class="t-display max-w-[15ch]" data-reveal>
+        <span class="rl"><span>Hear about homes</span></span>
+        <span class="rl" style="--i:1"><span>before they’re listed.</span></span>
+      </h2>
+    </div>
+    <div class="lg:col-span-5 lg:col-start-8" data-reveal-fade>
+      <p class="text-lg leading-relaxed pl-soft">{copy.body}</p>
+
+      <form class="mt-8" data-pl-form novalidate>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="pl-label" for="pl-email">Email</label>
+            <input class="field pl-field" id="pl-email" name="email" type="email" autocomplete="email" inputmode="email" data-rule="email" />
+          </div>
+          <div>
+            <label class="pl-label" for="pl-area">Area</label>
+            <select class="field pl-field" id="pl-area" name="area">
+              <option value="any">Anywhere we work</option>
+              {neighborhoods.map((n) => <option value={n.slug}>{n.name}</option>)}
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-accent btn-block mt-5 sm:w-auto" data-pl-submit>{copy.cta}</button>
+        <p class="mt-4 text-sm pl-soft">{copy.fine}</p>
+      </form>
+
+      <div data-pl-done hidden tabindex="-1" class="mt-8 outline-none">
+        <p class="font-display text-xl leading-snug" data-pl-done-text></p>
+        <p class="mt-3 pl-soft">{copy.doneFine}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pl { position: relative; isolation: isolate; }
+  /* The seal from the logo, drawn large and faint: a quiet brand mark behind the form. */
+  .pl::before {
+    content: '';
+    position: absolute;
+    width: 46rem; height: 46rem;
+    right: -22rem; top: 1rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+    box-shadow: inset 0 0 0 28px color-mix(in srgb, var(--c-accent) 6%, transparent);
+    z-index: -1;
+  }
+  .pl-soft { color: var(--c-on-dark-muted); }
+  .pl-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--c-deep-text); }
+  .pl-field { background-color: #FFFFFF; border-color: transparent; color: #142334; border-radius: 12px; }
+  .pl-field:focus { border-color: var(--c-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-accent) 45%, transparent); }
+  .pl :global(.field-error) { color: #F4B9AA; }
+  .pl :global(:focus-visible) { outline-color: var(--c-accent); }
+  select.pl-field { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23142334' stroke-width='1.5'/%3E%3C/svg%3E"); }
+</style>
+
+<script>
+  import { submitLead, track, profile, FieldError } from '../scripts/core';
+  import { attachValidation, validateForm, setServerError } from '../scripts/forms';
+
+  document.querySelectorAll<HTMLElement>('[data-pl]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('[data-pl-form]')!;
+    const done = root.querySelector<HTMLElement>('[data-pl-done]')!;
+    const btn = root.querySelector<HTMLButtonElement>('[data-pl-submit]')!;
+    const email = form.elements.namedItem('email') as HTMLInputElement;
+    const area = form.elements.namedItem('area') as HTMLSelectElement;
+    attachValidation(form);
+    const p = profile.get();
+    if (p.email) email.value = p.email;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm(form)) return;
+      btn.disabled = true;
+      const label = btn.textContent;
+      btn.textContent = 'Adding you…';
+      try {
+        await submitLead({ type: 'private_listings', contact: { email: email.value.trim() }, area: area.value });
+        profile.save({ email: email.value.trim() });
+        track('private_listings_joined', { area: area.value });
+        const where = area.value === 'any' ? 'every area we work in' : area.selectedOptions[0].textContent;
+        root.querySelector('[data-pl-done-text]')!.textContent = `You're on the list for ${where}. The next private listing goes to ${email.value.trim()}.`;
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+      } catch (err) {
+        if (err instanceof FieldError && err.field === 'email') setServerError(email, err.message);
+        else setServerError(email, 'That didn\'t go through because the connection dropped. Your email is still here; try again.');
+        email.focus();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = label;
+      }
+    });
+  });
+</script>

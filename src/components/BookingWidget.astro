@@ -1,0 +1,668 @@
+---
+import { brand } from '../lib/brand';
+import type { Agent, Listing } from '../lib/data';
+import { fullAddress, shortAddress } from '../lib/data';
+
+interface Props {
+  mode: 'tour' | 'call';
+  agent: Agent;
+  listing?: Listing;
+  id: string;
+  ctaLabel?: string;
+  group?: string;
+}
+const { mode, agent, listing, id, group = 'actions' } = Astro.props;
+const ctaLabel = Astro.props.ctaLabel ?? (mode === 'tour' ? 'Book a Tour' : `Book a call with ${agent.firstName}`);
+const panelId = `${id}-panel`;
+
+const config = {
+  mode,
+  key: mode === 'tour' ? `booking:${listing!.id}` : `call:${agent.id}`,
+  seed: mode === 'tour' ? listing!.id : agent.id,
+  listingId: listing?.id ?? null,
+  listingRef: listing ? listing.id.toUpperCase() : null,
+  place: listing ? shortAddress(listing) : null,
+  address: listing ? fullAddress(listing) : brand.contact.mapsQuery,
+  agent: { id: agent.id, name: agent.name, firstName: agent.firstName, phone: agent.phone, email: agent.email, hours: agent.hours, calLink: agent.calendarBookingLink },
+  tz: brand.site.timezone,
+  daysAhead: brand.booking.daysAhead,
+  stepMinutes: mode === 'tour' ? 60 : 30,
+  duration: mode === 'tour' ? brand.booking.tourLengthMinutes : brand.booking.callLengthMinutes,
+  provider: brand.booking.provider,
+  calOrigin: brand.booking.calOrigin,
+  colors: { accent: brand.accentColor, ink: brand.primaryColor, base: brand.baseColor },
+  brokerage: brand.brokerageName,
+};
+const tel = agent.phone.replace(/\D/g, '');
+---
+<section class="booking" id={id} data-booking data-config={JSON.stringify(config)} aria-label={mode === 'tour' ? 'Book a tour' : `Book a call with ${agent.firstName}`}>
+  <div data-cta>
+    <button type="button" class="btn btn-primary btn-block" data-toggle aria-expanded="false" aria-controls={panelId}>{ctaLabel}</button>
+    <p class="mt-2 text-[0.92rem] text-ink-muted" data-soonest hidden></p>
+  </div>
+
+  <div data-booked hidden class="booked">
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold">You're booked</p>
+        <p class="mt-1 font-display text-lg leading-snug" data-booked-when></p>
+      </div>
+      <button type="button" class="booked-toggle" data-toggle aria-expanded="false" aria-controls={panelId}>Details</button>
+    </div>
+  </div>
+
+  <div class="expander" id={panelId} data-open="false" data-group={group} inert>
+    <div class="expander-inner">
+      <div class="panel">
+        <!-- Step 1: time -->
+        <div data-step="slot">
+          <p class="alert" data-slot-alert role="alert" hidden></p>
+
+          <fieldset>
+            <legend class="step-legend days-legend">Choose a day<span class="days-month" data-days-month></span></legend>
+            <div class="days-wrap" data-days-wrap>
+              <div class="days" data-days></div>
+              <button type="button" class="days-nav prev" data-days-prev aria-label="Earlier days" hidden>
+                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+              </button>
+              <button type="button" class="days-nav next" data-days-next aria-label="Later days">
+                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" /></svg>
+              </button>
+            </div>
+          </fieldset>
+
+          <fieldset class="mt-6">
+            <legend class="step-legend">Choose a time <span class="font-normal text-ink-muted">(Pacific time)</span></legend>
+            <div class="times" data-times></div>
+            <p class="mt-2 text-[0.95rem] text-ink-muted" data-times-empty hidden></p>
+          </fieldset>
+
+          {mode === 'tour' ? (
+            <fieldset class="mt-6">
+              <legend class="step-legend">How would you like to see it?</legend>
+              <div class="flex flex-wrap gap-2">
+                <label class="choice"><input type="radio" name={`${id}-kind`} value="in-person" checked /><span>In person</span></label>
+                <label class="choice"><input type="radio" name={`${id}-kind`} value="video" /><span>Live video walkthrough</span></label>
+              </div>
+            </fieldset>
+          ) : (
+            <fieldset class="mt-6">
+              <legend class="step-legend">Phone or video?</legend>
+              <div class="flex flex-wrap gap-2">
+                <label class="choice"><input type="radio" name={`${id}-kind`} value="phone" checked /><span>Phone call</span></label>
+                <label class="choice"><input type="radio" name={`${id}-kind`} value="video" /><span>Video call</span></label>
+              </div>
+            </fieldset>
+          )}
+
+          <button type="button" class="btn btn-primary btn-block mt-7" data-next disabled>Pick a time to continue</button>
+        </div>
+
+        <!-- Step 2: details -->
+        <form data-step="details" hidden>
+          <div class="summary">
+            <p data-summary class="font-medium"></p>
+            <button type="button" class="link text-[0.95rem]" data-back>Change time</button>
+          </div>
+
+          <p class="prefilled" data-prefilled hidden>
+            We filled this in from your last visit. <button type="button" class="link" data-forget>Not you?</button>
+          </p>
+
+          <div class="mt-5 space-y-5">
+            <div>
+              <label class="field-label" for={`${id}-name`}>Full name</label>
+              <input class="field" type="text" id={`${id}-name`} name="name" autocomplete="name" data-rule="name" />
+            </div>
+            <div>
+              <label class="field-label" for={`${id}-email`}>Email</label>
+              <input class="field" id={`${id}-email`} name="email" type="email" autocomplete="email" inputmode="email" data-rule="email" />
+            </div>
+            <div>
+              <label class="field-label" for={`${id}-phone`}>Mobile number</label>
+              <input class="field num" id={`${id}-phone`} name="phone" type="tel" autocomplete="tel" inputmode="tel" data-rule="phone" />
+            </div>
+            <fieldset>
+              <legend class="field-label">Send my confirmation by</legend>
+              <div class="flex flex-wrap gap-2">
+                <label class="choice"><input type="radio" name="confirmBy" value="text" checked /><span>Text message</span></label>
+                <label class="choice"><input type="radio" name="confirmBy" value="email" /><span>Email</span></label>
+              </div>
+            </fieldset>
+            <div>
+              <label class="field-label" for={`${id}-notes`}>Anything {agent.firstName} should know? <span class="font-normal text-ink-muted">(optional)</span></label>
+              <textarea class="field" id={`${id}-notes`} name="notes" rows="3" placeholder={mode === 'tour' ? 'For example: we have pre-approval, or we\'ll bring our contractor' : 'For example: we\'re relocating in the spring'}></textarea>
+            </div>
+          </div>
+
+          <p class="alert mt-5" data-form-alert role="alert" hidden></p>
+          <button type="submit" class="btn btn-primary btn-block mt-6" data-submit>Book</button>
+          <p class="mt-3 text-sm text-ink-muted">No account needed. {agent.firstName} sees your request the moment you send it.</p>
+        </form>
+
+        <!-- Step 3: confirmation -->
+        <div data-step="done" hidden tabindex="-1" class="outline-none">
+          <h3 class="font-display text-xl leading-tight" data-done-title>You're booked.</h3>
+          <p class="mt-3" data-done-body></p>
+          <ul class="mt-6 grid gap-2">
+            <li><a class="btn btn-outline btn-block" data-ics download="booking.ics" href="#">Add to calendar</a></li>
+            <li><a class="btn btn-outline btn-block" data-gcal target="_blank" rel="noopener" href="#">Add to Google Calendar</a></li>
+            <li data-directions-wrap><a class="btn btn-outline btn-block" data-directions target="_blank" rel="noopener" href="#">Get directions</a></li>
+          </ul>
+          <p class="mt-6 text-[0.95rem] text-ink-muted">
+            Need to change it? <button type="button" class="link" data-reschedule>Pick a different time</button>, or
+            <button type="button" class="link" data-cancel>cancel</button>. You can also call {agent.firstName} on <a class="link num" href={`tel:${tel}`}>{agent.phone}</a>.
+          </p>
+        </div>
+
+        <!-- Live calendar (Cal.com) when brand.booking.provider is "cal" -->
+        <div data-step="cal" hidden>
+          <div data-cal-inline class="cal-frame"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .expander { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 380ms var(--ease-out-soft); }
+  .expander[data-open='true'] { grid-template-rows: 1fr; }
+  .expander-inner { min-height: 0; overflow: hidden; }
+  .panel {
+    margin-top: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-ui);
+    background: var(--c-surface);
+  }
+  @media (min-width: 768px) { .panel { padding: 1.5rem; } }
+
+  .step-legend { font-weight: 600; font-size: 0.98rem; margin-bottom: 0.75rem; }
+
+  .days-wrap { position: relative; }
+  .days {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    padding: 0.25rem 0.25rem 0.6rem;
+    margin: -0.25rem -0.25rem 0;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .days::-webkit-scrollbar { display: none; }
+  /* Fade the edge that has more days beyond it. */
+  .days-wrap[data-more-right='true'] .days { -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent); mask-image: linear-gradient(90deg, #000 78%, transparent); }
+  .days-wrap[data-more-left='true'] .days { -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%); mask-image: linear-gradient(90deg, transparent, #000 22%); }
+  .days-wrap[data-more-left='true'][data-more-right='true'] .days { -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent); }
+  /* Arrows sit in the heading row, above the strip, so they never cover a date. */
+  .days-nav {
+    position: absolute; top: -3.35rem;
+    display: grid; place-items: center;
+    width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+    background: var(--c-ink); color: var(--c-surface);
+    transition: background-color 150ms ease, opacity 150ms ease;
+    z-index: 1;
+  }
+  .days-nav:hover { background: var(--c-accent); }
+  .days-nav.prev { right: 2.65rem; }
+  .days-nav.next { right: 0; }
+  .days-nav[hidden] { display: grid !important; opacity: 0.3; pointer-events: none; }
+  .days-legend { display: block; width: 100%; padding-right: 5.5rem; white-space: nowrap; }
+  .days-month { display: block; margin-top: 0.1rem; font-size: 0.85rem; font-weight: 500; color: var(--c-ink-muted); }
+  .days :global(.day) { position: relative; flex: 0 0 auto; scroll-snap-align: start; }
+  .days :global(.day input) { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .days :global(.day span) {
+    display: flex; flex-direction: column; align-items: center; gap: 0.05rem;
+    width: 4.6rem; padding: 0.6rem 0.25rem 0.55rem;
+    border: 1px solid var(--c-line-strong); border-radius: var(--radius-ui);
+    background: var(--c-surface);
+    font-size: 0.82rem; line-height: 1.25;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+  .days :global(.day b) { font-family: var(--f-display); font-size: 1.45rem; font-weight: 400; line-height: 1.1; }
+  .days :global(.day em) { font-style: normal; margin-top: 0.2rem; color: var(--c-ink-muted); }
+  .days :global(.day input:hover + span) { border-color: var(--c-ink-muted); }
+  .days :global(.day input:checked + span) { background: var(--c-ink); border-color: var(--c-ink); color: var(--c-surface); }
+  .days :global(.day input:checked + span em) { color: color-mix(in srgb, var(--c-surface) 82%, transparent); }
+  .days :global(.day input:focus-visible + span) { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+  .days :global(.day input:disabled) { cursor: not-allowed; }
+  .days :global(.day input:disabled + span) { background: transparent; border-style: dashed; color: var(--c-ink-muted); }
+
+  .times { display: grid; grid-template-columns: repeat(auto-fill, minmax(6.2rem, 1fr)); gap: 0.5rem; }
+  .times :global(.choice span) { width: 100%; }
+
+  .summary {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem;
+    padding-bottom: 1rem; border-bottom: 1px solid var(--c-line);
+  }
+  .prefilled { margin-top: 1rem; font-size: 0.95rem; color: var(--c-ink-muted); }
+  .alert {
+    padding: 0.8rem 1rem;
+    border-left: 3px solid var(--c-accent);
+    background: var(--c-base);
+    border-radius: 0 var(--radius-ui) var(--radius-ui) 0;
+    font-size: 0.97rem;
+    margin-bottom: 1.25rem;
+  }
+  .alert[data-tone='error'] { border-left-color: #9A3B2B; }
+
+  .booked {
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-ui);
+    background: var(--c-accent-fill);
+    color: var(--c-accent-fill-text);
+  }
+  .booked-toggle {
+    min-height: 2.75rem; padding: 0 0.25rem; font-weight: 560; font-size: 0.95rem;
+    text-decoration: underline; text-underline-offset: 0.22em; color: inherit;
+  }
+  .booked :global(:focus-visible) { outline-color: var(--c-accent-on-dark); }
+  .cal-frame { width: 100%; min-height: 32rem; overflow: auto; }
+</style>
+
+<script>
+  import { store, profile, track, demoFlag, submitLead, FieldError, setPanel } from '../scripts/core';
+  import { buildDays, dayLabel, timeLabel, relativeDay, fmt, type Day } from '../scripts/time';
+  import { attachValidation, validateForm, setServerError, formatPhone } from '../scripts/forms';
+
+  interface Booking { slot: string; kind: string; name: string; email: string; phone: string; confirmBy: string; ref: string }
+
+  function init(root: HTMLElement) {
+    const cfg = JSON.parse(root.dataset.config!);
+    const $ = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const panel = $('.expander');
+    const cta = $('[data-cta]');
+    const bookedBox = $('[data-booked]');
+    const steps = {
+      slot: $('[data-step="slot"]'),
+      details: $<HTMLFormElement>('[data-step="details"]'),
+      done: $('[data-step="done"]'),
+      cal: $('[data-step="cal"]'),
+    };
+    const daysEl = $('[data-days]');
+    const timesEl = $('[data-times]');
+    const timesEmpty = $('[data-times-empty]');
+    const nextBtn = $<HTMLButtonElement>('[data-next]');
+    const submitBtn = $<HTMLButtonElement>('[data-submit]');
+    const slotAlert = $('[data-slot-alert]');
+    const formAlert = $('[data-form-alert]');
+    const form = steps.details;
+    const tz: string = cfg.tz;
+    const uid = root.id;
+
+    let days: Day[] = [];
+    let selectedDay: string | null = null;
+    let selectedSlot: string | null = null;
+    const taken: string[] = [];
+    let raceShown = false;
+
+    const show = (name: keyof typeof steps) => {
+      for (const [k, el] of Object.entries(steps)) el.hidden = k !== name;
+    };
+
+    const kind = () => (root.querySelector<HTMLInputElement>(`input[name="${uid}-kind"]:checked`)?.value ?? 'in-person');
+    const slotDate = () => new Date(selectedSlot!);
+    const shortWhen = (d: Date) => `${relativeDay(d, tz)} at ${timeLabel(d, tz)}`;
+    const longWhen = (d: Date) => `${dayLabel(d, tz)} at ${timeLabel(d, tz)}`;
+
+    // ---------- step 1 ----------
+    function renderDays() {
+      days = buildDays({ seed: cfg.seed, tz, daysAhead: cfg.daysAhead, stepMinutes: cfg.stepMinutes, hours: cfg.agent.hours, taken });
+      if (!selectedDay || !days.find((d) => d.key === selectedDay && d.slots.length)) {
+        selectedDay = days.find((d) => d.slots.length)?.key ?? null;
+      }
+      daysEl.innerHTML = days
+        .map((d) => {
+          const n = d.slots.length;
+          const note = d.closed ? 'Closed' : n === 0 ? 'Full' : `${n} open`;
+          return `<label class="day"><input type="radio" name="${uid}-day" value="${d.key}" ${n === 0 ? 'disabled' : ''} ${d.key === selectedDay ? 'checked' : ''} aria-label="${dayLabel(d.date, tz)}, ${note === 'Closed' ? `${cfg.agent.firstName} is not showing homes this day` : note === 'Full' ? 'no openings' : `${n} times open`}"><span aria-hidden="true">${fmt(d.date, tz, { weekday: 'short' })}<b>${fmt(d.date, tz, { day: 'numeric' })}</b>${fmt(d.date, tz, { month: 'short' })}<em>${note}</em></span></label>`;
+        })
+        .join('');
+      renderTimes();
+      requestAnimationFrame(syncStrip);
+    }
+
+    function renderTimes() {
+      const day = days.find((d) => d.key === selectedDay);
+      if (!day || !day.slots.length) {
+        timesEl.innerHTML = '';
+        timesEmpty.hidden = false;
+        timesEmpty.textContent = `${cfg.agent.firstName} has no open times in the next ${cfg.daysAhead} days. Call ${cfg.agent.phone} and we'll find one.`;
+        selectedSlot = null;
+      } else {
+        timesEmpty.hidden = true;
+        if (!day.slots.some((s) => s.toISOString() === selectedSlot)) selectedSlot = null;
+        timesEl.innerHTML = day.slots
+          .map((s) => {
+            const iso = s.toISOString();
+            return `<label class="choice"><input type="radio" name="${uid}-time" value="${iso}" ${iso === selectedSlot ? 'checked' : ''}><span class="num">${timeLabel(s, tz)}</span></label>`;
+          })
+          .join('');
+      }
+      updateNext();
+    }
+
+    function updateNext() {
+      nextBtn.disabled = !selectedSlot;
+      nextBtn.textContent = selectedSlot ? `Continue with ${shortWhen(slotDate())}` : 'Pick a time to continue';
+    }
+
+    // ---------- day strip: buttons, wheel and keyboard can all reach later days ----------
+    const daysWrap = $('[data-days-wrap]');
+    const prevDays = $<HTMLButtonElement>('[data-days-prev]');
+    const nextDays = $<HTMLButtonElement>('[data-days-next]');
+    const monthEl = $('[data-days-month]');
+    const syncStrip = () => {
+      const max = daysEl.scrollWidth - daysEl.clientWidth - 8;
+      const left = daysEl.scrollLeft > 8;
+      const right = daysEl.scrollLeft < max;
+      daysWrap.dataset.moreLeft = String(left);
+      daysWrap.dataset.moreRight = String(right);
+      prevDays.hidden = !left;
+      nextDays.hidden = !right;
+      // Month label follows the first fully visible day.
+      const first = [...daysEl.querySelectorAll<HTMLElement>('.day')].find((d) => d.offsetLeft + 4 >= daysEl.scrollLeft);
+      const key = first?.querySelector('input')?.value;
+      const day = days.find((d) => d.key === key);
+      if (day) monthEl.textContent = fmt(day.date, tz, { month: 'long', year: 'numeric' });
+    };
+    const page = (dir: number) => daysEl.scrollBy({ left: dir * daysEl.clientWidth * 0.8 });
+    prevDays.addEventListener('click', () => page(-1));
+    nextDays.addEventListener('click', () => page(1));
+    daysEl.addEventListener('scroll', () => requestAnimationFrame(syncStrip), { passive: true });
+    // A normal mouse wheel scrolls the strip sideways while the pointer is over it.
+    daysEl.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const max = daysEl.scrollWidth - daysEl.clientWidth;
+      const atEnd = (e.deltaY > 0 && daysEl.scrollLeft >= max - 1) || (e.deltaY < 0 && daysEl.scrollLeft <= 0);
+      if (atEnd) return;
+      e.preventDefault();
+      daysEl.scrollBy({ left: e.deltaY, behavior: 'auto' });
+    }, { passive: false });
+    new ResizeObserver(syncStrip).observe(daysEl);
+
+    daysEl.addEventListener('change', (e) => {
+      (e.target as HTMLElement).closest('.day')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      selectedDay = (e.target as HTMLInputElement).value;
+      selectedSlot = null;
+      renderTimes();
+    });
+    timesEl.addEventListener('change', (e) => {
+      selectedSlot = (e.target as HTMLInputElement).value;
+      updateNext();
+    });
+    nextBtn.addEventListener('click', () => {
+      if (!selectedSlot) return;
+      slotAlert.hidden = true;
+      toDetails();
+    });
+
+    // ---------- step 2 ----------
+    attachValidation(form);
+    const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+
+    function toDetails() {
+      const d = slotDate();
+      const k = kind();
+      const where = cfg.mode === 'tour'
+        ? (k === 'video' ? 'live video walkthrough' : `in person at ${cfg.place}`)
+        : (k === 'video' ? `${cfg.duration}-minute video call` : `${cfg.duration}-minute phone call`);
+      $('[data-summary]').textContent = `${longWhen(d)}, ${where}`;
+      submitBtn.textContent = `Book ${relativeDay(d, tz) === 'today' || relativeDay(d, tz) === 'tomorrow' ? relativeDay(d, tz) : fmt(d, tz, { weekday: 'long' })} at ${timeLabel(d, tz)}`;
+
+      const p = profile.get();
+      const filled = !!(p.name || p.email);
+      if (filled) {
+        if (!field('name').value) field('name').value = p.name ?? '';
+        if (!field('email').value) field('email').value = p.email ?? '';
+        if (!field('phone').value) field('phone').value = p.phone ?? '';
+      }
+      $('[data-prefilled]').hidden = !filled;
+      show('details');
+      (filled ? submitBtn : field('name')).focus({ preventScroll: true });
+      track('booking_details', { mode: cfg.mode, listing: cfg.listingId, agent: cfg.agent.id });
+    }
+
+    $('[data-back]').addEventListener('click', () => { show('slot'); nextBtn.focus(); });
+    $('[data-forget]').addEventListener('click', () => {
+      profile.clear();
+      ['name', 'email', 'phone'].forEach((n) => (field(n).value = ''));
+      $('[data-prefilled]').hidden = true;
+      field('name').focus();
+    });
+    field('phone').addEventListener('blur', () => { field('phone').value = formatPhone(field('phone').value); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formAlert.hidden = true;
+      if (!validateForm(form)) return;
+
+      const data = new FormData(form);
+      const booking: Booking = {
+        slot: selectedSlot!,
+        kind: kind(),
+        name: String(data.get('name')).trim(),
+        email: String(data.get('email')).trim(),
+        phone: formatPhone(String(data.get('phone'))),
+        confirmBy: String(data.get('confirmBy')),
+        ref: `${cfg.mode === 'tour' ? 'T' : 'C'}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`,
+      };
+
+      submitBtn.disabled = true;
+      const label = submitBtn.textContent;
+      submitBtn.textContent = 'Booking…';
+      try {
+        // The slot is re-checked at submit. In the demo, ?demo=slot-taken simulates losing it to someone else.
+        await new Promise((r) => setTimeout(r, 500));
+        if (demoFlag('slot-taken') && !raceShown) {
+          raceShown = true;
+          const lost = slotDate();
+          taken.push(selectedSlot!);
+          selectedSlot = null;
+          renderDays();
+          slotAlert.hidden = false;
+          slotAlert.textContent = `${timeLabel(lost, tz)} on ${fmt(lost, tz, { weekday: 'long' })} was booked by someone else a moment ago. These times are open right now, and your details are saved.`;
+          show('slot');
+          slotAlert.setAttribute('tabindex', '-1');
+          slotAlert.focus();
+          track('booking_slot_lost', { listing: cfg.listingId });
+          return;
+        }
+        await submitLead({
+          type: cfg.mode === 'tour' ? 'tour_booking' : 'agent_call',
+          listingId: cfg.listingId,
+          agentId: cfg.agent.id,
+          slot: booking.slot,
+          durationMinutes: cfg.duration,
+          kind: booking.kind,
+          contact: { name: booking.name, email: booking.email, phone: booking.phone, confirmBy: booking.confirmBy },
+          notes: String(data.get('notes') ?? ''),
+          ref: booking.ref,
+        });
+        profile.save({ name: booking.name, email: booking.email, phone: booking.phone });
+        store.set(cfg.key, booking);
+        track(cfg.mode === 'tour' ? 'tour_booked' : 'call_booked', { listing: cfg.listingId, agent: cfg.agent.id, kind: booking.kind });
+        renderDone(booking, true);
+      } catch (err) {
+        if (err instanceof FieldError) {
+          const f = field(err.field);
+          setServerError(f, err.message);
+          f.focus();
+        }
+        formAlert.hidden = false;
+        formAlert.dataset.tone = 'error';
+        formAlert.textContent = err instanceof FieldError
+          ? 'Your booking was not sent. Fix the highlighted field and send it again. Everything else you entered is still here.'
+          : `Your booking was not sent because the connection dropped. Everything you entered is still here. Try again, or call ${cfg.agent.firstName} on ${cfg.agent.phone}.`;
+      } finally {
+        submitBtn.disabled = false;
+        if (submitBtn.textContent === 'Booking…') submitBtn.textContent = label;
+      }
+    });
+
+    // ---------- step 3 ----------
+    function renderDone(b: Booking, focus: boolean) {
+      const d = new Date(b.slot);
+      const end = new Date(d.getTime() + cfg.duration * 60_000);
+      const first = cfg.agent.firstName;
+      const via = b.confirmBy === 'text' ? `text ${b.phone}` : `email ${b.email}`;
+      let body: string;
+      if (cfg.mode === 'tour') {
+        body = b.kind === 'video'
+          ? `${first} will ${via} with a video link within 15 minutes, then call you from the house at ${timeLabel(d, tz)}. Allow ${cfg.duration} minutes.`
+          : `${first} will ${via} to confirm within 15 minutes and meet you at the front door of ${cfg.place}. Allow ${cfg.duration} minutes, and bring any questions about the house.`;
+      } else {
+        body = b.kind === 'video'
+          ? `${first} will ${via} with a video link within 15 minutes. The call takes about ${cfg.duration} minutes.`
+          : `${first} will ${via} to confirm within 15 minutes, then call ${b.phone} at ${timeLabel(d, tz)}. The call takes about ${cfg.duration} minutes.`;
+      }
+      $('[data-done-title]').textContent = `You're booked for ${longWhen(d)}.`;
+      $('[data-done-body]').textContent = `${body} Your reference is ${b.ref}.`;
+
+      const title = cfg.mode === 'tour' ? `Tour of ${cfg.place} with ${cfg.agent.name}` : `Call with ${cfg.agent.name}, ${cfg.brokerage}`;
+      const location = cfg.mode === 'tour' && b.kind !== 'video' ? cfg.address : '';
+      const stamp = (x: Date) => x.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+      const ics = [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', `PRODID:-//${cfg.brokerage}//Booking//EN`, 'BEGIN:VEVENT',
+        `UID:${b.ref}@${location ? 'tour' : 'call'}`, `DTSTAMP:${stamp(new Date())}`, `DTSTART:${stamp(d)}`, `DTEND:${stamp(end)}`,
+        `SUMMARY:${title}`, `LOCATION:${location}`, `DESCRIPTION:${body} Reference ${b.ref}.`, 'END:VEVENT', 'END:VCALENDAR',
+      ].join('\r\n');
+      const icsLink = $<HTMLAnchorElement>('[data-ics]');
+      icsLink.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+      icsLink.download = `${b.ref}.ics`;
+      $<HTMLAnchorElement>('[data-gcal]').href =
+        `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${stamp(d)}/${stamp(end)}&location=${encodeURIComponent(location)}&details=${encodeURIComponent(`Reference ${b.ref}`)}`;
+      const showDirections = !!location;
+      $('[data-directions-wrap]').hidden = !showDirections;
+      if (showDirections) $<HTMLAnchorElement>('[data-directions]').href = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`;
+
+      // The CTA itself changes to a filled confirmation state, which persists on return.
+      cta.hidden = true;
+      bookedBox.hidden = false;
+      $('[data-booked-when]').textContent = longWhen(d);
+      show('done');
+      if (focus) $('[data-step="done"]').focus({ preventScroll: true });
+    }
+
+    $('[data-reschedule]').addEventListener('click', () => {
+      selectedSlot = null;
+      renderDays();
+      show('slot');
+      daysEl.querySelector<HTMLInputElement>('input:checked')?.focus();
+    });
+    $('[data-cancel]').addEventListener('click', () => {
+      store.remove(cfg.key);
+      track('booking_cancelled', { listing: cfg.listingId, agent: cfg.agent.id });
+      bookedBox.hidden = true;
+      cta.hidden = false;
+      selectedSlot = null;
+      renderDays();
+      show('slot');
+      close();
+      cta.querySelector('button')?.focus();
+    });
+
+    // ---------- open / close ----------
+    let calLoaded = false;
+    const reveal = () => {
+      const r = root.getBoundingClientRect();
+      if (r.top < 70 || r.top > innerHeight * 0.6) root.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+    };
+    function open() {
+      if (panel.dataset.open === 'true') { reveal(); return; }
+      const existing = store.get<Booking>(cfg.key);
+      if (cfg.provider === 'cal' && !existing) {
+        show('cal');
+        if (!calLoaded) { loadCal(); calLoaded = true; }
+      } else if (!existing) {
+        renderDays();
+        show(steps.details.hidden ? 'slot' : 'details');
+      }
+      setPanel(panel, root.querySelector('[data-toggle]:not([hidden] *)'), true);
+      root.querySelectorAll('[data-toggle]').forEach((t) => t.setAttribute('aria-expanded', 'true'));
+      track('booking_opened', { mode: cfg.mode, listing: cfg.listingId, agent: cfg.agent.id });
+      requestAnimationFrame(reveal);
+    }
+    function close() {
+      setPanel(panel, null, false);
+      root.querySelectorAll('[data-toggle]').forEach((t) => t.setAttribute('aria-expanded', 'false'));
+    }
+    root.querySelectorAll('[data-toggle]').forEach((t) =>
+      t.addEventListener('click', () => (panel.dataset.open === 'true' ? close() : open())),
+    );
+    root.addEventListener('booking:open', () => { open(); (root.querySelector('[data-days] input:checked') as HTMLElement | null)?.focus({ preventScroll: true }); });
+    panel.addEventListener('panel:close', close);
+
+    // Show the next few real openings under the button, from the same availability the picker uses.
+    const soonest = $('[data-soonest]');
+    const upcoming = buildDays({ seed: cfg.seed, tz, daysAhead: cfg.daysAhead, stepMinutes: cfg.stepMinutes, hours: cfg.agent.hours }).flatMap((d) => d.slots).slice(0, 2);
+    if (upcoming.length) {
+      const first = upcoming[0];
+      const second = upcoming[1];
+      const sameDay = second && relativeDay(second, tz) === relativeDay(first, tz);
+      soonest.textContent = `Next open: ${relativeDay(first, tz)} at ${timeLabel(first, tz)}` +
+        (second ? (sameDay ? ` or ${timeLabel(second, tz)}` : `, or ${relativeDay(second, tz)} at ${timeLabel(second, tz)}`) : '');
+      soonest.hidden = false;
+    }
+
+    // Restore a booking made earlier, if it's still in the future.
+    const existing = store.get<Booking>(cfg.key);
+    if (existing && new Date(existing.slot).getTime() > Date.now()) {
+      renderDone(existing, false);
+    } else if (existing) {
+      store.remove(cfg.key);
+    }
+
+    if (location.hash === `#${root.id}`) setTimeout(open, 60);
+
+    // ---------- Cal.com (live mode) ----------
+    function loadCal() {
+      const w = window as any;
+      (function (C: any, A: string, L: string) {
+        const p = (a: any, ar: any) => a.q.push(ar);
+        const d = C.document;
+        C.Cal = C.Cal || function (...ar: any[]) {
+          const cal = C.Cal;
+          if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement('script')).src = A; cal.loaded = true; }
+          if (ar[0] === L) {
+            const api: any = function (...a: any[]) { p(api, a); };
+            const namespace = ar[1];
+            api.q = api.q || [];
+            if (typeof namespace === 'string') { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ['initNamespace', namespace]); }
+            else p(cal, ar);
+            return;
+          }
+          p(cal, ar);
+        };
+      })(w, `${cfg.calOrigin.replace('cal.com', 'app.cal.com')}/embed/embed.js`, 'init');
+      const nsName = uid.replace(/\W/g, '');
+      w.Cal('init', nsName, { origin: cfg.calOrigin });
+      const p = profile.get();
+      w.Cal.ns[nsName]('inline', {
+        elementOrSelector: root.querySelector('[data-cal-inline]'),
+        calLink: cfg.agent.calLink,
+        config: { layout: 'month_view', name: p.name ?? '', email: p.email ?? '', notes: cfg.listingRef ? `Listing ${cfg.listingRef}, ${cfg.place}` : '' },
+      });
+      w.Cal.ns[nsName]('ui', {
+        hideEventTypeDetails: true,
+        layout: 'month_view',
+        cssVarsPerTheme: { light: { 'cal-brand': cfg.colors.accent, 'cal-text': cfg.colors.ink, 'cal-bg': '#FDFCF9' } },
+      });
+      w.Cal.ns[nsName]('on', {
+        action: 'bookingSuccessful',
+        callback: (e: any) => {
+          const start = e?.detail?.data?.date ?? e?.detail?.data?.booking?.startTime;
+          if (!start) return;
+          const b: Booking = { slot: new Date(start).toISOString(), kind: 'in-person', name: p.name ?? '', email: p.email ?? '', phone: p.phone ?? '', confirmBy: 'email', ref: 'CAL' };
+          store.set(cfg.key, b);
+          track('tour_booked', { listing: cfg.listingId, provider: 'cal' });
+          renderDone(b, true);
+        },
+      });
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-booking]').forEach(init);
+</script>

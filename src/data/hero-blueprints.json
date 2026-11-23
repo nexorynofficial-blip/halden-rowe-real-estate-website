@@ -1,0 +1,45 @@
+{
+  "_note": "Line drawings traced over hero photos, keyed by filename. Coordinates are in a viewBox scaled to the photo (object-fit: cover, centered), so the drawing lands on the house at any screen size. Labels may use {{sqft}}, {{yearBuilt}}, {{lotAcres}}, {{bedrooms}}, {{bathrooms}} from the hero listing. Photos without an entry get the reveal without the drawing.",
+  "1600585154340-be6161a56a0c.jpg": {
+    "viewBox": "0 0 1600 1066",
+    "structure": [
+      "M455 262 L478 253 L982 448 L982 503",
+      "M455 262 L455 578 L745 568",
+      "M283 377 L372 389 L440 318 L455 318",
+      "M283 377 L283 568",
+      "M372 389 L372 528",
+      "M45 553 L322 570 L322 528 L455 545",
+      "M45 553 L45 815 L595 797",
+      "M740 566 L1248 452 L1265 456 L1422 548",
+      "M745 598 L1235 515 L1330 555 L1422 548",
+      "M1330 555 L1330 870",
+      "M1422 548 L1422 845",
+      "M745 768 L1245 800 L1330 800",
+      "M745 800 L1300 895",
+      "M895 588 L895 778",
+      "M1100 562 L1100 790",
+      "M1240 515 L1240 800",
+      "M180 820 L745 790"
+    ],
+    "openings": [
+      "M178 628 H275 V800 H178 Z",
+      "M357 643 H568 V705 H357 Z",
+      "M305 418 H362 V530 H305 Z",
+      "M522 312 V540", "M548 318 V543", "M562 325 V545", "M590 332 V548", "M604 338 V548", "M628 345 V550",
+      "M700 395 V555", "M730 405 V558", "M760 410 V560", "M800 420 V545", "M850 435 V540", "M900 445 V535", "M940 455 V530",
+      "M1345 560 V770 H1395 V575"
+    ],
+    "landscape": [
+      "M620 798 C628 680 610 560 640 470 C670 380 720 300 770 180",
+      "M688 798 C690 690 700 560 720 470 C745 360 760 300 800 200",
+      "M770 180 C840 112 960 92 1080 62",
+      "M728 320 C800 252 920 232 1080 270",
+      "M700 410 C640 330 560 300 470 240"
+    ],
+    "dimensions": [
+      { "d": "M45 960 H1422", "ticks": [[45, 960], [1422, 960]], "label": "{{sqft}} sq ft interior", "x": 733, "y": 944, "anchor": "middle" },
+      { "d": "M1482 253 V840", "ticks": [[1482, 253], [1482, 840]], "vertical": true, "label": "Built {{yearBuilt}}", "x": 1508, "y": 546, "anchor": "middle", "rotate": true },
+      { "d": "M60 1012 H260", "ticks": [], "label": "{{lotAcres}} acre lot", "x": 60, "y": 1000, "anchor": "start" }
+    ]
+  }
+}

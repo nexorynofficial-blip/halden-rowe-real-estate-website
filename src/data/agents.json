@@ -1,0 +1,102 @@
+[
+  {
+    "id": "mara-ellison",
+    "name": "Mara Ellison",
+    "firstName": "Mara",
+    "title": "Principal Broker and Founder",
+    "photo": "agents/1573496359142-b8d87734a5a2.jpg",
+    "photoAlt": "Mara Ellison standing by a window in a gray blazer",
+    "bio": [
+      "Mara opened the brokerage in 2009 after a decade restoring historic homes in Montecito, and she still reads a house the way a builder does: roofline first, then the drainage, then the light in the kitchen at four in the afternoon.",
+      "She represents most of the firm's estate listings and works with a small number of buyers each year, usually people relocating who need someone to tell them plainly which streets flood and which canyons hold the morning fog."
+    ],
+    "shortBio": "Mara founded the firm in 2009 and handles most of our estate listings in Montecito, Summerland and Carpinteria.",
+    "areas": ["montecito", "summerland", "carpinteria"],
+    "languages": ["English", "French"],
+    "phone": "(805) 555-0142",
+    "email": "mara@haldenrowe.com",
+    "license": "CA DRE #01734552",
+    "yearsActive": 17,
+    "homesSold": 214,
+    "salesVolume": "$612M",
+    "listingIds": ["hr-1024", "hr-1018", "hr-1042"],
+    "calendarBookingLink": "halden-rowe/mara-ellison",
+    "responseTime": "within 2 business hours",
+    "hours": { "start": 9, "end": 17, "days": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "id": "julian-okafor",
+    "name": "Julian Okafor",
+    "firstName": "Julian",
+    "title": "Associate Broker",
+    "photo": "agents/1560250097-0b93528c311a.jpg",
+    "photoAlt": "Julian Okafor in a dark suit and glasses",
+    "bio": [
+      "Julian spent six years as a land-use attorney before moving into real estate, which is why sellers on the Riviera and in Hope Ranch call him when a property has a complicated easement, an unpermitted guest house, or a neighbor with opinions.",
+      "He grew up on the Mesa and can tell you which blocks of Cliff Drive get the sunset and which get the wind."
+    ],
+    "shortBio": "A former land-use attorney who handles the Riviera, Hope Ranch and the Mesa, and the paperwork nobody else wants to read.",
+    "areas": ["hope-ranch", "riviera", "mesa"],
+    "languages": ["English"],
+    "phone": "(805) 555-0157",
+    "email": "julian@haldenrowe.com",
+    "license": "CA DRE #01988120",
+    "yearsActive": 11,
+    "homesSold": 138,
+    "salesVolume": "$347M",
+    "listingIds": ["hr-1031", "hr-1009", "hr-1036"],
+    "calendarBookingLink": "halden-rowe/julian-okafor",
+    "responseTime": "within 2 business hours",
+    "hours": { "start": 10, "end": 18, "days": [1, 2, 3, 4, 5, 6] }
+  },
+  {
+    "id": "elena-varga",
+    "name": "Elena Varga",
+    "firstName": "Elena",
+    "title": "Director of Leasing",
+    "photo": "agents/1580489944761-15a19d654956.jpg",
+    "photoAlt": "Elena Varga smiling, in a white shirt",
+    "bio": [
+      "Elena runs the firm's leasing book: furnished seasonal homes, downtown residences and the long-term rentals that owners hand over when they move abroad. She places around ninety tenants a year and personally walks every property before it is listed.",
+      "If you are new to Santa Barbara and renting first, she is the person to start with."
+    ],
+    "shortBio": "Elena manages leasing across the firm, from downtown residences to furnished seasonal homes in the foothills.",
+    "areas": ["downtown", "mission-canyon"],
+    "languages": ["English", "Spanish", "Hungarian"],
+    "phone": "(805) 555-0163",
+    "email": "elena@haldenrowe.com",
+    "license": "CA DRE #02011873",
+    "yearsActive": 9,
+    "homesSold": 61,
+    "salesVolume": "$88M",
+    "listingIds": ["hr-1050", "hr-1047"],
+    "calendarBookingLink": "halden-rowe/elena-varga",
+    "responseTime": "within 1 business hour",
+    "hours": { "start": 9, "end": 18, "days": [1, 2, 3, 4, 5] }
+  },
+  {
+    "id": "daniel-reyes",
+    "name": "Daniel Reyes",
+    "firstName": "Daniel",
+    "title": "Agent, Ojai and Summerland",
+    "photo": "agents/1500648767791-00dcc994a43e.jpg",
+    "photoAlt": "Daniel Reyes in a gray sweater against a blue backdrop",
+    "bio": [
+      "Daniel lives in the East End of Ojai and sells the valley's older houses: craftsman bungalows, ranch homes on a few acres of citrus, and the occasional adobe that needs a buyer with patience.",
+      "Before real estate he ran a small restoration crew, so his walkthroughs tend to include a flashlight and an honest opinion about the foundation."
+    ],
+    "shortBio": "Daniel sells Ojai's older homes and ranches, and brings a contractor's eye to every walkthrough.",
+    "areas": ["ojai", "summerland"],
+    "languages": ["English", "Spanish"],
+    "phone": "(805) 555-0188",
+    "email": "daniel@haldenrowe.com",
+    "license": "CA DRE #02066394",
+    "yearsActive": 7,
+    "homesSold": 74,
+    "salesVolume": "$151M",
+    "listingIds": ["hr-1012", "hr-1015"],
+    "calendarBookingLink": "halden-rowe/daniel-reyes",
+    "responseTime": "within 2 business hours",
+    "hours": { "start": 9, "end": 17, "days": [2, 3, 4, 5, 6, 0] }
+  }
+]

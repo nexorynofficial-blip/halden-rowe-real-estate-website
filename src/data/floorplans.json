@@ -1,0 +1,202 @@
+{
+  "_note": "Floor plans keyed by listing id. Coordinates use each floor's viewBox. 'walls' is the full line drawing; each room in 'tour' is traced and counted in order as the visitor scrolls. 'labels' are quiet room names that are not part of the tour.",
+  "hr-1024": {
+    "heading": "Walk the floor plan",
+    "intro": "The tour moves through the house room by room. Pick any room or floor to jump straight to it. Plan shown for illustration; figures from the listing.",
+    "floors": [
+      {
+        "id": "ground",
+        "name": "Ground floor",
+        "viewBox": "0 0 1000 680",
+        "walls": "M60 120 H940 V380 H760 V520 H60 Z M360 120 V400 M60 400 H360 M460 120 V260 M360 260 H395 M440 260 H620 M620 120 V520 M760 120 V380 M620 260 H660 M705 260 H760 M690 430 H760 M690 430 V520 M360 400 V430 M360 475 V520 M410 340 H570 V390 H410 Z M372 140 H448 M372 154 H448 M372 168 H448 M372 182 H448 M372 196 H448 M372 210 H448 M372 224 H448 M372 140 V224 M448 140 V224 M54 140 V380 M66 140 V380 M80 526 H340 M60 520 V640 H620 V520 M660 560 H940 V640 H660 Z M680 580 H920 V620 H680 Z M800 140 H900 V360 H800 Z M396 260 A44 44 0 0 1 440 304 M660 260 A45 45 0 0 0 705 305",
+        "labels": [
+          {
+            "text": "Entry",
+            "x": 410,
+            "y": 248
+          },
+          {
+            "text": "Study",
+            "x": 540,
+            "y": 195
+          },
+          {
+            "text": "Mudroom",
+            "x": 690,
+            "y": 195
+          },
+          {
+            "text": "Garage",
+            "x": 850,
+            "y": 255
+          },
+          {
+            "text": "Dining",
+            "x": 210,
+            "y": 465
+          },
+          {
+            "text": "Bath",
+            "x": 725,
+            "y": 482
+          }
+        ]
+      },
+      {
+        "id": "upper",
+        "name": "Upper floor",
+        "viewBox": "0 0 1000 680",
+        "walls": "M60 120 H760 V520 H60 Z M360 120 V520 M60 360 H360 M200 360 V520 M460 120 V520 M460 320 H760 M620 120 V320 M372 140 H448 M372 154 H448 M372 168 H448 M372 182 H448 M372 196 H448 M372 210 H448 M372 224 H448 M372 140 V224 M448 140 V224 M54 140 V340 M66 140 V340 M60 520 V600 H360 V520 M90 395 H170 V445 H90 Z M230 380 V500 M330 380 V500 M360 280 A40 40 0 0 1 320 320 M460 260 A40 40 0 0 0 500 300 M460 440 A40 40 0 0 0 500 480",
+        "labels": [
+          {
+            "text": "Primary bath",
+            "x": 130,
+            "y": 478
+          },
+          {
+            "text": "Closet",
+            "x": 280,
+            "y": 450
+          },
+          {
+            "text": "Landing",
+            "x": 410,
+            "y": 330
+          },
+          {
+            "text": "Balcony",
+            "x": 210,
+            "y": 572
+          },
+          {
+            "text": "Bedroom 2",
+            "x": 540,
+            "y": 228
+          },
+          {
+            "text": "Bedroom 4",
+            "x": 690,
+            "y": 228
+          }
+        ]
+      }
+    ],
+    "tour": [
+      {
+        "floor": "ground",
+        "name": "Living room",
+        "d": "M60 120 H360 V400 H60 Z",
+        "lx": 210,
+        "ly": 265,
+        "stats": [
+          {
+            "value": 18,
+            "unit": "ft",
+            "label": "double-height ceiling"
+          },
+          {
+            "value": 860,
+            "unit": "sq ft",
+            "label": "living room area"
+          }
+        ]
+      },
+      {
+        "floor": "ground",
+        "name": "Kitchen",
+        "d": "M360 260 H620 V520 H360 Z",
+        "lx": 490,
+        "ly": 470,
+        "stats": [
+          {
+            "value": 26,
+            "unit": "ft",
+            "label": "kitchen run with island"
+          },
+          {
+            "value": 540,
+            "unit": "sq ft",
+            "label": "kitchen and scullery area"
+          }
+        ]
+      },
+      {
+        "floor": "ground",
+        "name": "Guest suite",
+        "d": "M620 260 H760 V520 H620 Z",
+        "lx": 690,
+        "ly": 330,
+        "stats": [
+          {
+            "value": 10,
+            "unit": "ft",
+            "label": "ceiling height"
+          },
+          {
+            "value": 380,
+            "unit": "sq ft",
+            "label": "guest suite with terrace"
+          }
+        ]
+      },
+      {
+        "floor": "ground",
+        "name": "Terrace and pool",
+        "d": "M60 520 H620 V640 H60 Z M660 560 H940 V640 H660 Z",
+        "lx": 330,
+        "ly": 590,
+        "stats": [
+          {
+            "value": 60,
+            "unit": "ft",
+            "label": "saltwater lap pool"
+          },
+          {
+            "value": 1450,
+            "unit": "sq ft",
+            "label": "terrace and pool deck"
+          }
+        ]
+      },
+      {
+        "floor": "upper",
+        "name": "Primary suite",
+        "d": "M60 120 H360 V360 H60 Z",
+        "lx": 210,
+        "ly": 245,
+        "stats": [
+          {
+            "value": 11,
+            "unit": "ft",
+            "label": "vaulted ceiling"
+          },
+          {
+            "value": 720,
+            "unit": "sq ft",
+            "label": "primary suite with balcony"
+          }
+        ]
+      },
+      {
+        "floor": "upper",
+        "name": "Bedroom suites",
+        "d": "M460 120 H760 V520 H460 Z",
+        "lx": 610,
+        "ly": 425,
+        "stats": [
+          {
+            "value": 3,
+            "unit": "suites",
+            "label": "each with its own bath"
+          },
+          {
+            "value": 1180,
+            "unit": "sq ft",
+            "label": "combined bedroom area"
+          }
+        ],
+        "mapLabel": "Bedroom 3"
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+---
+import { getAgent, agentUrl } from '../lib/data';
+interface Props {
+  t: { quote: string; name: string; detail: string; agentId: string };
+  size?: 'large' | 'medium';
+}
+const { t, size = 'large' } = Astro.props;
+const agent = getAgent(t.agentId);
+---
+<figure class:list={['quote', size]} data-reveal-fade>
+  <blockquote>
+    <p><span class="q">&ldquo;</span>{t.quote}&rdquo;</p>
+  </blockquote>
+  <figcaption class="mt-8 flex flex-col gap-1 md:mt-10">
+    <span class="font-semibold">{t.name}</span>
+    <span class="text-ink-muted">{t.detail}, with <a class="link" href={agentUrl(agent)}>{agent.name}</a></span>
+  </figcaption>
+</figure>
+
+<style>
+  blockquote p {
+    font-family: var(--f-display);
+    font-weight: 400;
+    text-wrap: pretty;
+    hanging-punctuation: first;
+  }
+  .q { color: var(--c-accent-text); }
+  .large blockquote p { font-size: clamp(1.75rem, 1.2rem + 2.1vw, 3.1rem); line-height: 1.16; letter-spacing: -0.018em; max-width: 30ch; }
+  .medium blockquote p { font-size: clamp(1.4rem, 1.1rem + 1.1vw, 2.075rem); line-height: 1.25; letter-spacing: -0.012em; max-width: 34ch; }
+  @supports not (hanging-punctuation: first) {
+    blockquote p { text-indent: -0.42em; }
+  }
+</style>

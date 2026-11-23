@@ -1,0 +1,26 @@
+---
+import { statusLabel, type ListingStatus } from '../lib/data';
+interface Props { status: ListingStatus; class?: string }
+const { status, class: cls = '' } = Astro.props;
+---
+<span class:list={['status', cls]} data-status={status}>
+  <span class="dot" aria-hidden="true"></span>{statusLabel[status]}
+</span>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.22rem 0.6rem 0.24rem 0.5rem;
+    border-radius: var(--radius-ui);
+    font-size: 0.82rem;
+    font-weight: 560;
+    line-height: 1.3;
+    background: var(--c-tertiary-tint);
+    color: var(--c-ink);
+  }
+  .dot { width: 0.45rem; height: 0.45rem; border-radius: 9999px; background: var(--c-tertiary); }
+  .status[data-status='pending'] { background: var(--c-secondary); color: var(--c-surface); }
+  .status[data-status='pending'] .dot { background: var(--c-accent-on-dark); }
+</style>
