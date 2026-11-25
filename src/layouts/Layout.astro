@@ -7,6 +7,7 @@ import { img } from '../lib/images';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Loader from '../components/Loader.astro';
+import Chatbot from '../components/Chatbot.astro';
 
 interface Props {
   title?: string;
@@ -116,6 +117,7 @@ const runtime = {
       <slot />
     </main>
     <Footer />
+    <Chatbot />
     <slot name="after" />
     <script>
       // Shared scroll reveals: add .is-in once an element is a fifth of the way into view.

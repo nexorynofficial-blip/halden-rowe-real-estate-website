@@ -1,0 +1,258 @@
+---
+/**
+ * Site assistant: a launcher in the bottom-left corner that opens a chat panel.
+ * Only the launcher and this small script load with the page. The assistant itself (its logic,
+ * its knowledge, its styles for message content) loads the first time someone opens it.
+ */
+import { brand } from '../lib/brand';
+const tel = brand.contact.phone.replace(/\D/g, '');
+---
+<div class="chat" data-chat data-state="closed" data-phone={brand.contact.phone} data-tel={tel} data-name={brand.brokerageName}>
+  <p class="chat-nudge" data-chat-nudge hidden>
+    <button type="button" class="chat-nudge-text" data-chat-nudge-open></button>
+    <button type="button" class="chat-nudge-x" data-chat-nudge-close aria-label="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg></button>
+  </p>
+
+  <button type="button" class="chat-launcher" data-chat-launcher aria-label="Ask us, open chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chat-panel">
+    <span class="chat-launcher-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.2 3.4a.6.6 0 0 1-1-.47V16A2.5 2.5 0 0 1 4 13.5v-7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><circle cx="9" cy="10" r="1" fill="currentColor" /><circle cx="12" cy="10" r="1" fill="currentColor" /><circle cx="15" cy="10" r="1" fill="currentColor" /></svg>
+    </span>
+    <span class="chat-launcher-label">Ask us</span>
+  </button>
+
+  <section class="chat-panel" id="chat-panel" role="dialog" aria-label={`Chat with the ${brand.brokerageName} assistant`} hidden>
+    <div class="chat-head">
+      <span class="chat-avatar" aria-hidden="true">{brand.logo.monogram}</span>
+      <div class="chat-head-text">
+        <p class="chat-title">{brand.brokerageName} assistant</p>
+        <p class="chat-sub">Automated · demo build</p>
+      </div>
+      <button type="button" class="chat-iconbtn" data-chat-restart aria-label="Start a new conversation" title="Start over">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+      <button type="button" class="chat-iconbtn" data-chat-close aria-label="Close chat">
+        <svg width="14" height="14" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+      </button>
+    </div>
+
+    <div class="chat-log" data-chat-log role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" tabindex="0">
+      <p class="chat-loading" data-chat-loading>Starting up...</p>
+    </div>
+
+    <form class="chat-form" data-chat-form autocomplete="off" novalidate>
+      <label class="sr-only" for="chat-input">Your message</label>
+      <input id="chat-input" class="chat-input" name="message" type="text" maxlength="600" placeholder="Ask a question or say what you need" enterkeyhint="send" autocomplete="off" autocapitalize="sentences" />
+      <button type="submit" class="chat-send" aria-label="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5 21 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </button>
+    </form>
+    <p class="chat-fine">Demo assistant: bookings made here are simulated. Please don't share card, bank or ID details.</p>
+  </section>
+</div>
+
+<style is:global>
+  .chat { position: fixed; z-index: 60; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); font-family: var(--f-body); }
+  /* Stays out of the way of the intro loader; the loader removes itself from the page when it finishes. */
+  html.is-loading:has([data-loader]) .chat { visibility: hidden; }
+  @media (max-width: 767px) { body:has([data-mbar]) .chat { bottom: calc(5.25rem + env(safe-area-inset-bottom)); } }
+
+  /* Launcher */
+  .chat-launcher {
+    display: inline-flex; align-items: center; gap: 0.6rem; min-height: 3.5rem; padding: 0.35rem 1.3rem 0.35rem 0.4rem;
+    border-radius: 9999px; background: var(--c-ink); color: var(--c-surface); font-weight: 600; font-size: 0.98rem; letter-spacing: 0.01em;
+    box-shadow: 0 18px 36px -16px rgb(11 34 48 / 0.55), 0 2px 6px rgb(11 34 48 / 0.18);
+    cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 180ms var(--ease-out-soft), background-color 180ms ease;
+    animation: chat-rise 0.7s var(--ease-out-soft) 0.4s both;
+  }
+  .chat-launcher:hover { background: var(--c-secondary); }
+  .chat-launcher:active { transform: translateY(1px); }
+  .chat-launcher:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 9999px; }
+  .chat-launcher-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: var(--c-accent); color: var(--c-ink); }
+  .chat[data-state='open'] .chat-launcher { display: none; }
+  @media (min-width: 641px) { .chat[data-state='open'] .chat-launcher { display: inline-flex; } .chat[data-state='open'] .chat-launcher-label { display: none; } .chat[data-state='open'] .chat-launcher { padding-right: 0.4rem; } }
+  @media (max-width: 380px) { .chat-launcher-label { display: none; } .chat-launcher { padding-right: 0.4rem; } }
+  @keyframes chat-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* Nudge */
+  .chat-nudge { position: absolute; left: 0; bottom: 4.5rem; display: flex; align-items: stretch; width: max-content; max-width: min(19rem, calc(100vw - 2rem)); border-radius: 18px 18px 18px 6px; background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line); box-shadow: var(--shadow-panel); animation: chat-rise 0.5s var(--ease-out-soft) both; }
+  .chat-nudge-text { padding: 0.75rem 0.4rem 0.75rem 1rem; text-align: left; font-size: 0.95rem; line-height: 1.4; cursor: pointer; }
+  .chat-nudge-x { display: grid; place-items: center; width: 2.75rem; color: var(--c-ink-muted); cursor: pointer; border-radius: 0 18px 18px 0; }
+  .chat-nudge-x:hover { color: var(--c-ink); }
+
+  /* Panel */
+  .chat-panel {
+    position: absolute; left: 0; bottom: 4.5rem; width: min(25rem, calc(100vw - 2rem)); height: min(40rem, calc(100dvh - 7.5rem));
+    display: flex; flex-direction: column; overflow: hidden; border-radius: 26px; background: var(--c-base); color: var(--c-ink);
+    border: 1px solid var(--c-line); box-shadow: 0 40px 80px -30px rgb(11 34 48 / 0.55), 0 2px 8px rgb(11 34 48 / 0.12);
+    transform-origin: 0 100%; animation: chat-pop 0.38s var(--ease-out-soft) both;
+  }
+  .chat-panel[hidden] { display: none; }
+  @keyframes chat-pop { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
+  @media (max-width: 640px) {
+    .chat[data-state='open'] { inset: 0; }
+    .chat-panel { position: fixed; inset: 0; width: auto; height: auto; border-radius: 0; border: 0; padding-bottom: env(safe-area-inset-bottom); }
+  }
+
+  .chat-head { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 0.9rem 0.9rem 1.1rem; background: var(--c-ink); color: var(--c-surface); padding-top: max(0.9rem, env(safe-area-inset-top)); }
+  .chat-avatar { display: grid; place-items: center; flex: none; width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--c-accent); color: var(--c-ink); font-family: var(--f-display); font-weight: 600; font-size: 0.95rem; letter-spacing: 0.02em; }
+  .chat-head-text { flex: 1; min-width: 0; }
+  .chat-title { font-weight: 600; font-size: 1rem; line-height: 1.25; }
+  .chat-sub { font-size: 0.8rem; line-height: 1.3; color: var(--c-on-dark-muted); }
+  .chat-iconbtn { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; color: var(--c-surface); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color 160ms ease; }
+  .chat-iconbtn:hover { background: color-mix(in srgb, var(--c-surface) 14%, transparent); }
+  .chat-head :focus-visible { outline: 2px solid var(--c-accent-on-dark); outline-offset: 1px; border-radius: 9999px; }
+
+  .chat-log { position: relative; flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 1.1rem 1rem 0.5rem; display: flex; flex-direction: column; gap: 0.7rem; scroll-behavior: auto; }
+  .chat-log:focus-visible { outline-offset: -3px; }
+  .chat-loading { color: var(--c-ink-muted); font-size: 0.95rem; padding: 0.5rem 0.25rem; }
+
+  .chat-msg { display: flex; flex-direction: column; gap: 0.45rem; max-width: 92%; animation: chat-in 0.32s var(--ease-out-soft) both; }
+  .chat-msg[data-role='user'] { align-self: flex-end; align-items: flex-end; max-width: 84%; }
+  .chat-msg[data-role='bot'] { align-self: flex-start; align-items: flex-start; }
+  @keyframes chat-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .chat-restored .chat-msg { animation: none; }
+
+  .chat-bubble { padding: 0.65rem 0.95rem; font-size: 0.97rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .chat-bubble p + p, .chat-bubble ul + p, .chat-bubble p + ul { margin-top: 0.5rem; }
+  .chat-bubble ul { padding-left: 1.1rem; list-style: disc; }
+  .chat-bubble li + li { margin-top: 0.15rem; }
+  .chat-bubble strong { font-weight: 640; }
+  .chat-msg[data-role='bot'] .chat-bubble { background: var(--c-surface); border: 1px solid var(--c-line); border-radius: 18px 18px 18px 6px; }
+  .chat-msg[data-role='user'] .chat-bubble { background: var(--c-ink); color: var(--c-surface); border-radius: 18px 18px 6px 18px; }
+  .chat-msg[data-tone='success'] .chat-bubble { border-color: var(--c-accent); box-shadow: inset 3px 0 0 var(--c-accent); }
+  .chat-msg[data-tone='error'] .chat-bubble { border-color: #9A3B2B; color: #7C2E21; }
+  .chat-bubble a { color: var(--c-accent-text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+  .chat-msg[data-role='user'] .chat-bubble a { color: var(--c-accent-on-dark); }
+  .chat-note { font-size: 0.8rem; line-height: 1.35; color: var(--c-ink-muted); padding: 0 0.35rem; }
+
+  .chat-facts { width: 100%; display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.8rem; padding: 0.75rem 0.95rem; border-radius: 14px; background: var(--c-surface); border: 1px solid var(--c-line); font-size: 0.92rem; }
+  .chat-facts dt { color: var(--c-ink-muted); }
+  .chat-facts dd { font-weight: 560; overflow-wrap: anywhere; }
+
+  .chat-cards { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
+  .chat-card { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.75rem; align-items: center; padding: 0.45rem; border-radius: 14px; background: var(--c-surface); border: 1px solid var(--c-line); transition: border-color 160ms ease, transform 160ms var(--ease-out-soft); }
+  .chat-card:hover { border-color: var(--c-ink); }
+  .chat-card:active { transform: translateY(1px); }
+  .chat-card img { width: 4.6rem; height: 3.4rem; object-fit: cover; border-radius: 10px; background: var(--c-base-deep); display: block; }
+  .chat-card-title { display: block; font-weight: 620; font-size: 0.95rem; line-height: 1.25; }
+  .chat-card-meta { display: block; font-size: 0.85rem; line-height: 1.35; margin-top: 0.1rem; }
+  .chat-card-sub { display: block; font-size: 0.8rem; color: var(--c-ink-muted); margin-top: 0.1rem; }
+
+  .chat-links { display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem; padding: 0 0.35rem; font-size: 0.92rem; }
+  .chat-links a { color: var(--c-accent-text); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; font-weight: 560; }
+
+  .chat-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; padding: 0.15rem 0 0.4rem; }
+  .chat-chip { min-height: 2.5rem; padding: 0.4rem 0.95rem; border-radius: 9999px; background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line-strong); font-size: 0.9rem; font-weight: 560; line-height: 1.2; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color 160ms ease, border-color 160ms ease, transform 160ms var(--ease-out-soft); text-align: left; }
+  .chat-chip:hover { border-color: var(--c-ink); background: var(--c-base-deep); }
+  .chat-chip:active { transform: translateY(1px); }
+  .chat-chip[data-kind='primary'] { background: var(--c-ink); color: var(--c-surface); border-color: var(--c-ink); }
+  .chat-chip[data-kind='primary']:hover { background: var(--c-secondary); }
+  .chat-chip[data-kind='quiet'] { background: transparent; border-color: transparent; color: var(--c-ink-muted); text-decoration: underline; text-underline-offset: 0.22em; text-decoration-thickness: 1px; padding-inline: 0.5rem; }
+  .chat-chip[data-kind='quiet']:hover { color: var(--c-ink); background: transparent; }
+
+  .chat-typing { align-self: flex-start; display: inline-flex; gap: 0.3rem; align-items: center; padding: 0.85rem 1rem; border-radius: 18px 18px 18px 6px; background: var(--c-surface); border: 1px solid var(--c-line); }
+  .chat-typing span { width: 0.4rem; height: 0.4rem; border-radius: 9999px; background: var(--c-ink-muted); animation: chat-dot 1.1s ease-in-out infinite; }
+  .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+  .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes chat-dot { 0%, 70%, 100% { opacity: 0.35; transform: none; } 35% { opacity: 1; transform: translateY(-3px); } }
+
+  .chat-form { display: flex; align-items: center; gap: 0.5rem; padding: 0.7rem 0.8rem 0.35rem; background: var(--c-base); border-top: 1px solid var(--c-line); }
+  .chat-input { flex: 1; min-width: 0; min-height: 2.9rem; padding: 0.55rem 1rem; border-radius: 9999px; background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line-strong); font: inherit; font-size: 1rem; }
+  .chat-input::placeholder { color: var(--c-ink-muted); }
+  .chat-input:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; border-radius: 9999px; }
+  .chat-send { display: grid; place-items: center; flex: none; width: 2.9rem; height: 2.9rem; border-radius: 9999px; background: var(--c-ink); color: var(--c-accent); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color 160ms ease, transform 160ms var(--ease-out-soft); }
+  .chat-send:hover { background: var(--c-secondary); }
+  .chat-send:active { transform: translateY(1px); }
+  .chat-send:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 3px; }
+  .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .chat-fine { padding: 0.15rem 1rem 0.7rem; font-size: 0.75rem; line-height: 1.35; color: var(--c-ink-muted); text-align: center; background: var(--c-base); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat-launcher, .chat-nudge, .chat-panel, .chat-msg { animation: none; }
+    .chat-typing span { animation: none; opacity: 0.7; }
+  }
+</style>
+
+<script>
+  // Opens and closes the panel and loads the assistant on demand. Nothing else runs until someone opens it.
+  const root = document.querySelector<HTMLElement>('[data-chat]');
+  if (root) {
+    const launcher = root.querySelector<HTMLButtonElement>('[data-chat-launcher]')!;
+    const panel = root.querySelector<HTMLElement>('#chat-panel')!;
+    const nudge = root.querySelector<HTMLElement>('[data-chat-nudge]')!;
+    const nudgeText = nudge.querySelector<HTMLElement>('[data-chat-nudge-open]')!;
+    const mobile = window.matchMedia('(max-width: 640px)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const KEY = `${(window as unknown as { __SITE__?: { brand?: string } }).__SITE__?.brand ?? 'site'}:chat-ui`;
+    const read = (): Record<string, unknown> => { try { return JSON.parse(sessionStorage.getItem(KEY) ?? '{}'); } catch { return {}; } };
+    const write = (patch: Record<string, unknown>) => { try { sessionStorage.setItem(KEY, JSON.stringify({ ...read(), ...patch })); } catch { /* private mode */ } };
+
+    let ui: Promise<typeof import('../scripts/chat/ui')> | null = null;
+    const load = () => (ui ??= import('../scripts/chat/ui').then((m) => { m.mount(root); return m; }).catch((e) => { ui = null; throw e; }));
+
+    let isOpen = false;
+    let inerted: HTMLElement[] = [];
+    const lock = (on: boolean) => {
+      const modal = on && mobile.matches;
+      panel.setAttribute('aria-modal', String(modal));
+      document.documentElement.style.overflow = modal ? 'hidden' : '';
+      inerted.forEach((el) => el.removeAttribute('inert'));
+      inerted = [];
+      if (modal) {
+        document.querySelectorAll<HTMLElement>('body > :not([data-chat]):not(script):not(style)').forEach((el) => { if (!el.hasAttribute('inert')) { el.setAttribute('inert', ''); inerted.push(el); } });
+      }
+    };
+    const setOpen = (open: boolean, opts: { focus?: boolean } = {}) => {
+      if (open === isOpen) return;
+      isOpen = open;
+      hideNudge();
+      panel.hidden = !open;
+      root.dataset.state = open ? 'open' : 'closed';
+      launcher.setAttribute('aria-expanded', String(open));
+      launcher.setAttribute('aria-label', open ? 'Close chat' : 'Ask us, open chat');
+      lock(open);
+      write({ open });
+      if (open) {
+        load().then((m) => m.onOpen(opts.focus !== false)).catch(() => {
+          const loading = root.querySelector<HTMLElement>('[data-chat-loading]');
+          if (loading) loading.innerHTML = `I couldn't start just now. You can reach us on <a href="tel:${root.dataset.tel}">${root.dataset.phone}</a>.`;
+        });
+      } else if (opts.focus !== false) launcher.focus();
+    };
+    const hideNudge = () => { nudge.hidden = true; };
+
+    launcher.addEventListener('click', () => setOpen(!isOpen));
+    root.querySelector('[data-chat-close]')!.addEventListener('click', () => setOpen(false));
+    panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.stopPropagation(); setOpen(false); } });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen && !panel.contains(document.activeElement)) setOpen(false); });
+    mobile.addEventListener('change', () => lock(isOpen));
+    // Anything on the page can open the assistant: <button data-chat-open>.
+    document.addEventListener('click', (e) => { const t = (e.target as HTMLElement).closest('[data-chat-open]'); if (t) { e.preventDefault(); setOpen(true); } });
+    // Warm up on intent, so opening feels instant.
+    const warm = () => { load().catch(() => {}); };
+    launcher.addEventListener('pointerenter', warm, { once: true });
+    launcher.addEventListener('focus', warm, { once: true });
+    launcher.addEventListener('touchstart', warm, { once: true, passive: true });
+
+    // Come back open if it was open on the previous page.
+    // (Not on a phone, where the open chat covers the whole screen: someone who tapped a home in the chat wants to see that home.)
+    if (read().open && !mobile.matches) { panel.hidden = false; isOpen = false; setOpen(true, { focus: false }); }
+    else if (read().open) write({ open: false });
+
+    // One gentle nudge per visit, after a pause. Never when a conversation exists or motion is reduced.
+    const onListing = /^\/listings\/[^/]+\/?$/.test(location.pathname);
+    if (!read().nudged && !read().open && !read().chatted && !reduced.matches) {
+      nudgeText.textContent = onListing ? 'Questions about this home? Ask me, or book a tour here.' : 'Looking for a home? Ask me anything.';
+      const show = () => {
+        if (isOpen || (document.documentElement.classList.contains('is-loading') && document.querySelector('[data-loader]'))) return;
+        nudge.hidden = false;
+        write({ nudged: true });
+        setTimeout(hideNudge, 14000);
+      };
+      setTimeout(show, 9000);
+    }
+    nudgeText.addEventListener('click', () => setOpen(true));
+    root.querySelector('[data-chat-nudge-close]')!.addEventListener('click', () => { hideNudge(); write({ nudged: true }); });
+    root.addEventListener('chat:chatted', () => write({ chatted: true }));
+  }
+</script>

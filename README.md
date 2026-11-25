@@ -126,6 +126,23 @@ accent, and records the booking in the same "You're booked" state.
   focus. Visitors can also click any room or floor. A listing with an entry gets the "Walk the floor plan" section on its page;
   the hero listing's plan also appears on the home page.
 
+## Site assistant (chat)
+
+An "Ask us" button sits in the bottom-left corner of every page. It opens a chat that can:
+
+- find homes from plain requests ("4 bedrooms with a pool under 10 million", "furnished rental in Mission Canyon"),
+- answer questions about the firm, each listing, neighborhood and agent, plus a bank of common buying, selling, leasing and booking questions,
+- book a tour or a call (slots come from the same agent hours as the page widgets), take a message for an agent, sign someone up for private listings, and cancel or reschedule what it booked,
+- decline politely and hand off to a person for offers, legal, tax, mortgage and fee questions, and stay neutral on schools, safety and who lives where.
+
+It is a rule-based assistant, not a language model, so it works on a static host with no server, no API key and no cost per message. Everything it says comes from the data files, so answers cannot drift from the pages.
+
+- **Knowledge:** built at deploy time into `/chat-knowledge.json` from `src/data/` (listings, agents, neighborhoods, brand) plus `src/data/chatbot.json` (the FAQ). To teach it a new answer, add an entry to `chatbot.json` with a few `q` phrasings and an `a`. `{{tokens}}` such as `{{phone}}` and `{{name}}` are filled from the brand file, so a re-skin carries over.
+- **Loading:** only the launcher and about 4 KB of script ship with each page. The assistant (about 33 KB gzipped) and the knowledge file (about 22 KB gzipped) load the first time someone opens it or hovers the button.
+- **Bookings are simulated.** Each confirmation says so, and nothing reaches a calendar. With `leads.webhookUrl` set, bookings, messages and signups are posted with the same payloads as the page forms (see `Company-Knowledge-Base.md`, operator notes), plus `channel: "chat"`.
+- **Conversation** is kept in the tab's `sessionStorage`, so it follows a visitor from page to page and disappears when the tab closes. On a listing page the assistant greets with that home and answers "how many bedrooms?" without being told which one.
+- **Code:** `src/components/Chatbot.astro` (launcher and styles), `src/scripts/chat/ui.ts` (panel), `engine.ts` (the logic, no DOM, testable in Node), `nlp.ts` (spelling repair, dates and times, prices, FAQ matching).
+
 ## Showing error states in a live demo
 
 Append these to any listing URL to walk a prospect through the edge cases from `UI-UX.md`:

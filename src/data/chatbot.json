@@ -1,0 +1,1778 @@
+{
+  "welcome": "Hi, I'm the {{name}} assistant. I can find homes, answer questions about the firm, and set up a tour or a call with an agent.",
+  "demoNote": "This is a demo assistant, so bookings made here are simulated.",
+  "starters": [
+    {
+      "label": "Find a home",
+      "send": "Help me find a home"
+    },
+    {
+      "label": "Book a tour",
+      "send": "Book a tour"
+    },
+    {
+      "label": "Sell my home",
+      "send": "I'm thinking of selling my home"
+    },
+    {
+      "label": "Rentals",
+      "send": "What rentals do you have?"
+    },
+    {
+      "label": "Talk to an agent",
+      "send": "I want to talk to an agent"
+    },
+    {
+      "label": "About {{name}}",
+      "send": "Tell me about the company"
+    }
+  ],
+  "faqs": [
+    {
+      "id": "who",
+      "q": [
+        "who are you",
+        "who is {{name}}",
+        "tell me about the company",
+        "tell me about your company",
+        "about {{name}}",
+        "what is {{name}}",
+        "what does {{name}} do",
+        "what kind of company is this",
+        "are you a real estate brokerage",
+        "company overview",
+        "what do you do"
+      ],
+      "a": "{{name}} ({{legalName}}) is an independent real estate brokerage in {{market}}, California, founded in {{founded}}. We sell and lease homes on the South Coast, in {{hoods}}.\n\nWe stay small on purpose: every home is shown by the agent who listed it, and prices come with the sales behind them.",
+      "links": [
+        {
+          "label": "About us",
+          "href": "/about/"
+        }
+      ],
+      "chips": [
+        "What makes you different?",
+        "Meet the team",
+        "See listings"
+      ]
+    },
+    {
+      "id": "story",
+      "q": [
+        "when was the company founded",
+        "how long have you been in business",
+        "company history",
+        "your story",
+        "how did {{name}} start",
+        "who founded the company",
+        "who is the founder",
+        "who started {{name}}",
+        "how old is the company",
+        "years in business",
+        "who owns the company",
+        "who is the owner",
+        "who is the ceo",
+        "who runs the company",
+        "who is in charge",
+        "who is the boss",
+        "your history",
+        "company history",
+        "history of the company",
+        "tell me about your history",
+        "who is the principal broker"
+      ],
+      "a": "We started {{name}} in {{founded}} with two agents and a rented office in Montecito, which makes {{years}} years in business. We're still on the same street, now with eleven agents.\n\nMara Ellison founded the firm after a decade restoring historic homes in Montecito, and she is still Principal Broker.",
+      "links": [
+        {
+          "label": "Our story",
+          "href": "/about/"
+        },
+        {
+          "label": "Mara Ellison",
+          "href": "/agents/mara-ellison/"
+        }
+      ]
+    },
+    {
+      "id": "size",
+      "q": [
+        "how big is the firm",
+        "how many agents do you have",
+        "how many people work here",
+        "team size",
+        "how many employees",
+        "number of agents",
+        "how large is the company"
+      ],
+      "a": "Eleven agents in one office on Coast Village Road. Four of them have public profiles on this site: Mara Ellison, Julian Okafor, Elena Varga and Daniel Reyes. For anyone else on the team, the main office can help: {{phone}}.",
+      "links": [
+        {
+          "label": "Meet the agents",
+          "href": "/agents/"
+        }
+      ]
+    },
+    {
+      "id": "different",
+      "q": [
+        "what makes you different",
+        "why choose you",
+        "why should i use {{name}}",
+        "why work with you",
+        "what sets you apart",
+        "your advantage",
+        "why {{name}}",
+        "what is special about you",
+        "how are you better than other brokerages",
+        "competitors",
+        "other agencies"
+      ],
+      "a": "A few things we hold to:\n- **One agent, start to finish.** The person who lists your home shows it, negotiates it and is at the closing.\n- **Prices you can defend.** Every list price comes with the six to ten comparable sales behind it.\n- **Small on purpose.** We turn down more listings than we take.\n- **Fast answers.** Questions about a listing go straight to the listing agent. Our median reply last year was 38 minutes.\n- **Private options.** About a third of the homes we sell never appear on this site.",
+      "links": [
+        {
+          "label": "How we work",
+          "href": "/about/"
+        }
+      ],
+      "chips": [
+        "How fast do homes sell?",
+        "What do clients say?"
+      ]
+    },
+    {
+      "id": "principles",
+      "q": [
+        "how do you work",
+        "what is your process",
+        "your values",
+        "your philosophy",
+        "how does it work working with you",
+        "what are your principles",
+        "what do you believe in",
+        "your approach"
+      ],
+      "a": "Five principles:\n1. One agent, start to finish.\n2. Prices you can defend, with the comparable sales shown.\n3. Answers the same day.\n4. Private when you need it.\n5. Local before anything else: every agent lives in the area they sell.",
+      "links": [
+        {
+          "label": "About us",
+          "href": "/about/"
+        }
+      ]
+    },
+    {
+      "id": "sold",
+      "q": [
+        "how much have you sold",
+        "sales volume",
+        "total sales",
+        "how many homes have you sold",
+        "how successful are you",
+        "track record",
+        "billion",
+        "sales numbers",
+        "your numbers",
+        "statistics",
+        "stats"
+      ],
+      "a": "We've sold $1.2B in homes since {{founded}}. Our median time on market in 2025 was 17 days, against a county median of 34, and clients rate us 4.9 out of 5 across 312 verified reviews.",
+      "links": [
+        {
+          "label": "About us",
+          "href": "/about/"
+        }
+      ]
+    },
+    {
+      "id": "speed",
+      "q": [
+        "how fast do your homes sell",
+        "how long do homes take to sell",
+        "days on market",
+        "median time on market",
+        "how quickly do you sell homes",
+        "how long will it take to sell my house",
+        "time to sell",
+        "speed of sale"
+      ],
+      "a": "Our median time on market in 2025 was 17 days, against a county median of 34. That's a median, not a promise for any one home; pace varies a lot by neighborhood. Medians run from 19 days on the Mesa to 46 in Ojai.",
+      "links": [
+        {
+          "label": "Neighborhood medians",
+          "href": "/neighborhoods/"
+        }
+      ],
+      "chips": [
+        "Median price by neighborhood"
+      ]
+    },
+    {
+      "id": "reviews",
+      "q": [
+        "reviews",
+        "ratings",
+        "testimonials",
+        "what do clients say",
+        "what do your clients say",
+        "customer feedback",
+        "how are you rated",
+        "are you any good",
+        "can i trust you",
+        "references",
+        "client stories",
+        "happy clients",
+        "star rating"
+      ],
+      "a": "Our average rating is 4.9 out of 5 from 312 verified client reviews. One of them:\n\n\"{{quote}}\"\n- {{quoteBy}}, {{quoteDetail}}",
+      "links": [
+        {
+          "label": "More client stories",
+          "href": "/#clients"
+        }
+      ]
+    },
+    {
+      "id": "awards",
+      "q": [
+        "awards",
+        "press coverage",
+        "featured in",
+        "media",
+        "recognition",
+        "accolades",
+        "social media",
+        "instagram",
+        "facebook",
+        "linkedin",
+        "youtube",
+        "do you have a blog",
+        "newsletter"
+      ],
+      "a": "I don't have details on awards, press coverage or social media accounts. The main office can tell you: {{phone}} or {{email}}.",
+      "links": [
+        {
+          "label": "Contact the office",
+          "href": "/contact/"
+        }
+      ]
+    },
+    {
+      "id": "careers",
+      "q": [
+        "careers",
+        "jobs",
+        "are you hiring",
+        "join your team",
+        "work for you",
+        "internship",
+        "referral program",
+        "partnerships",
+        "become an agent",
+        "refer a friend",
+        "affiliate",
+        "vendors",
+        "advertise with you"
+      ],
+      "a": "I don't have information on careers, referrals or partnerships. The main office can point you to the right person: {{phone}} or {{email}}.",
+      "links": [
+        {
+          "label": "Contact the office",
+          "href": "/contact/"
+        }
+      ]
+    },
+    {
+      "id": "license",
+      "q": [
+        "are you licensed",
+        "license number",
+        "dre number",
+        "real estate license",
+        "are you legit",
+        "are you a real company",
+        "is {{name}} legitimate",
+        "california license",
+        "brokerage license",
+        "credentials",
+        "is it safe to work with you"
+      ],
+      "a": "Yes. {{legalName}} holds {{license}}. Agent licenses: Mara Ellison CA DRE #01734552, Julian Okafor CA DRE #01988120, Elena Varga CA DRE #02011873, Daniel Reyes CA DRE #02066394.",
+      "links": [
+        {
+          "label": "Meet the agents",
+          "href": "/agents/"
+        }
+      ]
+    },
+    {
+      "id": "office",
+      "q": [
+        "where is your office",
+        "office address",
+        "where are you located",
+        "where are you based",
+        "what is your address",
+        "how do i get to your office",
+        "directions to the office",
+        "can i visit your office",
+        "location",
+        "where can i find you",
+        "visit you",
+        "come to your office",
+        "walk in",
+        "parking",
+        "wheelchair accessible",
+        "do i need an appointment",
+        "is there parking at your office",
+        "parking at the office",
+        "where do i park",
+        "is your office wheelchair accessible",
+        "do i need an appointment to visit the office",
+        "do you take walk ins",
+        "do you accept walk ins",
+        "can i just drop by",
+        "can i stop by the office",
+        "are walk ins welcome",
+        "do i need to call before visiting"
+      ],
+      "a": "Our office is at {{street}}, {{cityLine}}. It's open {{hoursLower}} (Pacific time).\n\nI don't have details on parking, accessibility or walk-in policy. Call {{phone}} before you come and the office can tell you.",
+      "links": [
+        {
+          "label": "Get directions",
+          "href": "{{mapsUrl}}"
+        },
+        {
+          "label": "Contact page",
+          "href": "/contact/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "q": [
+        "phone number",
+        "email address",
+        "how can i contact you",
+        "how do i reach you",
+        "contact details",
+        "contact information",
+        "call you",
+        "email you",
+        "what is your number",
+        "get in touch",
+        "contact the office",
+        "customer service",
+        "main line",
+        "send an email"
+      ],
+      "a": "Main office: {{phone}}, {{email}}. We're open {{hoursLower}} (Pacific time). Each agent also has a direct line, and I can pass you to the right one.\n\nFor a quick start, I can book a call or take a message right here.",
+      "links": [
+        {
+          "label": "Call {{phone}}",
+          "href": "tel:{{phoneDigits}}"
+        },
+        {
+          "label": "Contact page",
+          "href": "/contact/"
+        }
+      ],
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "team",
+      "q": [
+        "who are your agents",
+        "meet the team",
+        "list of agents",
+        "tell me about your agents",
+        "who works here",
+        "agent profiles",
+        "show me the agents",
+        "your team",
+        "who are the brokers",
+        "staff"
+      ],
+      "a": "{{teamList}}",
+      "links": [
+        {
+          "label": "Meet the agents",
+          "href": "/agents/"
+        }
+      ],
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "languages",
+      "q": [
+        "which agent speaks spanish",
+        "do you have spanish speaking agents",
+        "french speaking agent",
+        "do you speak hungarian",
+        "what languages do you speak",
+        "languages",
+        "bilingual agent",
+        "agent who speaks my language",
+        "habla espanol",
+        "parlez vous francais",
+        "multilingual"
+      ],
+      "a": "All four agents speak English. Spanish: Elena Varga and Daniel Reyes. French: Mara Ellison. Hungarian: Elena Varga.",
+      "links": [
+        {
+          "label": "Meet the agents",
+          "href": "/agents/"
+        }
+      ]
+    },
+    {
+      "id": "areas",
+      "q": [
+        "what areas do you cover",
+        "where do you work",
+        "what areas do you serve",
+        "which neighborhoods",
+        "do you sell in los angeles",
+        "do you work outside santa barbara",
+        "do you cover san francisco",
+        "service area",
+        "do you sell in goleta",
+        "do you cover santa ynez",
+        "do you work in montecito",
+        "geographic area",
+        "other cities",
+        "outside the area",
+        "do you cover malibu",
+        "napa"
+      ],
+      "a": "We work on the Santa Barbara South Coast and in Ojai: {{hoods}}. I don't have information on other areas; if you're looking elsewhere, the main office can tell you whether we can help: {{phone}}.",
+      "links": [
+        {
+          "label": "Neighborhood guide",
+          "href": "/neighborhoods/"
+        }
+      ]
+    },
+    {
+      "id": "equal-housing",
+      "q": [
+        "equal housing",
+        "fair housing",
+        "do you discriminate",
+        "equal opportunity",
+        "discrimination policy",
+        "diversity",
+        "inclusive"
+      ],
+      "a": "We display Equal Housing Opportunity and describe homes and neighborhoods by their facts only. I can't characterize who lives in an area. If you have a concern, the main office can take it: {{phone}}."
+    },
+    {
+      "id": "bot",
+      "q": [
+        "are you a bot",
+        "are you a human",
+        "are you a robot",
+        "are you ai",
+        "am i talking to a person",
+        "is this a real person",
+        "are you chatgpt",
+        "who am i talking to",
+        "are you real",
+        "is this automated",
+        "what are you",
+        "is this a demo",
+        "is this real",
+        "is this a real company",
+        "is this site real",
+        "is this a fake website",
+        "are the listings real",
+        "is this a test"
+      ],
+      "a": "I'm the {{name}} website assistant, an automated helper rather than a person. I can answer questions, find homes, and set up tours, calls and messages. For anything I can't cover, I'll pass you to an agent.\n\nThis is a demo build: the firm, agents and homes are sample content, and bookings made here are simulated.",
+      "chips": [
+        "Find a home",
+        "Talk to an agent"
+      ]
+    },
+    {
+      "id": "privacy",
+      "q": [
+        "privacy",
+        "what do you do with my information",
+        "is my data safe",
+        "do you share my details",
+        "do you store my information",
+        "data protection",
+        "will you spam me",
+        "do you sell my data",
+        "my personal information",
+        "gdpr",
+        "cookies",
+        "terms and conditions",
+        "privacy policy"
+      ],
+      "a": "The details you give me are used only to arrange the tour, call or message you ask for. On this site, your contact details are kept in your own browser to pre-fill forms, and you can clear them any time. Please don't share payment details, bank details or ID numbers in this chat.",
+      "chips": [
+        "Clear my saved details"
+      ]
+    },
+    {
+      "id": "buy-start",
+      "q": [
+        "i want to buy a home",
+        "how do i buy a house",
+        "i'm looking to buy",
+        "where do i start buying",
+        "first step to buying",
+        "help me buy a home",
+        "buying process",
+        "i'd like to purchase a property",
+        "who should i talk to about buying",
+        "buyer agent",
+        "i want to purchase a house",
+        "looking to buy",
+        "buying a house"
+      ],
+      "a": "Tell us the areas and the kind of house, and we'll send homes that match, including ones that haven't reached the market yet. Julian Okafor, Associate Broker, is our main contact for buyers: {{julianPhone}}, julian@haldenrowe.com. Mara Ellison also works with a small number of relocating buyers.\n\nI can search the current homes for you now, or book a call with Julian.",
+      "links": [
+        {
+          "label": "Browse all listings",
+          "href": "/listings/"
+        }
+      ],
+      "actions": [
+        "call",
+        "tour"
+      ],
+      "chips": [
+        "Help me find a home",
+        "Private listings"
+      ]
+    },
+    {
+      "id": "private",
+      "q": [
+        "off market homes",
+        "private listings",
+        "homes not on your website",
+        "do you have homes not listed",
+        "pocket listings",
+        "hear about homes before they're listed",
+        "exclusive listings",
+        "unlisted homes",
+        "off-market",
+        "coming soon homes",
+        "quiet sales",
+        "homes before they hit the market",
+        "pre-market",
+        "send me private listings"
+      ],
+      "a": "Yes. About a third of the homes we sell never appear on this site, because owners ask us to show them quietly first. I can't describe those homes, but I can sign you up: tell me your email and the area you want, and we'll send them as they come in. It's one or two emails a month, each with an unsubscribe link.",
+      "actions": [
+        "signup"
+      ]
+    },
+    {
+      "id": "price-range",
+      "q": [
+        "what is the price range of your homes",
+        "what is the price range",
+        "how expensive are your homes",
+        "typical price of your homes",
+        "average price of your listings",
+        "price range of your listings",
+        "what is the average price"
+      ],
+      "a": "{{priceRange}}",
+      "links": [
+        {
+          "label": "Browse all listings",
+          "href": "/listings/"
+        }
+      ]
+    },
+    {
+      "id": "video",
+      "q": [
+        "can i see a home by video",
+        "virtual tour",
+        "video walkthrough",
+        "can i tour remotely",
+        "tour over video call",
+        "i live far away can i see the home",
+        "facetime tour",
+        "remote viewing",
+        "online tour",
+        "live video tour",
+        "zoom tour",
+        "3d tour",
+        "can i view it online"
+      ],
+      "a": "Yes. Any available home can be toured by live video. When you book a tour, choose \"Live video walkthrough\": the agent sends a video link within 15 minutes of booking, then calls from the house at the booked time. I can set that up for you here.",
+      "actions": [
+        "tour"
+      ]
+    },
+    {
+      "id": "offer",
+      "q": [
+        "i want to make an offer",
+        "how do i make an offer",
+        "should i make an offer",
+        "will you accept an offer",
+        "can i negotiate the price",
+        "is the price negotiable",
+        "how much should i offer",
+        "what should i bid",
+        "lowball offer",
+        "multiple offers",
+        "bidding war",
+        "counter offer",
+        "submit an offer",
+        "can you negotiate for me",
+        "is the asking price firm",
+        "will the seller take less"
+      ],
+      "a": "I can't advise on offers or negotiation, and I can't say what a seller will accept. The listing agent can, and at {{name}} that's the same person who shows you the house. Use \"Ask a Question\" on the listing, or I can pass your message along or book a call.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "mortgage",
+      "q": [
+        "mortgage",
+        "financing",
+        "can you help me get a loan",
+        "pre approval",
+        "preapproval",
+        "lenders",
+        "interest rates",
+        "down payment",
+        "how much can i afford",
+        "mortgage calculator",
+        "home loan",
+        "do you work with lenders",
+        "do you offer financing",
+        "cash offer",
+        "monthly payment",
+        "affordability",
+        "can i afford it",
+        "do you help with mortgages",
+        "do you help with financing",
+        "mortgage help",
+        "can you recommend a lender",
+        "mortgage advice",
+        "do you offer mortgages",
+        "help with a mortgage",
+        "do you have a lender",
+        "recommend a mortgage broker"
+      ],
+      "a": "I don't have financing information, and I can't give mortgage advice. Please ask the agent you're working with; a call with Julian Okafor is a good starting point for buyers.",
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "closing",
+      "q": [
+        "closing costs",
+        "how long does closing take",
+        "escrow process",
+        "inspection",
+        "home inspection",
+        "appraisal",
+        "disclosures",
+        "repairs",
+        "title insurance",
+        "contingencies",
+        "what happens after an offer is accepted",
+        "closing process",
+        "how long to close",
+        "due diligence",
+        "what are the fees to buy"
+      ],
+      "a": "I don't have details on closing costs, timelines, escrow, inspections or appraisals, and I can't give advice on them. The listing agent can walk you through each step. I can pass your question along or book a call.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "taxes",
+      "q": [
+        "property taxes",
+        "property tax",
+        "hoa fees",
+        "hoa",
+        "homeowners insurance",
+        "flood zone",
+        "flood insurance",
+        "fire insurance",
+        "earthquake insurance",
+        "insurance cost",
+        "tax benefits",
+        "mello roos",
+        "tax implications",
+        "tax advice",
+        "legal advice",
+        "do i need a lawyer",
+        "legal questions",
+        "capital gains",
+        "1031 exchange",
+        "investment property",
+        "rental income",
+        "is it a good investment",
+        "roi",
+        "cap rate"
+      ],
+      "a": "I can't give legal, tax, insurance or investment advice, and this site doesn't publish property taxes, HOA fees or flood-zone details for individual homes. The listing agent can tell you what they know. For advice, a licensed attorney, tax professional or insurer is the right person.",
+      "actions": [
+        "message"
+      ]
+    },
+    {
+      "id": "relocating",
+      "q": [
+        "i'm relocating to santa barbara",
+        "moving to santa barbara",
+        "i'm moving from out of state",
+        "moving from london",
+        "relocation help",
+        "i don't know the area",
+        "new to santa barbara",
+        "moving from another city",
+        "relocating for work",
+        "moving from abroad",
+        "i have never been to santa barbara",
+        "moving to california",
+        "corporate relocation"
+      ],
+      "a": "We work with people moving to Santa Barbara regularly. Mara Ellison works with relocating buyers, and Elena Varga is the person to start with if you want to rent first. Both can tour homes with you by live video if you can't visit yet.",
+      "links": [
+        {
+          "label": "Mara Ellison",
+          "href": "/agents/mara-ellison/"
+        },
+        {
+          "label": "Elena Varga",
+          "href": "/agents/elena-varga/"
+        }
+      ],
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "first-time",
+      "q": [
+        "first time home buyer",
+        "i've never bought a home",
+        "first time buyer program",
+        "is this my first home",
+        "new to buying",
+        "starter home",
+        "buying my first house",
+        "first home",
+        "inexperienced buyer"
+      ],
+      "a": "I don't have a first-time buyer program to describe. Julian Okafor takes buyer inquiries and can walk you through how buying works with us: {{julianPhone}}. I can book a 20-minute call with him.",
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "sell-start",
+      "q": [
+        "i want to sell my home",
+        "i'm thinking of selling",
+        "how do i sell my house",
+        "what happens first when selling",
+        "list my home",
+        "sell my property",
+        "selling process",
+        "i'd like to list my house",
+        "how does selling work",
+        "can you sell my house",
+        "put my house on the market",
+        "i own a home and want to sell",
+        "selling my house",
+        "listing my home",
+        "sell my house"
+      ],
+      "a": "Start with Mara Ellison: {{maraPhone}}, mara@haldenrowe.com. Our promise to sellers is that we visit, walk the house with you and come back within a week with a price and the sales behind it.\n\nI can book a call with Mara, or take a message about your home.",
+      "links": [
+        {
+          "label": "Mara Ellison",
+          "href": "/agents/mara-ellison/"
+        }
+      ],
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "pricing",
+      "q": [
+        "how do you set a price",
+        "how do you price homes",
+        "how do you value a home",
+        "what is my home worth",
+        "home valuation",
+        "how much is my house worth",
+        "free valuation",
+        "market analysis",
+        "comps",
+        "comparable sales",
+        "how do you decide the list price",
+        "can you appraise my home",
+        "estimate my home value",
+        "home value",
+        "what will my house sell for",
+        "price my home"
+      ],
+      "a": "Every list price comes with the six to ten comparable sales behind it, so you can see where the number came from. They're sales we've walked through ourselves.\n\nI can't estimate what a specific home is worth. Mara Ellison will visit, walk the house with you and come back within a week with a price and the sales behind it.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "who-sells",
+      "q": [
+        "who will sell my home",
+        "will i work with one agent",
+        "do i get a junior agent",
+        "who handles my sale",
+        "will i be handed off",
+        "one agent start to finish",
+        "who will show my house",
+        "who negotiates for me",
+        "do you use assistants"
+      ],
+      "a": "The agent who lists your home shows it, prices it, negotiates it and is at the closing. Nobody is handed off to a junior colleague."
+    },
+    {
+      "id": "commission",
+      "q": [
+        "what commission do you charge",
+        "what are your fees",
+        "how much do you charge",
+        "commission rate",
+        "listing fee",
+        "seller fees",
+        "agent fees",
+        "what does it cost to sell",
+        "marketing budget",
+        "retainer",
+        "do you charge to list",
+        "commission structure",
+        "percentage",
+        "how are you paid",
+        "do i pay anything upfront",
+        "contract terms",
+        "listing agreement",
+        "exclusive listing contract",
+        "how long is the contract",
+        "cancellation fee",
+        "exclusivity period"
+      ],
+      "a": "I don't have the firm's fee, commission or contract details. Mara Ellison can go through them with you: {{maraPhone}}. I can book a call with her or pass on your question.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "private-sale",
+      "q": [
+        "can i sell without a public listing",
+        "sell my home privately",
+        "quiet sale",
+        "off market sale",
+        "i don't want a sign on my lawn",
+        "discreet sale",
+        "confidential sale",
+        "private sale",
+        "sell without listing it",
+        "i want privacy when selling",
+        "sell off market",
+        "no sign"
+      ],
+      "a": "Yes. Many sellers never want a sign on the lawn, so we show those homes quietly to buyers we've already met. Talk to Mara Ellison, or the agent for your area.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "easement",
+      "q": [
+        "my property has an easement",
+        "unpermitted guest house",
+        "unpermitted structure",
+        "complicated property",
+        "neighbor dispute",
+        "boundary dispute",
+        "title issue",
+        "code violation",
+        "permit issues",
+        "difficult neighbor",
+        "land use issue",
+        "zoning issue",
+        "non-conforming",
+        "unpermitted work",
+        "problem with my property"
+      ],
+      "a": "Julian Okafor spent six years as a land-use attorney and is the agent sellers on the Riviera and in Hope Ranch call for complicated easements, unpermitted guest houses and difficult neighbors: {{julianPhone}}. He can't give legal advice here, and neither can I, but he knows how these usually unfold.",
+      "links": [
+        {
+          "label": "Julian Okafor",
+          "href": "/agents/julian-okafor/"
+        }
+      ],
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "staging",
+      "q": [
+        "do you stage homes",
+        "home staging",
+        "photography",
+        "do you take professional photos",
+        "marketing plan",
+        "how do you market homes",
+        "how will you market my home",
+        "drone photos",
+        "videos of my home",
+        "open house",
+        "do you hold open houses",
+        "advertising",
+        "how do you advertise",
+        "social media marketing",
+        "virtual staging"
+      ],
+      "a": "We photograph each home in the light that suits it. I don't have details on staging, advertising or open houses; Mara Ellison can tell you exactly what a listing with us includes: {{maraPhone}}.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "buy-and-sell",
+      "q": [
+        "i need to sell and buy at the same time",
+        "buy and sell",
+        "selling my home and buying another",
+        "trade up",
+        "downsizing",
+        "move up buyer",
+        "contingent sale",
+        "bridge loan",
+        "sell first or buy first",
+        "upsizing"
+      ],
+      "a": "I don't have details on coordinating a sale and a purchase. An agent can talk it through; Mara Ellison handles sellers and Julian Okafor handles buyers, and both can take your call. I can book one for you.",
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "lease-apply",
+      "q": [
+        "how do i apply for a lease",
+        "rental application",
+        "what do i need to rent",
+        "security deposit",
+        "credit check",
+        "application fee",
+        "lease requirements",
+        "income requirements",
+        "first month rent",
+        "rental deposit",
+        "background check",
+        "references for renting",
+        "cosigner",
+        "do you require a deposit",
+        "lease terms",
+        "renters insurance",
+        "move in costs"
+      ],
+      "a": "I don't have details on lease applications, deposits, credit checks or fees. Elena Varga, Director of Leasing, can tell you: {{elenaPhone}}, elena@haldenrowe.com. I can book a call with her or pass on a message.",
+      "links": [
+        {
+          "label": "Elena Varga",
+          "href": "/agents/elena-varga/"
+        }
+      ],
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "pets",
+      "q": [
+        "are pets allowed",
+        "do you allow dogs",
+        "can i bring my dog",
+        "cat friendly",
+        "pet policy",
+        "pet friendly rental",
+        "pet friendly homes",
+        "can i have a pet",
+        "pets considered",
+        "dog friendly",
+        "pet deposit",
+        "animals allowed"
+      ],
+      "a": "21 West Victoria Street, Unit 4B says pets are considered. For any other home I don't have a pet policy; Elena Varga can check: {{elenaPhone}}.",
+      "chips": [
+        "Tell me about 21 West Victoria Street"
+      ],
+      "actions": [
+        "message"
+      ]
+    },
+    {
+      "id": "lease-length",
+      "q": [
+        "how long is the lease",
+        "minimum lease",
+        "lease length",
+        "month to month",
+        "short term rental",
+        "vacation rental",
+        "seasonal rental",
+        "rent for a few months",
+        "six month lease",
+        "can i rent for a month",
+        "12 month lease",
+        "long term rental",
+        "rent for a summer",
+        "weekly rental",
+        "airbnb"
+      ],
+      "a": "It depends on the home. 1222 Las Canoas Road, a furnished house in Mission Canyon, has a six-month minimum. 21 West Victoria Street prefers twelve months, and will consider six for the right tenant. I don't have details on stays shorter than that; Elena Varga can tell you what's possible: {{elenaPhone}}.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "furnished",
+      "q": [
+        "do you rent furnished homes",
+        "furnished rentals",
+        "furnished seasonal homes",
+        "fully furnished house",
+        "do the rentals come furnished",
+        "furnished or unfurnished",
+        "furnished apartment",
+        "move in ready rental",
+        "linens included"
+      ],
+      "a": "Yes, furnished seasonal homes are part of Elena Varga's leasing book. 1222 Las Canoas Road is fully furnished, linens and kitchenware included, with a six-month minimum. 21 West Victoria Street can be furnished or unfurnished.",
+      "chips": [
+        "Tell me about 1222 Las Canoas Road",
+        "Tell me about 21 West Victoria Street"
+      ]
+    },
+    {
+      "id": "tour-how",
+      "q": [
+        "how do i book a tour",
+        "how do i schedule a viewing",
+        "how to see a home",
+        "how can i visit a property",
+        "how do i tour a house",
+        "schedule a showing",
+        "book a showing",
+        "how does tour booking work",
+        "make an appointment to see a house",
+        "can i see a house in person",
+        "private showing"
+      ],
+      "a": "Open a listing and press \"Book a Tour\", or let me do it here. You choose a day and time (only open times are shown), in person or live video, then give your name, email and mobile number. The agent confirms by text or email within 15 minutes.",
+      "actions": [
+        "tour"
+      ]
+    },
+    {
+      "id": "tour-length",
+      "q": [
+        "how long is a tour",
+        "how long does a showing take",
+        "tour duration",
+        "how much time should i allow for a tour",
+        "length of a viewing"
+      ],
+      "a": "Allow 45 minutes for a tour. A call with an agent takes about 20 minutes."
+    },
+    {
+      "id": "tour-ahead",
+      "q": [
+        "how far ahead can i book",
+        "how far in advance can i schedule",
+        "can i book for today",
+        "same day tour",
+        "tour today",
+        "can i see a home today",
+        "book a tour for tomorrow",
+        "earliest available tour",
+        "how soon can i tour",
+        "last minute showing",
+        "how much notice do you need",
+        "how many days ahead"
+      ],
+      "a": "You can book up to 21 days ahead. Same-day times need at least two hours' notice. Only open times are shown, so what you see is what's free.",
+      "actions": [
+        "tour"
+      ]
+    },
+    {
+      "id": "tour-pending",
+      "q": [
+        "can i tour a pending home",
+        "can i see a pending house",
+        "what does pending mean",
+        "what is a pending listing",
+        "is pending still available",
+        "pending status",
+        "in escrow",
+        "home under contract",
+        "tour a home in escrow",
+        "sale pending",
+        "can i tour a pending home"
+      ],
+      "a": "Pending means the home is in escrow with a buyer, and tours have stopped. Ask the listing agent about similar homes, including ones not yet listed; I can find similar homes or pass on your question.",
+      "chips": [
+        "Help me find a home",
+        "Private listings"
+      ]
+    },
+    {
+      "id": "tour-change",
+      "q": [
+        "can i change my booking",
+        "how do i cancel a tour",
+        "reschedule my tour",
+        "change my appointment",
+        "cancel my booking",
+        "cancel my appointment",
+        "move my tour to another day",
+        "i can't make it",
+        "i need to reschedule",
+        "modify booking",
+        "cancel a call"
+      ],
+      "a": "Yes. If you booked through this chat, I can cancel it for you. If you booked on a listing page, open its \"You're booked\" panel and pick a different time or cancel. If the agent has already confirmed with you, also let them know by phone or email so they can free the slot.",
+      "actions": [
+        "cancel"
+      ],
+      "chips": [
+        "Reschedule my booking"
+      ]
+    },
+    {
+      "id": "call-agent",
+      "q": [
+        "how do i talk to an agent",
+        "can i speak to someone",
+        "i want to speak with an agent",
+        "call an agent",
+        "talk to a person",
+        "speak to a human",
+        "can someone call me",
+        "i need a real person",
+        "connect me to an agent",
+        "phone call with an agent",
+        "request a callback",
+        "have an agent call me",
+        "call me back",
+        "human",
+        "representative",
+        "live agent",
+        "live chat with agent",
+        "talk to someone"
+      ],
+      "a": "Happy to. I can book a 20-minute phone or video call with the right agent, or take a message and have them reply. You can also phone the main office on {{phone}}.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "reply-time",
+      "q": [
+        "how fast will i get a reply",
+        "how long until someone responds",
+        "response time",
+        "when will an agent get back to me",
+        "how quickly do you respond",
+        "reply time",
+        "how long to hear back",
+        "will someone get back to me today"
+      ],
+      "a": "Messages sent through the website are answered within 2 business hours, and Elena Varga promises within 1 business hour. Last year our median reply to listing questions was 38 minutes. After you book a tour or call, the agent confirms within 15 minutes."
+    },
+    {
+      "id": "confirm",
+      "q": [
+        "how will i know my booking is confirmed",
+        "will i get a confirmation",
+        "what happens after i book",
+        "do i get an email",
+        "confirmation email",
+        "how do i get confirmed",
+        "will the agent contact me",
+        "what happens next"
+      ],
+      "a": "After you book, the agent texts or emails you within 15 minutes to confirm, whichever you chose. You'll also get a reference number to quote."
+    },
+    {
+      "id": "outside-hours",
+      "q": [
+        "can i book outside the hours",
+        "evening showing",
+        "weekend viewing",
+        "can i tour on sunday",
+        "early morning tour",
+        "after hours viewing",
+        "viewing at night",
+        "holiday showing",
+        "can you show me a home at 8pm",
+        "tour on christmas",
+        "special request viewing",
+        "can i see a house on sunday",
+        "can i see a home on sunday evening",
+        "can i view a house in the evening",
+        "tour on a sunday evening",
+        "can i see a home at night",
+        "can we tour on the weekend",
+        "can i see a house on saturday",
+        "viewing on sunday"
+      ],
+      "a": "Booking times follow each agent's working hours, and I can only offer the open times shown. For a time outside them, speak to the agent directly: I can pass your request along or book a call.",
+      "actions": [
+        "message",
+        "call"
+      ]
+    },
+    {
+      "id": "what-bring",
+      "q": [
+        "what should i bring to a tour",
+        "what do i need for a viewing",
+        "should i bring anything",
+        "do i need id",
+        "can i bring someone",
+        "can i bring my family",
+        "who can come with me to a tour",
+        "do i need to be pre approved to tour",
+        "do i need to have financing before touring"
+      ],
+      "a": "Just bring any questions about the house. I don't have anything further on requirements for tours; the agent will tell you when they confirm. Bringing a partner or family member along is fine to mention in the notes when you book."
+    },
+    {
+      "id": "floor-plan",
+      "q": [
+        "is the floor plan exact",
+        "floor plan accuracy",
+        "floor plans",
+        "room sizes",
+        "room dimensions",
+        "square footage per room",
+        "ceiling height",
+        "can i see the floor plan",
+        "measured plans",
+        "blueprints",
+        "layout of the house",
+        "how big are the rooms"
+      ],
+      "a": "The floor plan on 1190 Pepper Lane is an illustration. The whole-house figures (5 bedrooms, 5.5 bathrooms, 6,120 sq ft) are from the listing, but the room-by-room areas shown in the walkthrough are not confirmed measurements. Ask Mara Ellison, the listing agent, for measured plans.",
+      "links": [
+        {
+          "label": "1190 Pepper Lane",
+          "href": "/listings/1190-pepper-lane-montecito/"
+        }
+      ]
+    },
+    {
+      "id": "site-help",
+      "q": [
+        "how do i use this website",
+        "how do i search for homes",
+        "how do i filter listings",
+        "how do i sort",
+        "how do i save a home",
+        "can i save favorites",
+        "wishlist",
+        "favorites",
+        "do i need an account",
+        "create an account",
+        "sign in",
+        "log in",
+        "login",
+        "register",
+        "password",
+        "website help",
+        "navigation",
+        "where do i find listings",
+        "saved searches",
+        "alerts"
+      ],
+      "a": "No account is needed. On the Listings page you can filter by buy or lease, neighborhood, price and bedrooms, and sort the results. I can also search for you: tell me what you want, like \"3 bedrooms in Ojai under $2.5 million\". For new homes before they're public, use the private listings signup.",
+      "links": [
+        {
+          "label": "Browse all listings",
+          "href": "/listings/"
+        }
+      ],
+      "actions": [
+        "signup"
+      ]
+    },
+    {
+      "id": "unsubscribe",
+      "q": [
+        "how do i unsubscribe",
+        "stop emails",
+        "opt out",
+        "remove me from your list",
+        "stop texting me",
+        "delete my information",
+        "clear my saved details",
+        "forget me",
+        "delete my data",
+        "remove my information"
+      ],
+      "a": "Every email we send has an unsubscribe link. To clear the contact details this site keeps in your own browser, I can do that now. For anything already sent to an agent, contact the main office and they'll remove it: {{phone}}, {{email}}.",
+      "actions": [
+        "clear"
+      ]
+    },
+    {
+      "id": "def-escrow",
+      "q": [
+        "what is escrow",
+        "what does escrow mean",
+        "define escrow",
+        "escrow meaning",
+        "explain escrow"
+      ],
+      "a": "In general terms, escrow is the period after an offer is accepted when a neutral third party holds the money and documents until the sale closes. For how it works on a specific sale, ask the listing agent."
+    },
+    {
+      "id": "def-mls",
+      "q": [
+        "what is mls",
+        "what does mls mean",
+        "multiple listing service",
+        "where do your market figures come from",
+        "source of data",
+        "where do the medians come from",
+        "data source",
+        "how current are the prices",
+        "where does your data come from",
+        "how accurate is the market data"
+      ],
+      "a": "The MLS is the Multiple Listing Service, the shared database of listings. Our neighborhood medians are single-family sale figures for Q3 2026 from the Santa Barbara MLS, updated every quarter."
+    },
+    {
+      "id": "def-casita",
+      "q": [
+        "what is a casita",
+        "what is a scullery",
+        "what is pocketing glass",
+        "what is an easement",
+        "what does dre mean",
+        "what is a listing agent",
+        "what is off market",
+        "what is the pink moment",
+        "glossary",
+        "define casita",
+        "what does for lease mean",
+        "what is median days on market",
+        "what is a median",
+        "what is a guest casita"
+      ],
+      "a": "{{glossary}}"
+    },
+    {
+      "id": "snapshot",
+      "q": [
+        "how up to date are the listings",
+        "when were the listings last updated",
+        "is this listing still available",
+        "are your listings current",
+        "is the home still for sale",
+        "has it sold",
+        "latest listings",
+        "new listings",
+        "any new homes",
+        "recently listed",
+        "just listed",
+        "price changes",
+        "price drop",
+        "reduced price"
+      ],
+      "a": "The homes here are the ones currently on the site, and status can change. Before you plan around one, the listing agent confirms whether it's still available. I don't have information on new listings or price changes beyond what's published.",
+      "links": [
+        {
+          "label": "Browse all listings",
+          "href": "/listings/"
+        }
+      ],
+      "actions": [
+        "signup"
+      ]
+    },
+    {
+      "id": "sold-history",
+      "q": [
+        "what did it sell for",
+        "past sold prices",
+        "sales history",
+        "comparable sales for this home",
+        "price history",
+        "when was it last sold",
+        "recent sales nearby",
+        "sold homes",
+        "recently sold",
+        "previous owner",
+        "how much did the last house sell for"
+      ],
+      "a": "I don't have sold data or price history for individual homes. The listing agent can share the comparable sales behind a list price.",
+      "actions": [
+        "message"
+      ]
+    },
+    {
+      "id": "market-forecast",
+      "q": [
+        "is it a good time to buy",
+        "is it a good time to sell",
+        "will prices go up",
+        "will prices drop",
+        "market forecast",
+        "housing market prediction",
+        "is the market crashing",
+        "is it a buyers market",
+        "is it a sellers market",
+        "market outlook",
+        "will interest rates fall",
+        "housing bubble",
+        "should i wait",
+        "market trends"
+      ],
+      "a": "I can't predict the market. What I can share are current neighborhood medians for price and days on market, and an agent can talk through current conditions with you.",
+      "links": [
+        {
+          "label": "Neighborhood medians",
+          "href": "/neighborhoods/"
+        }
+      ],
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "hr-schools",
+      "q": [
+        "what are the schools like",
+        "best school district",
+        "good schools nearby",
+        "school ratings",
+        "school quality",
+        "which area has the best schools",
+        "is it near a school",
+        "school zones",
+        "crime rate",
+        "is the area safe",
+        "is it a safe neighborhood",
+        "how safe is it",
+        "demographics",
+        "what kind of people live there",
+        "who lives there",
+        "is it a good place for families",
+        "kid friendly neighborhood",
+        "family friendly",
+        "diverse neighborhood",
+        "i am looking for a family home near good schools",
+        "family home near good schools",
+        "homes near good schools",
+        "best neighborhood for families",
+        "where should a family live",
+        "good area for kids",
+        "what are the neighbors like",
+        "who are the neighbors",
+        "what are the neighbours like",
+        "safest area",
+        "which area is safest",
+        "is it safe here",
+        "is hope ranch safe",
+        "is montecito safe",
+        "what schools are in the area",
+        "school district",
+        "are there good schools nearby",
+        "what schools are nearby",
+        "schools",
+        "school",
+        "safe",
+        "safety",
+        "crime",
+        "neighbors",
+        "neighbours"
+      ],
+      "a": "I can only repeat what we publish about neighborhoods. The Mesa is described as having \"small cafés, good schools\" and Carpinteria as having \"a strong local school district\", and I'd suggest verifying school information with the district itself. I can't characterize who lives in an area, and I don't have crime or demographic data. The listing agent and official public sources are the best places to look.",
+      "links": [
+        {
+          "label": "Neighborhood guide",
+          "href": "/neighborhoods/"
+        }
+      ],
+      "actions": [
+        "message"
+      ],
+      "chips": [
+        "Help me find a home"
+      ]
+    },
+    {
+      "id": "thanks-human",
+      "q": [
+        "i have a complaint",
+        "i want to complain",
+        "i'm unhappy",
+        "bad experience",
+        "problem with my booking",
+        "something went wrong",
+        "i was charged",
+        "refund",
+        "i'm not happy with my agent",
+        "report a problem",
+        "issue with my appointment",
+        "i have an issue",
+        "the booking didn't work",
+        "i never got a reply",
+        "nobody called me"
+      ],
+      "a": "I'm sorry that happened. A person needs to look at this. Please call the main office on {{phone}} or email {{email}}, and say what happened. I can also leave a message for them now.",
+      "actions": [
+        "message"
+      ]
+    },
+    {
+      "id": "other-services",
+      "q": [
+        "do you do property management",
+        "do you manage rental properties",
+        "commercial real estate",
+        "do you sell land",
+        "do you sell commercial property",
+        "vacation rental management",
+        "do you do appraisals",
+        "do you do home inspections",
+        "do you offer moving services",
+        "interior design services",
+        "do you build homes",
+        "new construction",
+        "foreclosures",
+        "short sales",
+        "do you handle 55 plus communities",
+        "do you sell mobile homes",
+        "do you buy houses for cash",
+        "sell my house fast for cash",
+        "do you do renovations",
+        "what services do you offer",
+        "what do you offer",
+        "list of services"
+      ],
+      "a": "{{name}} does residential sales and leasing on the {{market}} South Coast and in Ojai. I don't have information on property management, commercial property, appraisals, inspections, renovations or other services; the main office can tell you what we can arrange: {{phone}}.",
+      "links": [
+        {
+          "label": "Contact the office",
+          "href": "/contact/"
+        }
+      ],
+      "actions": [
+        "message"
+      ],
+      "chips": [
+        "How does buying work?",
+        "How does selling work?"
+      ]
+    },
+    {
+      "id": "referrals",
+      "q": [
+        "can you recommend an inspector",
+        "can you recommend a contractor",
+        "do you know a good lawyer",
+        "recommend an attorney",
+        "recommend a lender",
+        "recommend a photographer",
+        "do you recommend movers",
+        "recommend a stager",
+        "recommend an insurance agent",
+        "do you have vendor recommendations",
+        "trusted professionals",
+        "do you work with local contractors",
+        "do you have preferred vendors",
+        "recommend a title company",
+        "can you recommend an architect"
+      ],
+      "a": "I don't have vendor or professional recommendations to share. The agent you're working with can suggest people they trust; for anything legal, tax or financial, a licensed professional you choose is the right person.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "investors",
+      "q": [
+        "do you work with investors",
+        "investor friendly",
+        "buying as an investment",
+        "rental yield",
+        "best investment property",
+        "can i rent out the home",
+        "is it good for airbnb",
+        "short term rental allowed",
+        "can i airbnb this house",
+        "buying to rent out",
+        "is this a good investment",
+        "rental income potential"
+      ],
+      "a": "I can't give investment advice or estimate rental income, and I don't have rules on renting out a particular home. An agent can talk through the homes and what's published about them, and a licensed adviser can help with the financial side.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "best-neighborhood",
+      "q": [
+        "what is the best neighborhood",
+        "where should i live",
+        "which area is best",
+        "best place to live",
+        "what is the nicest area",
+        "best area in santa barbara",
+        "where would you live",
+        "which neighborhood do you recommend",
+        "recommend a neighborhood",
+        "what neighborhood suits me",
+        "which area should i choose"
+      ],
+      "a": "That depends on what matters to you, and I can't rank areas by quality. I can share each area's published description, median price and pace of sales, or find areas that suit something specific, like being near the beach, trails, walkable streets or quiet. Tell me what matters, or pick an area.",
+      "links": [
+        {
+          "label": "Neighborhood guide",
+          "href": "/neighborhoods/"
+        }
+      ],
+      "actions": [
+        "call"
+      ],
+      "chips": [
+        "Which area is near the beach?",
+        "Which area is best for hiking?",
+        "Which area is walkable?"
+      ]
+    },
+    {
+      "id": "how-buying-works",
+      "q": [
+        "how does buying work",
+        "how does the buying process work",
+        "what is the buying process like",
+        "steps to buy a house",
+        "walk me through buying",
+        "what happens when i buy",
+        "how long does it take to buy a house"
+      ],
+      "a": "With us, buying starts with a conversation: you tell us the areas and the kind of house, and we send matching homes, including ones that haven't reached the market. You tour with the listing agent, who shows, prices and negotiates the home. I don't have details on the later steps (offers, inspections, escrow, closing), so Julian Okafor, our buyer contact, can walk you through them: {{julianPhone}}.",
+      "actions": [
+        "call"
+      ]
+    },
+    {
+      "id": "how-selling-works",
+      "q": [
+        "how does selling work",
+        "how does the selling process work",
+        "steps to sell a house",
+        "walk me through selling",
+        "what happens when i sell",
+        "how long does it take to sell a house"
+      ],
+      "a": "With us, selling starts with a visit: Mara Ellison walks the house with you and comes back within a week with a price and the sales behind it. The agent who lists your home shows it, negotiates it and is at the closing. I don't have details on fees, contracts or timelines; Mara can go through them: {{maraPhone}}.",
+      "actions": [
+        "call",
+        "message"
+      ]
+    },
+    {
+      "id": "accessibility-homes",
+      "q": [
+        "wheelchair accessible homes",
+        "accessible home",
+        "step free home",
+        "single story homes",
+        "one level home",
+        "home with an elevator",
+        "ground floor bedroom",
+        "mobility friendly",
+        "senior friendly",
+        "aging in place",
+        "homes for seniors",
+        "homes for my parents",
+        "no stairs",
+        "accessible bathroom"
+      ],
+      "a": "The listings don't publish accessibility details such as step-free entry, elevators or single-level layouts, so I can't say. I can point to features that are listed, for example 1190 Pepper Lane has a ground-floor guest suite, and the listing agent can confirm anything the page doesn't say.",
+      "actions": [
+        "message",
+        "call"
+      ],
+      "chips": [
+        "Tell me about 1190 Pepper Lane"
+      ]
+    },
+    {
+      "id": "send-info",
+      "q": [
+        "text me the details",
+        "email me the listing",
+        "send me a brochure",
+        "can you send me information",
+        "send me the details",
+        "do you have a brochure",
+        "can i get a pdf",
+        "flyer",
+        "send me the listing",
+        "can you email me",
+        "email me information",
+        "text me the listing",
+        "can you text me",
+        "send me photos",
+        "can you send me the floor plan"
+      ],
+      "a": "I can't send documents or texts from this chat. The listing page has the photos, details and floor plan, and an agent can email or text you more. I can leave a message asking for it, or book a call.",
+      "actions": [
+        "message",
+        "call"
+      ]
+    }
+  ]
+}
