@@ -13,11 +13,11 @@ const tel = brand.contact.phone.replace(/\D/g, '');
     <button type="button" class="chat-nudge-x" data-chat-nudge-close aria-label="Dismiss"><svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg></button>
   </p>
 
-  <button type="button" class="chat-launcher" data-chat-launcher aria-label="Ask us, open chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chat-panel">
+  <button type="button" class="chat-launcher" data-chat-launcher aria-label="Chat with us, open chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chat-panel">
     <span class="chat-launcher-icon" aria-hidden="true">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.2 3.4a.6.6 0 0 1-1-.47V16A2.5 2.5 0 0 1 4 13.5v-7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><circle cx="9" cy="10" r="1" fill="currentColor" /><circle cx="12" cy="10" r="1" fill="currentColor" /><circle cx="15" cy="10" r="1" fill="currentColor" /></svg>
     </span>
-    <span class="chat-launcher-label">Ask us</span>
+    <span class="chat-launcher-label">Chat with us</span>
   </button>
 
   <section class="chat-panel" id="chat-panel" role="dialog" aria-label={`Chat with the ${brand.brokerageName} assistant`} hidden>
@@ -51,40 +51,43 @@ const tel = brand.contact.phone.replace(/\D/g, '');
 </div>
 
 <style is:global>
-  .chat { position: fixed; z-index: 60; left: max(1rem, env(safe-area-inset-left)); bottom: max(1rem, env(safe-area-inset-bottom)); font-family: var(--f-body); }
+  .chat { position: fixed; z-index: 60; right: max(1rem, env(safe-area-inset-right)); bottom: max(1.25rem, env(safe-area-inset-bottom)); font-family: var(--f-body); }
   /* Stays out of the way of the intro loader; the loader removes itself from the page when it finishes. */
   html.is-loading:has([data-loader]) .chat { visibility: hidden; }
   @media (max-width: 767px) { body:has([data-mbar]) .chat { bottom: calc(5.25rem + env(safe-area-inset-bottom)); } }
 
   /* Launcher */
   .chat-launcher {
-    display: inline-flex; align-items: center; gap: 0.6rem; min-height: 3.5rem; padding: 0.35rem 1.3rem 0.35rem 0.4rem;
-    border-radius: 9999px; background: var(--c-ink); color: var(--c-surface); font-weight: 600; font-size: 0.98rem; letter-spacing: 0.01em;
-    box-shadow: 0 18px 36px -16px rgb(11 34 48 / 0.55), 0 2px 6px rgb(11 34 48 / 0.18);
+    display: inline-flex; align-items: center; gap: 0.6rem; min-height: 4rem; padding: 0.4rem 1.5rem 0.4rem 0.45rem;
+    border-radius: 9999px; background: var(--c-ink); color: var(--c-surface); font-weight: 650; font-size: 1.05rem; letter-spacing: 0.01em;
+    border: 2px solid var(--c-accent);
+    box-shadow: 0 22px 44px -14px rgb(11 34 48 / 0.65), 0 4px 12px rgb(11 34 48 / 0.28);
     cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 180ms var(--ease-out-soft), background-color 180ms ease;
     animation: chat-rise 0.7s var(--ease-out-soft) 0.4s both;
   }
   .chat-launcher:hover { background: var(--c-secondary); }
   .chat-launcher:active { transform: translateY(1px); }
   .chat-launcher:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; border-radius: 9999px; }
-  .chat-launcher-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 9999px; background: var(--c-accent); color: var(--c-ink); }
+  .chat-launcher-icon { display: grid; place-items: center; width: 3.1rem; height: 3.1rem; border-radius: 9999px; background: var(--c-accent); color: var(--c-ink); position: relative; }
+  .chat-launcher-icon::after { content: ''; position: absolute; inset: -2px; border-radius: 9999px; border: 2px solid var(--c-accent); animation: chat-ping 2.6s ease-out 2s 3; }
+  @keyframes chat-ping { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 0; transform: scale(1.7); } }
   .chat[data-state='open'] .chat-launcher { display: none; }
   @media (min-width: 641px) { .chat[data-state='open'] .chat-launcher { display: inline-flex; } .chat[data-state='open'] .chat-launcher-label { display: none; } .chat[data-state='open'] .chat-launcher { padding-right: 0.4rem; } }
   @media (max-width: 380px) { .chat-launcher-label { display: none; } .chat-launcher { padding-right: 0.4rem; } }
   @keyframes chat-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
   /* Nudge */
-  .chat-nudge { position: absolute; left: 0; bottom: 4.5rem; display: flex; align-items: stretch; width: max-content; max-width: min(19rem, calc(100vw - 2rem)); border-radius: 18px 18px 18px 6px; background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line); box-shadow: var(--shadow-panel); animation: chat-rise 0.5s var(--ease-out-soft) both; }
+  .chat-nudge { position: absolute; right: 0; bottom: 5rem; display: flex; align-items: stretch; width: max-content; max-width: min(19rem, calc(100vw - 2rem)); border-radius: 18px 18px 6px 18px; background: var(--c-surface); color: var(--c-ink); border: 1px solid var(--c-line); box-shadow: var(--shadow-panel); animation: chat-rise 0.5s var(--ease-out-soft) both; }
   .chat-nudge-text { padding: 0.75rem 0.4rem 0.75rem 1rem; text-align: left; font-size: 0.95rem; line-height: 1.4; cursor: pointer; }
   .chat-nudge-x { display: grid; place-items: center; width: 2.75rem; color: var(--c-ink-muted); cursor: pointer; border-radius: 0 18px 18px 0; }
   .chat-nudge-x:hover { color: var(--c-ink); }
 
   /* Panel */
   .chat-panel {
-    position: absolute; left: 0; bottom: 4.5rem; width: min(25rem, calc(100vw - 2rem)); height: min(40rem, calc(100dvh - 7.5rem));
+    position: absolute; right: 0; bottom: 5rem; width: min(25rem, calc(100vw - 2rem)); height: min(40rem, calc(100dvh - 7.5rem));
     display: flex; flex-direction: column; overflow: hidden; border-radius: 26px; background: var(--c-base); color: var(--c-ink);
     border: 1px solid var(--c-line); box-shadow: 0 40px 80px -30px rgb(11 34 48 / 0.55), 0 2px 8px rgb(11 34 48 / 0.12);
-    transform-origin: 0 100%; animation: chat-pop 0.38s var(--ease-out-soft) both;
+    transform-origin: 100% 100%; animation: chat-pop 0.38s var(--ease-out-soft) both;
   }
   .chat-panel[hidden] { display: none; }
   @keyframes chat-pop { from { opacity: 0; transform: translateY(10px) scale(0.97); } to { opacity: 1; transform: none; } }
@@ -168,7 +171,7 @@ const tel = brand.contact.phone.replace(/\D/g, '');
   .chat-fine { padding: 0.15rem 1rem 0.7rem; font-size: 0.75rem; line-height: 1.35; color: var(--c-ink-muted); text-align: center; background: var(--c-base); }
 
   @media (prefers-reduced-motion: reduce) {
-    .chat-launcher, .chat-nudge, .chat-panel, .chat-msg { animation: none; }
+    .chat-launcher, .chat-nudge, .chat-panel, .chat-msg, .chat-launcher-icon::after { animation: none; }
     .chat-typing span { animation: none; opacity: 0.7; }
   }
 </style>
@@ -209,7 +212,7 @@ const tel = brand.contact.phone.replace(/\D/g, '');
       panel.hidden = !open;
       root.dataset.state = open ? 'open' : 'closed';
       launcher.setAttribute('aria-expanded', String(open));
-      launcher.setAttribute('aria-label', open ? 'Close chat' : 'Ask us, open chat');
+      launcher.setAttribute('aria-label', open ? 'Close chat' : 'Chat with us, open chat');
       lock(open);
       write({ open });
       if (open) {

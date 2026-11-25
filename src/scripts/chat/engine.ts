@@ -1298,6 +1298,12 @@ export function createBot(k: Knowledge, deps: Deps) {
     if (/\b(are you open|you open|is the office open|opening hours|office hours|business hours|hours of operation|when are you open|what time (do|does) (you|the office) (open|close)|are you closed|open (today|now|on (sunday|saturday|monday|tuesday|wednesday|thursday|friday|weekends?))|open late|closing time|what are your hours|your hours)\b/.test(t)) return [hoursReply()];
     if (/\b(how many (homes|listings|properties|houses|rentals|leases|condos|pending)|number of (homes|listings)|what (homes|listings|properties) do you have|what do you have( for sale| available)?|what('s| is) available|what('s| is) for sale|current (listings|inventory)|your (listings|inventory)|show me (all|everything)|what are you selling|available homes|inventory)\b/.test(t) && !hasCriteria({ ...c, sort: undefined }) && !ag && !hs.length) return [listingsOverview()];
 
+    // "What properties do you have" in any wording
+    const invNoun = /\b(propert(y|ies)|homes?|houses?|listings?|inventory|rentals?|places?|condos?|stock|portfolio)\b/.test(t);
+    const invAsk = /\b(have|got|sell|selling|available|show|list|see|browse|any|currently|right now|on the market|for sale|carry|represent|offer)\b/.test(t);
+    const invBare = /\bwhat (else )?(do|can) (you|i|we) (sell|buy|get|rent)\b|\bwhat else (do you have|is there|is available)\b/.test(t);
+    if (((invNoun && invAsk) || invBare) && !hasCriteria({ ...c, sort: undefined }) && !ag && !hs.length && !l && !asking && !/^how\b/.test(t) && !/\b(my|our|mine)\b/.test(t) && !/\b(tour|book|cancel|offer on|make an offer)\b/.test(t)) return [listingsOverview()];
+
     // Glossary: "what is escrow"
     if (!entity) { const g = glossaryReply(text); if (g) return [g]; }
 

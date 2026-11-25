@@ -352,7 +352,7 @@ export function makeAutocorrect(vocabulary: Iterable<string>, alsoKnown: Iterabl
 // ---------- slang ----------
 
 const SLANG: [RegExp, string][] = [
-  [/\bwanna\b/gi, 'want to'], [/\bgonna\b/gi, 'going to'], [/\blemme\b/gi, 'let me'], [/\bgimme\b/gi, 'give me'],
+  [/\b(you|u) guys\b/gi, 'you'], [/\brightnow\b/gi, 'right now'], [/\bwanna\b/gi, 'want to'], [/\bgonna\b/gi, 'going to'], [/\blemme\b/gi, 'let me'], [/\bgimme\b/gi, 'give me'],
   [/\bur\b/gi, 'your'], [/\bu\b/gi, 'you'], [/\br\b/gi, 'are'], [/\bpls\b|\bplz\b/gi, 'please'], [/\bthx\b/gi, 'thanks'],
   [/\bbc\b/gi, 'because'], [/\bcuz\b/gi, 'because'], [/\bbtw\b/gi, 'by the way'], [/\bidk\b/gi, "i don't know"],
   [/\b(\d+)\s?bd\b/gi, '$1 bedroom'], [/\bapt\b/gi, 'apartment'], [/\bsqft\b|\bsq\.? ?ft\b/gi, 'sq ft'], [/\btmrw\b|\btmw\b|\b2moro\b|\b2morrow\b/gi, 'tomorrow'],
