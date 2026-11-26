@@ -182,7 +182,7 @@ than these local runs.
   script and style (`security.csp` in `astro.config.mjs`). External origins are limited to
   Plausible, Cal.com and the map tiles. If you add a third-party script, add its origin there.
 - **HTTP headers:** `vercel.json` (Vercel) and `public/_headers` (Netlify / Cloudflare Pages) set
-  HSTS, `X-Frame-Options: DENY` / `frame-ancestors 'none'`, `nosniff`, a strict referrer policy,
+  HSTS, `frame-ancestors 'self' https://nexoryn.tech https://www.nexoryn.tech` (only those sites can embed it; no `X-Frame-Options`, which can't allow a specific origin), `nosniff`, a strict referrer policy,
   a locked-down `Permissions-Policy`, and long-lived caching for hashed assets.
   There is deliberately no `Cross-Origin-Opener-Policy` header: with it, Lighthouse and Google PageSpeed
   Insights intermittently fail to measure the page (error `NO_NAVSTART`).
